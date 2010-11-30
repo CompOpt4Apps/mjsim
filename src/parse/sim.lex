@@ -23,8 +23,8 @@ QSTRING=\"[^\"]*\"
 WHITESPACE=[ \t\n\r\f]
 EOL=(\n+|\r+|\r\n+)
 NOT_EOL=[^\r\n]
-LINE_COMMENT=[;#]{NOT_EOL}*{EOL}+
-C_COMMENT="/*"[^*]*("*"([^*/][^*]*)?)*"*/"{WHITESPACE}*{EOL}*
+LINE_COMMENT=[;#]{NOT_EOL}*
+C_COMMENT="/*"[^*]*("*"([^*/][^*]*)?)*"*/"
 
 REG=([Rr]{DIGIT}+)|[XxYyZz]
 GLOBAL=__{ID}__
@@ -50,6 +50,8 @@ TYPE=@{LETTER}+
 "sub" { return new Symbol(sym.AVR_SUB, new TokenValue("pop", yyline, yychar)); }
 "breq" { return new Symbol(sym.AVR_BREQ, new TokenValue("pop", yyline, yychar)); }
 "brlo" { return new Symbol(sym.AVR_BRLO, new TokenValue("pop", yyline, yychar)); }
+"brlt" { return new Symbol(sym.AVR_BRLT, new TokenValue("pop", yyline, yychar)); }
+"tst" { return new Symbol(sym.AVR_TST, new TokenValue("pop", yyline, yychar)); }
 "in" { return new Symbol(sym.AVR_IN, new TokenValue("in", yyline, yychar)); }
 "ld" { return new Symbol(sym.AVR_LD, new TokenValue("ld", yyline, yychar));  }
 "ldi" { return new Symbol(sym.AVR_LDI, new TokenValue("ldi", yyline, yychar)); }
@@ -75,10 +77,9 @@ TYPE=@{LETTER}+
 {LABEL} { return new Symbol(sym.LABEL, new TokenValue(yytext(), yyline, yychar)); }
 {TYPE} { return new Symbol(sym.TYPE, new TokenValue(yytext(), yyline, yychar)); }
 {ID} { return new Symbol(sym.ID, new TokenValue(yytext(), yyline, yychar)); }
-
 {EOL} { yychar = 0; return new Symbol(sym.EOL); }
 {WHITESPACE} {}
-{LINE_COMMENT} { yychar = 0; yy_buffer_start = yy_buffer_index-1; }
-{C_COMMENT} { yychar = 0; }
+{LINE_COMMENT} { yychar = 0; yy_buffer_start = yy_buffer_index-1; return new Symbol(sym.EOL);}
+{C_COMMENT} { yychar = 0; return new Symbol(sym.EOL); }
 
 . { System.out.println("Unexpected token '" + yytext() + "' on line: " + yyline + " at char: " + yychar); }

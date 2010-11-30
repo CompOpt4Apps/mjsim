@@ -136,7 +136,7 @@ Meg.AuxLEDs = (n & 170) >>1 | (n & 85) << 1;
 // Simple function to color in a pixel at position (x,y,color):
 void DrawPx(byte xin, byte yin, byte color)
 {
-        Meg.SetPxClr(xin,yin,ColorTable[color]);
+    GameSlate[xin][yin] = color;
 }
 
 
