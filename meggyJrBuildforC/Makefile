@@ -1,0 +1,74 @@
+#######################
+# Makefile for linux
+#
+# This makefile will generate a .hex file from a .cpp file
+# and upload it to the MeggyJr when the commands 
+#   make file.hex
+# and
+#   make file.install
+# are run on the linux boxes in the CS department.
+#
+# 12/15/10, Michelle Strout
+#######################
+
+
+## paths to the necessary tools, on linux the tools are in default path
+AVRGCC =        avr-gcc
+AVRDUDE =       avrdude
+AVROBJCOPY =    avr-objcopy
+
+## AVRDUDE_OPTIONS
+AVRDUDE_OPTIONS = -Pusb -p m328p -c avrispmkII
+
+## avr chip
+MCU =           atmega328p
+
+## Options common to compile, link and assembly rules
+COMMON =        -mmcu=$(MCU)
+
+## Compile options common for all C compilation units.
+CFLAGS =        $(COMMON)
+CFLAGS +=       -Wall -Os -fsigned-char
+CFLAGS +=       -MD -MP -MT $(*F).o -MF dep/$(@F).d 
+CFLAGS +=       -DF_CPU=16000000UL
+
+## Assembly specific flags
+ASMFLAGS =      $(COMMON)
+ASMFLAGS +=     -x assembler-with-cpp -Wa,-gdwarf2
+
+## Linker flags
+LDFLAGS =       $(COMMON)
+LDFLAGS += 
+
+## Intel Hex file production flags
+HEX_FLASH_FLAGS = -R .eeprom
+HEX_EEPROM_FLAGS = -j .eeprom
+HEX_EEPROM_FLAGS += --set-section-flags=.eeprom="alloc,load"
+HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0
+
+## Compile and Build
+
+%.hex: %.cpp MeggyJr.o
+	$(AVRGCC) $(INCLUDES) $(CFLAGS) -S  $<
+	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $*.s
+	$(AVRGCC) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
+	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $*.elf $@
+
+MeggyJr.o: MeggyJr.cpp
+	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $<
+
+
+## Install on the device
+%.install: %.hex
+	$(AVRDUDE) -b57600 -v -U flash:w:$<:i -V -v $(AVRDUDE_OPTIONS)
+
+
+## Clean target
+.PHONY: clean
+clean:
+	-rm -rf dep/* dep .DS_Store *.s *.o *.hex *.elf
+
+## Other dependencies, this is actually needed for the Mac compile
+-include $(shell mkdir dep 2>/dev/null) $(wildcard dep/*)
+
+
