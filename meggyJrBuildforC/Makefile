@@ -18,7 +18,8 @@ AVRDUDE =       avrdude
 AVROBJCOPY =    avr-objcopy
 
 ## AVRDUDE_OPTIONS
-AVRDUDE_OPTIONS = -Pusb -p m328p -c avrispmkII
+AVRDUDE_OPTIONS = -P/dev/ttyUSB0 -patmega328p -cstk500v1
+#AVRDUDE_OPTIONS = -P/dev/ttyUSB0 -p m328p -c avrispmkII
 
 ## avr chip
 MCU =           atmega328p
@@ -60,7 +61,7 @@ MeggyJr.o: MeggyJr.cpp
 
 ## Install on the device
 %.install: %.hex
-	$(AVRDUDE) -b57600 -v -U flash:w:$<:i -V -v $(AVRDUDE_OPTIONS)
+	$(AVRDUDE) -b57600 -v $(AVRDUDE_OPTIONS) -D -Uflash:w:$<:i 
 
 
 ## Clean target
