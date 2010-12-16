@@ -1,4 +1,4 @@
-#LyX 1.6.5 created this file. For more info see http://www.lyx.org/
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
 \lyxformat 345
 \begin_document
 \begin_header
@@ -82,7 +82,7 @@ Compiler construction is an important area in Computer Science.
  and I had identified this project I signed up for the compiler course the
  next day and loved the course.
  From a purely theoretical and intellectual standpoint, I found writing
- compilers very satisfying.
+ compilers satisfying.
  It ties together a lot of theory with concrete examples as well as how
  good software engineering techniques can be used with actual Computer Science
  theory.
@@ -172,8 +172,8 @@ Steps Taken
 \end_layout
 
 \begin_layout Standard
-Completing this project took a lot of work requiring each step to build
- on the previous.
+In order to complete the project, it was split into multiple steps that
+ would build on each other.
  In order to test that the compiler is working correctly I needed to have
  the build process complete and running.
  Following this was updating some of the basic examples in the reference
@@ -184,8 +184,9 @@ Completing this project took a lot of work requiring each step to build
  examples that would work throughout each process.
  If there are not any code examples there would be no way to verify that
  any of the 3 steps were working correctly.
- I used these code examples to figure out what instructions needed to be
- simulated in the simulator.
+ I created code examples to figure out what instructions needed to be simulated
+ in the simulator as well as to test the compiler to verify all the steps
+ where working.
 \end_layout
 
 \begin_layout Subsection*
@@ -211,7 +212,7 @@ Implementing the code that builds the AVR executable took a lot of investigating
 Once I had all the commands documented I was then able to get the utilities
  that are used in the build process: the assembler, the device up-loader,
  and the libraries used by the MeggyJr.
- Getting these utilities was not very difficult but it did require me having
+ Getting these utilities was not  difficult but it did require me having
  to build many of the utilities from source code.
  Once the utilities were built I was able to write a program that takes
  in an AVR assembly file and builds the executable and then uploads it to
@@ -229,7 +230,7 @@ Reference Compiler
 Updating the reference compiler has proved to not be the most important
  area of the project.
  The reason for this is that without the other two portions of the project
- done we won't have a way to run the programs once they have been compiled,
+ done we will not have a way to run the programs once they have been compiled,
  or will be have a way to grade the compilers that the students will write.
 \end_layout
 
@@ -305,7 +306,7 @@ I also had to figure out the best way to organize the instructions and how
  machine without repeating the same code over and over again.
  To accomplish this I decided to create an Class called MachineState which
  will hold all of the machine information: the instructions, the registers,
- the memory space, etc...
+ the memory space, etc.
  I then created a Class for every instruction.
  Each of these classes extends from the same base class allowing for the
  code that implements updating the MachineState to be shared amongst all
@@ -323,8 +324,8 @@ I also had to figure out the best way to organize the instructions and how
 \end_layout
 
 \begin_layout Standard
-Each of the Instr classes has an UpdateEvent that gets constructed at the
- same time that each Instr gets constructed.
+Each of the Instr classes has an UpdateEvent assosiated with it when the
+ Instr gets constructed.
  This allows for each Instr class to customize the data that it sets to
  update the MachineState object.
  In the Instr base class there is an executeWrapper function that will call
@@ -333,7 +334,7 @@ Each of the Instr classes has an UpdateEvent that gets constructed at the
  If you look at the MachineState methods there are no setter methods.
  The only way to update the MachineState is through the use of the UpdateEvent
  object.
- This allows for very explicit control over how the MachineState gets updated
+ This allows for  explicit control over how the MachineState gets updated
  and also means that in each Instr subclass inside of the execute method
  the writer of the subclass has to only update the information in the UpdateEven
 t object but does not have to remember to send the UpdateEvent to the MachineSta
@@ -347,13 +348,14 @@ I made a design decision to not check to see if a label exists in the call
  instructions to determine if the label exists, but we can at run-time determine
  this instead.
  I made this decision to make the parsing simpler and require fewer steps.
- To implement this checking at run-time is very easy and the error that
- gets reported states what label did not exist.
+ To implement this checking at run-time proved to be easy and whenever there
+ is a run-time error the error is reported with the Label name and execution
+ ends.
 \end_layout
 
 \begin_layout Standard
 Another requirement for the simulator is to simulate function calls that
- are implemented in the MeggyJr library and some of the AVR std c library.
+ are implemented in the MeggyJr library and some of the AVR std C library.
  We need to simulate these functions so that students will be able to see
  what the actual hardware will do.
  So in the case where we want to turn on a single LED on the LED screen
@@ -391,9 +393,9 @@ The picture of the simulator now has in addition to managing the machine
 
 \begin_layout Standard
 Once the instructions have been read into the MachineState object then it
- is just a matter of calling executeInstruction which will then execute
+ is just a matter of calling executeInstruction, which will then execute
  the every first instruction and update the MachineState.
- This makes it very easy to extend how the MachineState will execute.
+ This makes it easy to extend how the MachineState will execute.
  It can either run in a while loop until there are no more instructions
  to run to make it run in batch mode, or it can be ran to include stop points
  so students can pause the execution and probe the MachineState to see if
@@ -448,10 +450,10 @@ The simulator has been the most important and interesting part of the project.
  Without it making the transition to using the MeggyJr platform could not
  happen.
  I feel that the class will be more attractive to other undergraduate students
- based off of the feed back I have received from my peers in my other classes.
+ based off of the feedback I have received from my peers in my other classes.
  The effort put into this project I feel will make the compiler course stronger
  and also make the students that take the class stronger programmers.
- I know it make me a stronger programmer.
+ I know it has made me a stronger programmer.
 \end_layout
 
 \begin_layout Standard
