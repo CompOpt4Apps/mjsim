@@ -61,7 +61,7 @@ MeggyJr.o: MeggyJr.cpp
 
 ## Install on the device
 %.install: %.hex
-	$(AVRDUDE) -b57600 -v $(AVRDUDE_OPTIONS) -D -Uflash:w:$<:i 
+	$(AVRDUDE) -b57600 -v $(AVRDUDE_OPTIONS) -D -Uflash:w:$<:i
 
 
 ## Clean target
