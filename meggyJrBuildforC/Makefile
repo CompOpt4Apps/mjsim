@@ -67,7 +67,7 @@ MeggyJr.o: MeggyJr.cpp
 ## Clean target
 .PHONY: clean
 clean:
-	-rm -rf dep/* dep .DS_Store *.s *.o *.hex *.elf
+	-rm -rf dep/* dep .DS_Store *.o *.hex *.elf
 
 ## Other dependencies, this is actually needed for the Mac compile
 -include $(shell mkdir dep 2>/dev/null) $(wildcard dep/*)
