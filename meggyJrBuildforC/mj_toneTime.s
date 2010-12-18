@@ -32,8 +32,8 @@ main:
 ; mj.StartTone(18182, 1000);
 	movw r24,r28         ; Load Y so we can pass mj to the function
 	adiw r24,1           ; 1 is where the address of mj is stored
-	ldi r18,lo8(18182)   ; Store low bits of tone into r18
-	ldi r19,hi8(18182)   ; Store high bits of tone into r19
+	ldi r22,lo8(18182)   ; Store low bits of tone into r18
+	ldi r23,hi8(18182)   ; Store high bits of tone into r19
 	ldi r20,lo8(1000)    ; Store low bits of duration into r20
 	ldi r21,hi8(1000)    ; Store high bits of duration into r21
 	call _ZN7MeggyJr9StartToneEjj
@@ -43,21 +43,21 @@ main:
 
 ; time = MeggyJr::ToneTimeRemaining;
 	lds r24,_ZN7MeggyJr17ToneTimeRemainingE
-	lds r25,(_ZN7MeggyJr17ToneTimeRemainingE)+1
+	lds r25,_ZN7MeggyJr17ToneTimeRemainingE+1
 	std Y+2,r24          ; Store the value retrieved into time
 	std Y+3,r25
 
 ; } while(time);
 	ldd r24,Y+2          ; Load time from the stack
 	ldd r25,Y+3
-	sbiw r24,0           ; Subtract 0 (this resets the zero flag)
-	brne .L2             ; Do the loop again if time is not zero
+	sbiw r24,0           ; This resets the 0 flag
+        brne .L2             ; Do the loop again if time is not zero
 
 ; mj.StartTone(15290, 1000);
 	movw r24,r28         ; Load Y so we can pass mj to the function
 	adiw r24,1           ; 1 is where the address of mj is stored
-	ldi r18,lo8(15290)   ; Store low bits of tone into r18
-	ldi r19,hi8(15290)   ; Store high bits of tone into r19
+	ldi r22,lo8(15290)   ; Store low bits of tone into r18
+	ldi r23,hi8(15290)   ; Store high bits of tone into r19
 	ldi r20,lo8(1000)    ; Store low bits of duration into r20
 	ldi r21,hi8(1000)    ; Store high bits of duration into r21
 	call _ZN7MeggyJr9StartToneEjj

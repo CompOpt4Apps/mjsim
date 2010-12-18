@@ -1,5 +1,5 @@
 /*** Start of Header ***/
-	.file	"mj_auxLEDs.cpp"
+	.file	"mj_and.cpp"
 __SREG__ = 0x3f
 __SP_H__ = 0x3e
 __SP_L__ = 0x3d
@@ -13,12 +13,12 @@ __zero_reg__ = 1
 main:
 	push r29
 	push r28
-	push __tmp_reg__
+	rcall .
 	in r28,__SP_L__
 	in r29,__SP_H__
 /* prologue: function */
-/* frame size = 1 */
-/* stack size = 3 */
+/* frame size = 2 */
+/* stack size = 4 */
 /*** End of Header ***/
 
 
@@ -28,8 +28,17 @@ main:
 	adiw r24,1
 	call _ZN7MeggyJrC1Ev
 
-; MeggyJr::AuxLEDs = 0xAA;
-	ldi r24,lo8(-86)
+; byte leds = 0xFF;
+	ldi r24,lo8(-1)
+	std Y+2,r24
+
+; leds &= 0xAA;
+	ldd r24,Y+2       ; Load leds into a register
+	andi r24,lo8(-86) ; And the register with the immediate value -86 (0xAA)
+	std Y+2,r24       ; Store the result back into leds
+
+; MeggyJr::AuxLEDs = leds;
+	ldd r24,Y+2
 	sts _ZN7MeggyJr7AuxLEDsE,r24
 
 ; mj.StartTone(0, 1);

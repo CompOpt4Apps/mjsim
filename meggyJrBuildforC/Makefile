@@ -18,7 +18,8 @@ AVRDUDE =       avrdude
 AVROBJCOPY =    avr-objcopy
 
 ## AVRDUDE_OPTIONS
-AVRDUDE_OPTIONS = -P/dev/ttyUSB0 -patmega328p -cstk500v1
+PORT = /dev/ttyUSB0
+AVRDUDE_OPTIONS = -P$(PORT) -patmega328p -cstk500v1
 #AVRDUDE_OPTIONS = -P/dev/ttyUSB0 -p m328p -c avrispmkII
 
 ## avr chip
@@ -49,6 +50,9 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0
 
 ## Compile and Build
 
+%.s: %.cpp
+	$(AVRGCC) $(COMMON) -S $<
+
 %.hex: %.cpp MeggyJr.o
 	$(AVRGCC) $(INCLUDES) $(CFLAGS) -S  $<
 	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $*.s
@@ -62,6 +66,12 @@ MeggyJr.o: MeggyJr.cpp
 ## Install on the device
 %.install: %.hex
 	$(AVRDUDE) -b57600 -v $(AVRDUDE_OPTIONS) -D -Uflash:w:$<:i
+
+%.install_s: %.s MeggyJr.o
+	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c $*.s
+	$(AVRGCC) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
+	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS) $*.elf $*.hex
+	$(AVRDUDE) -b57600 -v -U flash:w:$*.hex:i -V -v $(AVRDUDE_OPTIONS)
 
 
 ## Clean target

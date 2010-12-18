@@ -48,8 +48,8 @@ main:
 	ldi r20,lo8(4)       ; Store Y (4) in r21:r20
 	movw r18,r28         ; Get Y (top of stack) so we can get red[], r19:r18 needs to
 	                     ; be the address of the array of color values.
-	subi r18,lo8(-4)     ; Add 4, this moves the address to the first item in red[]
-	sbci r19,hi8(-4)
+	subi r18,lo8(-2)     ; Add 2, this moves the address to the first item in red[]
+	sbci r19,hi8(-2)
 	call _ZN7MeggyJr8SetPxClrEhhPh
 
 ; while(1);

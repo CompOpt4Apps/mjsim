@@ -60,7 +60,7 @@ main:
 	call _ZN7MeggyJr9GetPixelREhh
 	std Y+5,r24          ; Put the result in r
 
-; byte r = mj.GetPixelG(2, 2);
+; byte g = mj.GetPixelG(2, 2);
 	movw r24,r28         ; Load Y
 	adiw r24,1           ; Move to mj
 	ldi r22,lo8(2)       ; Put the X value (2) of the pixel we want to get in r22
@@ -68,7 +68,7 @@ main:
 	call _ZN7MeggyJr9GetPixelGEhh
 	std Y+6,r24          ; Put the result in g
 
-; byte r = mj.GetPixelB(2, 2);
+; byte b = mj.GetPixelB(2, 2);
 	movw r24,r28         ; Load Y
 	adiw r24,1           ; Move to mj
 	ldi r22,lo8(2)       ; Put the X value (2) of the pixel we want to get in r22

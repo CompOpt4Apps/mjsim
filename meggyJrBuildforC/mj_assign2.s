@@ -57,6 +57,10 @@ main:
 	sbci r19,hi8(-4)
 	call _ZN7MeggyJr8SetPxClrEhhPh
 
+; while(1);
+.L2:
+	rjmp .L2
+
 
 
 /*** Start of Footer ***/

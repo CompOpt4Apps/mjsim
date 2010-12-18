@@ -9,6 +9,5 @@ int main (void)
 		if(buttons)
 			mj.SetPxClr(5, 5, Green);
 	}
-	while(1);
 	return 0;
 }

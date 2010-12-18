@@ -30,11 +30,11 @@ main:
 
 ; byte Green[3] = {0, 5, 0};
 	ldi r24,lo8(0)
-	std Y+2,r24          ; Store 0
+	std Y+1,r24          ; Store 0
 	ldi r24,lo8(5) 
-	std Y+3,r24          ; Store 5
+	std Y+2,r24          ; Store 5
 	ldi r24,lo8(0)
-	std Y+4,r24          ; Store 0
+	std Y+3,r24          ; Store 0
 
 ; MeggyJr mj;
 	movw r24,r28         ; Store Y in r24/r25
@@ -63,8 +63,8 @@ main:
 	ldi r20,lo8(5)       ; Store Y (5) in r21:r20
 	movw r18,r28         ; Get Y (top of stack) so we can get Green[], r19:r18 needs
 	                     ; to be the address of the array of color values.
-	subi r18,lo8(-4)     ; Add 4, this moves the address to the first item in Green[]
-	sbci r19,hi8(-4)
+	subi r18,lo8(-1)     ; Add 1, this moves the address to the first item in Green[]
+	sbci r19,hi8(-1)
 	call _ZN7MeggyJr8SetPxClrEhhPh
 
 ; }

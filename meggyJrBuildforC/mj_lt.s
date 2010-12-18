@@ -1,5 +1,5 @@
 /*** Start of Header ***/
-	.file	"mj_auxLEDs.cpp"
+	.file	"mj_lt.cpp"
 __SREG__ = 0x3f
 __SP_H__ = 0x3e
 __SP_L__ = 0x3d
@@ -13,37 +13,51 @@ __zero_reg__ = 1
 main:
 	push r29
 	push r28
+	rcall .
 	push __tmp_reg__
 	in r28,__SP_L__
 	in r29,__SP_H__
 /* prologue: function */
-/* frame size = 1 */
-/* stack size = 3 */
+/* frame size = 3 */
+/* stack size = 5 */
 /*** End of Header ***/
 
 
 
 ; MeggyJr mj;
 	movw r24,r28
-	adiw r24,1
+	adiw r24,3
 	call _ZN7MeggyJrC1Ev
 
-; MeggyJr::AuxLEDs = 0xAA;
-	ldi r24,lo8(-86)
-	sts _ZN7MeggyJr7AuxLEDsE,r24
+; byte x = 20;
+	ldi r24,lo8(20)
+	std Y+1,r24
 
-; mj.StartTone(0, 1);
+; byte y = 50;
+	ldi r24,lo8(50)
+	std Y+2,r24
+
+; if(x < y) {
+	ldd r25,Y+1 ; Load x
+	ldd r24,Y+2 ; Load y
+	cp r25,r24  ; Compare x and y
+	brge .L2    ; Jump over the block if x >= y
+
+; mj.StartTone(2500, 750);
 	movw r24,r28
-	adiw r24,1
-	ldi r22,lo8(0)
-	ldi r23,hi8(0)
-	ldi r20,lo8(1)
-	ldi r21,hi8(1)
+	adiw r24,3
+	ldi r22,lo8(2500)
+	ldi r23,hi8(2500)
+	ldi r20,lo8(750)
+	ldi r21,hi8(750)
 	call _ZN7MeggyJr9StartToneEjj
 
+; }
+.L2:                ; Continue execution
+
 ; while(1);
-.L2:
-	rjmp .L2
+.L3:
+	rjmp .L3
 
 
 
