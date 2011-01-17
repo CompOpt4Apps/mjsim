@@ -1,4 +1,4 @@
-#include "MeggyJrSimple.h"
+//#include "MeggyJrSimple.h"
 //#include <util/delay.h>
 
 /*void delay_ms(uint32_t time) {
@@ -8,6 +8,10 @@
 	}
 }*/
 
+#include <MeggyJr.h>
+void MeggyJrSimpleSetup(void);
+void DisplaySlate (void);
+void DrawPx(byte xin, byte yin, byte color);
 
 int main (void)
 {
