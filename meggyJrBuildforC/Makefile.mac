@@ -18,6 +18,7 @@
 AVRDIR =        /Applications/Arduino.app/Contents/Resources/Java/hardware/tools/avr/bin
 
 AVRGCC =        $(AVRDIR)/avr-gcc
+AVRGXX =        $(AVRDIR)/avr-g++
 AVROBJCOPY =    $(AVRDIR)/avr-objcopy
 AVRDUDE =       $(AVRDIR)/avrdude
 
@@ -52,14 +53,30 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0
 
 ## Compile and Build
 
+#%.hex: %.s MeggyJr.o MeggyJrSimple.o
+#	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $*.s
+#	$(AVRGXX) $(LDFLAGS) $*.o MeggyJr.o MeggyJrSimple.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
+#	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $*.elf $@
+
 %.hex: %.cpp MeggyJr.o
-	$(AVRGCC) $(INCLUDES) $(CFLAGS) -S  $<
-	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $*.s
-	$(AVRGCC) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
+	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -S  $<
+	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -c  $*.s
+	$(AVRGXX) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
 	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $*.elf $@
+
+# BEFORE incorporating MeggyJrSimple
+#%.hex: %.cpp MeggyJr.o
+#	$(AVRGCC) $(INCLUDES) $(CFLAGS) -S  $<
+#	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $*.s
+#	$(AVRGCC) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
+#	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $*.elf $@
 
 MeggyJr.o: MeggyJr.cpp
 	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $<
+
+MeggyJrSimple.o: MeggyJrSimple.cpp
+	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -c  $<
+
 
 
 ## Install on the device
