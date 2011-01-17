@@ -14,6 +14,7 @@
 
 ## paths to the necessary tools, on linux the tools are in default path
 AVRGCC =        avr-gcc
+AVRGXX =        avr-g++
 AVRDUDE =       avrdude
 AVROBJCOPY =    avr-objcopy
 
@@ -53,11 +54,20 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0
 %.s: %.cpp
 	$(AVRGCC) $(COMMON) -S $<
 
-%.hex: %.cpp MeggyJr.o
-	$(AVRGCC) $(INCLUDES) $(CFLAGS) -S  $<
-	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $*.s
-	$(AVRGCC) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
+#%.hex: %.cpp MeggyJr.o
+#	$(AVRGCC) $(INCLUDES) $(CFLAGS) -S  $<
+#	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $*.s
+#	$(AVRGCC) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
+#	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $*.elf $@
+
+%.hex: %.cpp MeggyJr.o MeggyJrSimple.o
+	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -S  $<
+	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -c  $*.s
+	$(AVRGXX) $(LDFLAGS) $*.o MeggyJr.o MeggyJrSimple.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
 	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $*.elf $@
+
+MeggyJrSimple.o: MeggyJrSimple.cpp
+	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -c  $<
 
 MeggyJr.o: MeggyJr.cpp
 	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $<
