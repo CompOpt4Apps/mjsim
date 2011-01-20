@@ -1,5 +1,6 @@
 package machine.functions;
 
+import instructions.RuntimeError;
 import machine.MachineState;
 
 /**
@@ -22,7 +23,7 @@ public abstract class Func {
 		return name;
 	}
 	
-	public abstract void exec();
+	public abstract void exec() throws RuntimeError;
 	
 	static public String valueToColor(int value)
 	{

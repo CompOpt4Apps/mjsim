@@ -14,6 +14,7 @@ import java.util.TreeMap;
 
 import machine.functions.Func;
 import machine.functions.FuncDisplaySlate;
+import machine.functions.FuncMalloc;
 import machine.functions.FuncSetPix;
 
 import org.apache.log4j.Logger;
@@ -82,8 +83,8 @@ public class MachineState {
 
 		// add all of the predefined functions
 		predefinedFunctions.put("_Z6DrawPxhhh", new FuncSetPix(this));
-		predefinedFunctions
-				.put("_Z12DisplaySlatev", new FuncDisplaySlate(this));
+		predefinedFunctions.put("_Z12DisplaySlatev", new FuncDisplaySlate(this));
+		predefinedFunctions.put("malloc", new FuncMalloc(this));
 	}
 
 	public MachineState(String name, boolean batch) {
