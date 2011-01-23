@@ -52,16 +52,9 @@ HEX_EEPROM_FLAGS += --change-section-lma .eeprom=0
 ## Compile and Build
 
 %.s: %.cpp
-	$(AVRGCC) $(COMMON) -S $<
-
-#%.hex: %.cpp MeggyJr.o
-#	$(AVRGCC) $(INCLUDES) $(CFLAGS) -S  $<
-#	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c  $*.s
-#	$(AVRGCC) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
-#	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $*.elf $@
-
-%.hex: %.cpp MeggyJr.o MeggyJrSimple.o
 	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -S  $<
+
+%.hex: %.s MeggyJr.o MeggyJrSimple.o
 	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -c  $*.s
 	$(AVRGXX) $(LDFLAGS) $*.o MeggyJr.o MeggyJrSimple.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
 	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS)  $*.elf $@
