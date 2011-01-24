@@ -19,58 +19,18 @@
     along with this library.  If not, see <http://www.gnu.org/licenses/>.
 	  
 */
-
-
-
+/*
+ * MMS, 1/23/11, put most of functionality in MeggyJrSimple.cpp
+ * to enable simpler code gen for MeggyJava.
+ */
 
 #ifndef MeggyJrSimple_h
 #define MeggyJrSimple_h
  
 #include <MeggyJr.h>
 
-MeggyJr Meg;
-byte GameSlate[8][8];       
-byte lastButtonState;
 
-byte Button_A;		 
-byte Button_B;
-byte Button_Up;
-byte Button_Down;
-byte Button_Left;
-byte Button_Right;
- 
 #define MeggyCursorColor   15,15,15				// You can define color constants like this.
-
-//Color lookup Table
-byte ColorTable[26][3] = 
-{
-  { MeggyDark  },  
-  { MeggyRed  }  ,
-  { MeggyOrange  },
-  { MeggyYellow  },
-  { MeggyGreen  },
-  { MeggyBlue  } ,
-  { MeggyViolet  },
-  { MeggyWhite  },  
-  { MeggyDimRed  },  
-  { MeggyDimOrange  },  
-  { MeggydimYellow  },  
-  { MeggyDimGreen  },  
-  { MeggydimAqua  },  
-  { MeggyDimBlue  },  
-  { MeggydimViolet  },   
-  { MeggyCursorColor},      //Extra bright cursor position color (not white).
-  {0,0,0},					//CustomColor0 (dark, by default)
-  {0,0,0},			        //CustomColor1 (dark, by default)
-  {0,0,0},					//CustomColor2 (dark, by default)
-  {0,0,0},					//CustomColor3 (dark, by default)	
-  {0,0,0},					//CustomColor4 (dark, by default)
-  {0,0,0},					//CustomColor5 (dark, by default)
-  {0,0,0},					//CustomColor6 (dark, by default)
-  {0,0,0},					//CustomColor7 (dark, by default)
-  {0,0,0},					//CustomColor8 (dark, by default)
-  {0,0,0}					//CustomColor9 (dark, by default)
-}; 
 
 // Assign those colors names that we can use:
 enum colors {
@@ -80,120 +40,41 @@ enum colors {
 	CustomColor5, CustomColor6, CustomColor7, CustomColor8, CustomColor9
 	};     
 
-
   
-void CheckButtonsDown()
-	{ 
-	 byte i = Meg.GetButtons(); 
-	 
- 	 Button_B  = (i & 1);      
-     Button_A = (i & 2);     
-     Button_Up = (i & 4);
-     Button_Down = (i & 8);
-     Button_Left = (i & 16);
-     Button_Right = (i & 32);
-	 
-	 lastButtonState = i; 
-	}
-	 
-void CheckButtonsPress()
-	{
-	 byte j;
-	 byte i = Meg.GetButtons();
-	 j = i & ~(lastButtonState);  // What's changed?
-	 
- 	 Button_B  = (j & 1);      
-     Button_A = (j & 2);     
-     Button_Up = (j & 4);
-     Button_Down = (j & 8);
-     Button_Left = (j & 16);
-     Button_Right = (j & 32);
-	 
-	 lastButtonState = i;
-	}
+void CheckButtonsDown();
  
+void CheckButtonsPress();
  
 // Write a byte to the Auxiliary LED set at the top of the LED matrix display.  
-void SetAuxLEDs(byte InputLEDs)
-	{
-		Meg.AuxLEDs = InputLEDs;
-	}
-
+void SetAuxLEDs(byte InputLEDs);
  
 
 // Write a byte to the Auxiliary LED set at the top of the LED matrix display.  
 // This version reverses bit order, so you can call it with an explicit binary number
-void SetAuxLEDsBinary(byte n)
-{
-n = (n & 240) >> 4 | (n & 15) << 4; 
-n = (n & 204) >> 2 | (n & 51) << 2; 
-Meg.AuxLEDs = (n & 170) >>1 | (n & 85) << 1; 
-}
-
- 
+void SetAuxLEDsBinary(byte n);
 
 
 // Simple function to color in a pixel at position (x,y,color):
-void DrawPx(byte xin, byte yin, byte color)
-{
-		GameSlate[xin][yin] = color;
-}
-
+void DrawPx(byte xin, byte yin, byte color);
 
 // Same as above, except checks to see if pixel is onscreen
 // This function is new as of v 1.4
-void SafeDrawPx(byte xin, byte yin, byte color)
-{
-    if ((xin >= 0) && (xin <= 7) && (yin >= 0) && (yin <= 7))
-		GameSlate[xin][yin] = color;
-}
+void SafeDrawPx(byte xin, byte yin, byte color);
 
 // function to read color of pixel at position (x,y):
-byte ReadPx(byte xin, byte yin)
-{   
-	return	GameSlate[xin][yin];
-}
-
+byte ReadPx(byte xin, byte yin);
 
 //Empty the Game Slate:
-void ClearSlate(void)
-{
-  byte i;
-  byte j;
-  i = 0;
-  while (i < 8) { 
-    j = 0;
-    while ( j < 8)
-    {
-      GameSlate[i][j] = 0;
-      j++;
-    }
-    i++;
-  }
-}
-
+void ClearSlate(void);
 
 // DisplaySlate() :: Write the Game Slate to the Display Memory it.
 // This function looks up each color number (name) stored in the Game Slate,
 // retreives its R,G,B components from the color table, and writes them to the
 // R,G,B parts of the display memory.
 
-void DisplaySlate (void) {	
-  byte  j = 0; 
-  while (j < 8) 
-  {
-    Meg.SetPxClr(j, 7, ColorTable[ GameSlate[j][7] ]);   
-    Meg.SetPxClr(j, 6, ColorTable[ GameSlate[j][6] ]);  
-    Meg.SetPxClr(j, 5, ColorTable[ GameSlate[j][5] ]);   
-    Meg.SetPxClr(j, 4, ColorTable[ GameSlate[j][4] ]);  
-    Meg.SetPxClr(j, 3, ColorTable[ GameSlate[j][3] ]);   
-    Meg.SetPxClr(j, 2, ColorTable[ GameSlate[j][2] ]);  
-    Meg.SetPxClr(j, 1, ColorTable[ GameSlate[j][1] ]);   
-    Meg.SetPxClr(j, 0, ColorTable[ GameSlate[j][0] ]);  
-    j++; 
-  }  	 
-}  
- #endif
+void DisplaySlate (void);
+
+#endif
   
  
   // Pre-defined sound divisors:
@@ -304,12 +185,7 @@ void DisplaySlate (void) {
  
  
  // other sound functions:
-void Tone_Start(unsigned int divisor, unsigned int duration_ms)
-{
-  Meg.StartTone(divisor, duration_ms);
-}
-
-
+void Tone_Start(unsigned int divisor, unsigned int duration_ms);
 
 #define Tone_Update(); {}			// For backwards compatibility.
 
@@ -323,25 +199,8 @@ void Tone_Update(void)
 */
 
 
-void EditColor(byte WhichColor, byte RedComponent, byte GreenComponent, byte BlueComponent)
-{
-   ColorTable[WhichColor][0] = RedComponent;
-   ColorTable[WhichColor][1] = GreenComponent;
-   ColorTable[WhichColor][2] = BlueComponent;
- } 
+void EditColor(byte WhichColor, byte RedComponent, byte GreenComponent, byte BlueComponent);
 
-
-
-
-void MeggyJrSimpleSetup(void) 
-  {
-		Meg = MeggyJr();  
-		
-	    lastButtonState = Meg.GetButtons();
-		
-		 Meg.StartTone(0, 0);
-	//	 Tone_Update();
-		 SoundOff();
-  }
-  
+void MeggyJrSimpleSetup(void);
+ 
   

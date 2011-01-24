@@ -70,11 +70,11 @@ MeggyJr.o: MeggyJr.cpp
 %.install: %.hex
 	$(AVRDUDE) -b57600 -v $(AVRDUDE_OPTIONS) -D -Uflash:w:$<:i
 
-%.install_s: %.s MeggyJr.o
-	$(AVRGCC) $(INCLUDES) $(CFLAGS) -c $*.s
-	$(AVRGCC) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
-	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS) $*.elf $*.hex
-	$(AVRDUDE) -b57600 -v -U flash:w:$*.hex:i -V -v $(AVRDUDE_OPTIONS)
+#%.install_s: %.s MeggyJr.o
+#	$(AVRGXX) $(INCLUDES) $(CFLAGS) -c $*.s
+#	$(AVRGXX) $(LDFLAGS) $*.o MeggyJr.o $(LINKONLYOBJECTS) $(LIBDIRS) $(LIBS) -o $*.elf
+#	$(AVROBJCOPY) -O ihex $(HEX_FLASH_FLAGS) $*.elf $*.hex
+#	$(AVRDUDE) -b57600 -v -U flash:w:$*.hex:i -V -v $(AVRDUDE_OPTIONS)
 
 
 ## Clean target
@@ -82,7 +82,6 @@ MeggyJr.o: MeggyJr.cpp
 clean:
 	-rm -rf dep/* dep .DS_Store *.o *.hex *.elf
 
-## Other dependencies, this is actually needed for the Mac compile
+
+## Other dependencies
 -include $(shell mkdir dep 2>/dev/null) $(wildcard dep/*)
-
-

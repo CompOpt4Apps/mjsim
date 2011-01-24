@@ -68,7 +68,6 @@ MeggyJrSimple.o: MeggyJrSimple.cpp
 	$(AVRGXX) $(INCLUDES) $(CFLAGS) -I. -c  $<
 
 
-
 ## Install on the device
 %.install: %.hex
 	$(AVRDUDE) -b57600 -v $(AVRDUDE_OPTIONS) -D -Uflash:w:$<:i
@@ -79,6 +78,6 @@ MeggyJrSimple.o: MeggyJrSimple.cpp
 clean:
 	-rm -rf dep/* dep .DS_Store *.o *.hex *.elf
 
-## Other dependencies, this is actually needed for the Mac compile
+## Other dependencies
 -include $(shell mkdir dep 2>/dev/null) $(wildcard dep/*)
 
