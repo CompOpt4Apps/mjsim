@@ -29,6 +29,13 @@
  
 #include <MeggyJr.h>
 
+extern byte Button_A;		 
+extern byte Button_B;
+extern byte Button_Up;
+extern byte Button_Down;
+extern byte Button_Left;
+extern byte Button_Right;
+
 
 #define MeggyCursorColor   15,15,15				// You can define color constants like this.
 
