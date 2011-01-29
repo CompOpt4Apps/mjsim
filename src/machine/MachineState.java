@@ -295,6 +295,10 @@ public class MachineState {
 	}
 
 	public void setDisplaySlate(int x, int y, String color) {
+		if(color == null)
+		{
+			logger.fatal("Color is null.");
+		}
 		displaySlate[x][y] = color;
 	}
 

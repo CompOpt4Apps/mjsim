@@ -28,6 +28,26 @@ public class InstrLDI extends Instr {
 		this.k = k;
 	}
 
+	public InstrLDI(MachineState machine, int rd, int k, LDIType type) throws MalformedInstruction
+	{
+		this(machine, rd, getHILO(k,type));
+	}
+	
+	private static int getHILO(int k, LDIType type)
+	{
+		int value = 0;
+		switch(type)
+		{
+		case LO:
+				value = k & 0xFF;
+				break;
+		case HI: 
+				value = (k & 0xFF00) >> 8;
+				break;
+		}	
+		return value;
+	}
+	
 	@Override
 	public String toString() {
 		return "LDI r" + rd + " " + k;
@@ -38,5 +58,9 @@ public class InstrLDI extends Instr {
 		logger.debug("LDI instructions r("+rd+") value(" + k + ")");
 		this.event.setPC(this.machine.getPC()+1);
 		this.event.setRd(rd, k);
+	}
+	public enum LDIType
+	{
+		HI,LO;
 	}
 }

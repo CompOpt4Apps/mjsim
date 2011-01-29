@@ -53,16 +53,12 @@ _Z16SetAuxLEDsBinaryh:
 /* epilogue start */
 	ret
 	.size	_Z16SetAuxLEDsBinaryh, .-_Z16SetAuxLEDsBinaryh
-	.section	.text._Z10SafeDrawPxhhh,"ax",@progbits
-.global	_Z10SafeDrawPxhhh
-	.type	_Z10SafeDrawPxhhh, @function
-_Z10SafeDrawPxhhh:
+	.section	.text._Z6DrawPxhhh,"ax",@progbits
+.global	_Z6DrawPxhhh
+	.type	_Z6DrawPxhhh, @function
+_Z6DrawPxhhh:
 /* prologue: function */
 /* frame size = 0 */
-	cpi r24,lo8(8)
-	brsh .L7
-	cpi r22,lo8(8)
-	brsh .L7
 	mov r30,r24
 	ldi r31,lo8(0)
 	ldi r23,3
@@ -75,7 +71,32 @@ _Z10SafeDrawPxhhh:
 	subi r30,lo8(-(GameSlate))
 	sbci r31,hi8(-(GameSlate))
 	st Z,r20
-.L7:
+/* epilogue start */
+	ret
+	.size	_Z6DrawPxhhh, .-_Z6DrawPxhhh
+	.section	.text._Z10SafeDrawPxhhh,"ax",@progbits
+.global	_Z10SafeDrawPxhhh
+	.type	_Z10SafeDrawPxhhh, @function
+_Z10SafeDrawPxhhh:
+/* prologue: function */
+/* frame size = 0 */
+	cpi r24,lo8(8)
+	brsh .L9
+	cpi r22,lo8(8)
+	brsh .L9
+	mov r30,r24
+	ldi r31,lo8(0)
+	ldi r26,3
+1:	lsl r30
+	rol r31
+	dec r26
+	brne 1b
+	add r30,r22
+	adc r31,__zero_reg__
+	subi r30,lo8(-(GameSlate))
+	sbci r31,hi8(-(GameSlate))
+	st Z,r20
+.L9:
 	ret
 	.size	_Z10SafeDrawPxhhh, .-_Z10SafeDrawPxhhh
 	.section	.text._Z6ReadPxhh,"ax",@progbits
@@ -86,10 +107,10 @@ _Z6ReadPxhh:
 /* frame size = 0 */
 	mov r30,r24
 	ldi r31,lo8(0)
-	ldi r26,3
+	ldi r27,3
 1:	lsl r30
 	rol r31
-	dec r26
+	dec r27
 	brne 1b
 	add r30,r22
 	adc r31,__zero_reg__
@@ -109,30 +130,30 @@ _Z10ClearSlatev:
 	ldi r19,hi8(GameSlate+8)
 	ldi r24,lo8(0)
 	ldi r25,hi8(0)
-	rjmp .L12
-.L13:
+	rjmp .L14
+.L15:
 	st Z+,__zero_reg__
 	cp r30,r18
 	cpc r31,r19
-	brne .L13
+	brne .L15
 	adiw r24,1
 	movw r18,r30
 	subi r18,lo8(-(8))
 	sbci r19,hi8(-(8))
 	cpi r24,8
 	cpc r25,__zero_reg__
-	breq .L15
-.L12:
+	breq .L17
+.L14:
 	movw r30,r24
-	ldi r27,3
+	ldi r20,3
 1:	lsl r30
 	rol r31
-	dec r27
+	dec r20
 	brne 1b
 	subi r30,lo8(-(GameSlate))
 	sbci r31,hi8(-(GameSlate))
-	rjmp .L13
-.L15:
+	rjmp .L15
+.L17:
 	ret
 	.size	_Z10ClearSlatev, .-_Z10ClearSlatev
 	.section	.text._Z9EditColorhhhh,"ax",@progbits
@@ -300,7 +321,7 @@ _Z12DisplaySlatev:
 	ldi r29,hi8(GameSlate)
 	ldi r17,lo8(0)
 	ldi r16,lo8(3)
-.L30:
+.L32:
 	ldd r18,Y+7
 	mul r18,r16
 	movw r18,r0
@@ -393,7 +414,7 @@ _Z12DisplaySlatev:
 	adiw r28,8
 	cpi r17,lo8(8)
 	breq .+2
-	rjmp .L30
+	rjmp .L32
 /* epilogue start */
 	pop r29
 	pop r28
@@ -401,28 +422,6 @@ _Z12DisplaySlatev:
 	pop r16
 	ret
 	.size	_Z12DisplaySlatev, .-_Z12DisplaySlatev
-	.section	.text._Z6DrawPxhhh,"ax",@progbits
-.global	_Z6DrawPxhhh
-	.type	_Z6DrawPxhhh, @function
-_Z6DrawPxhhh:
-/* prologue: function */
-/* frame size = 0 */
-	mov r23,r24
-	mov r21,r22
-	ldi r24,lo8(3)
-	mul r20,r24
-	movw r18,r0
-	clr r1
-	subi r18,lo8(-(ColorTable))
-	sbci r19,hi8(-(ColorTable))
-	ldi r24,lo8(Meg)
-	ldi r25,hi8(Meg)
-	mov r22,r23
-	mov r20,r21
-	call _ZN7MeggyJr8SetPxClrEhhPh
-/* epilogue start */
-	ret
-	.size	_Z6DrawPxhhh, .-_Z6DrawPxhhh
 .global	Meg
 	.section	.bss.Meg,"aw",@nobits
 	.type	Meg, @object

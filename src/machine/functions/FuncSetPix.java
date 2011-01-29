@@ -1,5 +1,6 @@
 package machine.functions;
 
+import instructions.RuntimeError;
 import machine.MachineState;
 
 public class FuncSetPix extends Func {
@@ -13,11 +14,15 @@ public class FuncSetPix extends Func {
 	/**
 	 * Will grab the parameters from the machine state.  the values x,y, color are in registers r24,r22, and r20 respectively.
 	 */
-	public void exec() {
+	public void exec() throws RuntimeError{
 
 		final int x = this.machine.getRegister(24);
 		final int y = this.machine.getRegister(22);
 		final String color = Func.valueToColor(this.machine.getRegister(20));
+		if(color == null)
+		{
+			throw new RuntimeError("Color is null.");
+		}
 		this.machine.setDisplaySlate(x, y, color);
 	}
 }

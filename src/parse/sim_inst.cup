@@ -42,7 +42,7 @@ parser code {:
 
 /* Symbols */
 terminal EOL;
-terminal ASSIGN, COMMA;
+terminal ASSIGN, COMMA, LPARAN, RPARAN, AVR_HI, AVR_LO;
 terminal TokenValue NUM, HEX, QSTRING;
 terminal TokenValue DOT_FILE, DOT_GLOBAL, DOT_TEXT, DOT_TYPE, SIZE_TYPE, MINUS, DOT;
 terminal TokenValue SP_L, SP_H;
@@ -81,7 +81,6 @@ header	::=	DOT_FILE QSTRING eol
 		AVR_PUSH REG eol
 		AVR_IN REG COMMA SP_L eol
 		AVR_IN REG COMMA SP_H eol
-		AVR_CALL ID eol
 		AVR_CALL ID eol
 		{:
 		    RESULT=null;//empty state.
@@ -126,6 +125,14 @@ instr	::=	AVR_PUSH REG:r eol
 			//RESULT= new InstrLD(sim_inst.machine);
 		:}
 		
+	|	AVR_LDI REG:r COMMA AVR_LO LPARAN exp:e RPARAN eol 
+		{:
+			RESULT= new InstrLDI(sim_inst.machine,Integer.parseInt(r.toString()),Integer.parseInt(e.toString()));
+		:}
+	|	AVR_LDI REG:r COMMA AVR_HI LPARAN exp:e RPARAN eol 
+		{:
+			RESULT= new InstrLDI(sim_inst.machine,Integer.parseInt(r.toString()),Integer.parseInt(e.toString()));
+		:}
 	|	AVR_LDI REG:r COMMA exp:e eol 
 		{:
 			RESULT= new InstrLDI(sim_inst.machine,Integer.parseInt(r.toString()),Integer.parseInt(e.toString()));
