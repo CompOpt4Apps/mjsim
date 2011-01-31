@@ -35,6 +35,6 @@ public class InstrPop extends Instr {
 		//grab the value on the top of the stack and store it into the register.
 		this.event.setStackPointer(machine.getStackPointer()+1);
 		//popping off the address on the top of the stack pointer adds one to the stack.
-		logger.debug("Popping the value ("+this.event.getRd().getRight()+") into register r("+this.event.getRd().getLeft()+")");
+		logger.debug("Popping the value ("+this.event.getRd().get(register)+") into register r("+register+")");
 	}
 }

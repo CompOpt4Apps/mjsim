@@ -1,7 +1,9 @@
 package machine;
 
+import java.util.HashMap;
+
 public class UpdateEvent {
-	private Pair<Integer,Integer> rd = null;
+	private final HashMap<Integer, Integer> rd = new HashMap<Integer, Integer>();
 	private int pc;
 	private Pair<Integer,Integer> memory = null;
 	private Pair<Integer,Integer> longMemory= null;
@@ -14,7 +16,7 @@ public class UpdateEvent {
 
     public void setRd(int reg, int value)
     {
-    	rd = new Pair<Integer, Integer>(reg, value);
+    	rd.put(reg, value);
     }
     
     public void setMemory(int address, int value)
@@ -38,9 +40,9 @@ public class UpdateEvent {
     }
 
 	/**
-	 * @return the rd
+	 * @return the updated registers
 	 */
-	public Pair<Integer, Integer> getRd() {
+	public HashMap<Integer, Integer> getRd() {
 		return rd;
 	}
 

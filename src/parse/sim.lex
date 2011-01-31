@@ -52,6 +52,7 @@ TYPE=@{LETTER}+
 "brlo" { return new Symbol(sym.AVR_BRLO, new TokenValue("pop", yyline, yychar)); }
 "brlt" { return new Symbol(sym.AVR_BRLT, new TokenValue("pop", yyline, yychar)); }
 "tst" { return new Symbol(sym.AVR_TST, new TokenValue("pop", yyline, yychar)); }
+"muls" { return new Symbol(sym.AVR_MULS, new TokenValue("pop", yyline, yychar)); }
 "in" { return new Symbol(sym.AVR_IN, new TokenValue("in", yyline, yychar)); }
 "ld" { return new Symbol(sym.AVR_LD, new TokenValue("ld", yyline, yychar));  }
 "ldi" { return new Symbol(sym.AVR_LDI, new TokenValue("ldi", yyline, yychar)); }

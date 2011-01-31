@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
  */
 public abstract class Instr
 {
-	private static final Logger logger = Logger.getLogger(Instr.class);
 	protected final MachineState machine;
 	protected UpdateEvent event;
 	/**

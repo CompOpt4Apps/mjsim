@@ -346,10 +346,13 @@ public class MachineState {
 		logger.info("Received UpdateEvent...processing...");
 
 		if (event.getRd() != null) {
-			final Pair<Integer, Integer> pair = event.getRd();
-			logger.info("Updating register r(" + pair.getLeft()
-					+ ") with the value (" + pair.getRight() + ")");
-			registers.put(pair.getLeft(), pair.getRight());
+			final HashMap<Integer, Integer> rds = event.getRd();
+			for(Integer key:rds.keySet())
+			{
+				logger.info("Updating register r(" + key
+						+ ") with the value (" + rds.get(key) + ")");	
+				registers.put(key, rds.get(key));				
+			}
 		}
 
 		if (event.getMemory() != null) {
