@@ -54,7 +54,7 @@ non terminal Instr instr;
 non terminal header, eol; 
 
 /* AVR Functions */
-terminal AVR_PUSH, AVR_POP, AVR_IN, AVR_LD, AVR_LDI, AVR_ADD, AVR_ADC, AVR_CALL, AVR_RET, AVR_AND, AVR_EOR, AVR_JMP, AVR_NEG, AVR_OR, AVR_CP, AVR_SUB, AVR_BREQ, AVR_BRLO, AVR_BRLT, AVR_TST, AVR_MULS;
+terminal AVR_PUSH, AVR_POP, AVR_IN, AVR_LD, AVR_LDI, AVR_ADD, AVR_ADC, AVR_CALL, AVR_RET, AVR_AND, AVR_EOR, AVR_JMP, AVR_NEG, AVR_OR, AVR_CP, AVR_SUB, AVR_BREQ, AVR_BRLO, AVR_BRLT, AVR_TST, AVR_MULS, AVR_SBC;
 
 /* Grammar */
 start with pgrm;
@@ -123,8 +123,7 @@ instr	::=	AVR_PUSH REG:r eol
 	|	AVR_LD eol 
 		{:
 			//RESULT= new InstrLD(sim_inst.machine);
-		:}
-		
+		:}		
 	|	AVR_LDI REG:r COMMA AVR_LO LPARAN exp:e RPARAN eol 
 		{:
 			RESULT= new InstrLDI(sim_inst.machine,Integer.parseInt(r.toString()),Integer.parseInt(e.toString()));
@@ -140,6 +139,14 @@ instr	::=	AVR_PUSH REG:r eol
 	|	AVR_ADD REG:r1 COMMA REG:r2 eol 
 		{:
 			RESULT= new InstrAdd(sim_inst.machine,Integer.parseInt(r1.toString()),Integer.parseInt(r2.toString()));
+		:}
+	|	AVR_SUB REG:r1 COMMA REG:r2 eol 
+		{:
+			RESULT= new InstrSub(sim_inst.machine,Integer.parseInt(r1.toString()),Integer.parseInt(r2.toString()));
+		:}
+	|	AVR_SBC REG:r1 COMMA REG:r2 eol 
+		{:
+			RESULT= new InstrSBC(sim_inst.machine,Integer.parseInt(r1.toString()),Integer.parseInt(r2.toString()));
 		:}
 	|	AVR_MULS REG:r1 COMMA REG:r2 eol 
 		{:

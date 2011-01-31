@@ -1,8 +1,10 @@
 package instructions;
 
-import org.apache.log4j.Logger;
+import java.util.Map;
 
 import machine.MachineState;
+
+import org.apache.log4j.Logger;
 
 /**
  * RET - Return from Subroutine
@@ -31,6 +33,16 @@ public class InstrRet extends Instr {
 		logger.debug("The PC returned from the stack is (0x"+ Integer.toHexString(realPC)+")");
 		this.event.setPC(realPC);
 		this.event.setStackPointer(this.machine.getStackPointer()+2);
+		if(logger.isTraceEnabled())
+		{
+			//print the stack when in trace mode on returns.
+			Map<Integer, Integer> stack = machine.getStack();
+			logger.trace("Print the values on the stack.");
+			for(Integer key: stack.keySet())
+			{
+				logger.trace("0x" + Integer.toHexString(key) + " - " + stack.get(key));
+			}
+		}
 	}
 
 }

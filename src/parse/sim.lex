@@ -46,19 +46,20 @@ TYPE=@{LETTER}+
 
 "push" { return new Symbol(sym.AVR_PUSH, new TokenValue("push", yyline, yychar)); }
 "pop" { return new Symbol(sym.AVR_POP, new TokenValue("pop", yyline, yychar)); }
-"cp" { return new Symbol(sym.AVR_CP, new TokenValue("pop", yyline, yychar)); }
-"sub" { return new Symbol(sym.AVR_SUB, new TokenValue("pop", yyline, yychar)); }
-"breq" { return new Symbol(sym.AVR_BREQ, new TokenValue("pop", yyline, yychar)); }
-"brlo" { return new Symbol(sym.AVR_BRLO, new TokenValue("pop", yyline, yychar)); }
-"brlt" { return new Symbol(sym.AVR_BRLT, new TokenValue("pop", yyline, yychar)); }
-"tst" { return new Symbol(sym.AVR_TST, new TokenValue("pop", yyline, yychar)); }
-"muls" { return new Symbol(sym.AVR_MULS, new TokenValue("pop", yyline, yychar)); }
+"cp" { return new Symbol(sym.AVR_CP, new TokenValue("cp", yyline, yychar)); }
+"sub" { return new Symbol(sym.AVR_SUB, new TokenValue("sub", yyline, yychar)); }
+"sbc" { return new Symbol(sym.AVR_SBC, new TokenValue("sbc", yyline, yychar)); }
+"breq" { return new Symbol(sym.AVR_BREQ, new TokenValue("breq", yyline, yychar)); }
+"brlo" { return new Symbol(sym.AVR_BRLO, new TokenValue("brlo", yyline, yychar)); }
+"brlt" { return new Symbol(sym.AVR_BRLT, new TokenValue("brlt", yyline, yychar)); }
+"tst" { return new Symbol(sym.AVR_TST, new TokenValue("txt", yyline, yychar)); }
+"muls" { return new Symbol(sym.AVR_MULS, new TokenValue("muls", yyline, yychar)); }
 "in" { return new Symbol(sym.AVR_IN, new TokenValue("in", yyline, yychar)); }
 "ld" { return new Symbol(sym.AVR_LD, new TokenValue("ld", yyline, yychar));  }
 "ldi" { return new Symbol(sym.AVR_LDI, new TokenValue("ldi", yyline, yychar)); }
 "add" { return new Symbol(sym.AVR_ADD, new TokenValue("add", yyline, yychar)); }
-"lo8" { return new Symbol(sym.AVR_LO, new TokenValue("lo", yyline, yychar)); }
-"hi8" { return new Symbol(sym.AVR_HI, new TokenValue("hi", yyline, yychar)); }
+"lo8" { return new Symbol(sym.AVR_LO, new TokenValue("lo8", yyline, yychar)); }
+"hi8" { return new Symbol(sym.AVR_HI, new TokenValue("hi8", yyline, yychar)); }
 "adc" { return new Symbol(sym.AVR_ADC, new TokenValue("adc", yyline, yychar)); }
 "and" { return new Symbol(sym.AVR_AND, new TokenValue("and", yyline, yychar)); }
 "eor" { return new Symbol(sym.AVR_EOR, new TokenValue("eor", yyline, yychar)); }
@@ -70,8 +71,8 @@ TYPE=@{LETTER}+
 ".size" { return new Symbol(sym.SIZE_TYPE, new TokenValue(".size",yyline,yychar)); }
 "-" { return new Symbol(sym.MINUS, new TokenValue("-",yyline,yychar)); }
 "." { return new Symbol(sym.DOT, new TokenValue(".",yyline,yychar)); }
-"(" { return new Symbol(sym.LPARAN, new TokenValue(".",yyline,yychar)); }
-")" { return new Symbol(sym.RPARAN, new TokenValue(".",yyline,yychar)); }
+"(" { return new Symbol(sym.LPARAN, new TokenValue("(.",yyline,yychar)); }
+")" { return new Symbol(sym.RPARAN, new TokenValue(")",yyline,yychar)); }
 
 {NUMBER} { return new Symbol(sym.NUM, new TokenValue(yytext(), yyline, yychar)); }
 {HEX} { return new Symbol(sym.HEX, new TokenValue(yytext(), yyline, yychar)); }

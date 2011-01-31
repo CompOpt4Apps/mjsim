@@ -235,6 +235,16 @@ public class MachineState {
 		}
 		return tempReg;
 	}
+	
+	/**
+	 * Only use this for debugging and possibly gui purposes.
+	 * 
+	 * @return A Map with the stack address mapped to the value stored there.
+	 */
+	public Map<Integer, Integer> getStack()
+	{
+		return stack;
+	}
 
 	/**
 	 * Return the current top of the stack.
