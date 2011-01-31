@@ -38,6 +38,8 @@ public class InstrRet extends Instr {
 			//print the stack when in trace mode on returns.
 			Map<Integer, Integer> stack = machine.getStack();
 			logger.trace("Print the values on the stack.");
+            logger.trace("Stack pointer - 0x" + Integer.toHexString(machine.getStackPointer()) );
+            logger.trace("---------------------------------");
 			for(Integer key: stack.keySet())
 			{
 				logger.trace("0x" + Integer.toHexString(key) + " - " + stack.get(key));
