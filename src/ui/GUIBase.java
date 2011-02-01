@@ -13,7 +13,7 @@ import ui.components.BaseWindow;
 
 
 public class GUIBase implements Application {
-	private Window window = null;
+	private BaseWindow window = null;
 	
 	private static final Logger logger = Logger.getLogger(GUIBase.class);
 	@Override

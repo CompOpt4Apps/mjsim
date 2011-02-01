@@ -4,8 +4,23 @@
 	xmlns:collections="org.apache.pivot.collections"
 	xmlns:content="org.apache.pivot.wtk.content"
 	xmlns:avr="ui.components">
-<BoxPane height="300">
-<Border>
+	<bxml:define>
+		<FileBrowserSheet bxml:id="fileBrowserSheet"></FileBrowserSheet></bxml:define><actionMappings>
+		<Window.ActionMapping action="fileOpen" keyStroke="CMD-O" /><Window.ActionMapping
+			action="exit" keyStroke="CMD-Q">
+</Window.ActionMapping>
+</actionMappings><BoxPane height="300" orientation="vertical" styles="{fill:true}">
+<Border styles="{backgroundColor: '#7d966f'}"><MenuBar>
+		<MenuBar.Item buttonData="File"><Menu>
+			<Menu.Section>
+				<Menu.Item action="fileOpen">
+					<buttonData>
+						<content:MenuItemData text="Open" keyboardShortcut="CMD-O"></content:MenuItemData></buttonData></Menu.Item>
+				<Menu.Item action="exit">
+					<buttonData>
+						<content:MenuItemData text="Exit"
+							keyboardShortcut="CMD-Q">
+						</content:MenuItemData></buttonData></Menu.Item></Menu.Section></Menu></MenuBar.Item></MenuBar></Border><Border>
 	<TabPane bxml:id="tabPane" height="300" preferredHeight="300" width="300" preferredWidth="300">			
 			<ScrollPane height="300" width="300" horizontalScrollBarPolicy="fill">
 			<TabPane.tabData>
@@ -59,5 +74,6 @@
 		</ScrollPane>
 	</TabPane>
 	</Border>
-	</BoxPane>
-</avr:BaseWindow>
+	
+</BoxPane>
+	</avr:BaseWindow>
