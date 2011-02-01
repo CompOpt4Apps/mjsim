@@ -35,9 +35,9 @@ public class AVRSim {
 	 * Only run this is you are not in batch mode. If in batch mode, just run
 	 * the Assem.
 	 */
-	public void gui(String[] args) {
+	public void gui() {
 		logger.info("Starting the simulator in gui mode.");
-		DesktopApplicationContext.main(GUIBase.class,args);
+		DesktopApplicationContext.main(GUIBase.class,new String[0]);
 	}
 
 	public void initMachine() {
@@ -64,19 +64,19 @@ public class AVRSim {
 											// the machine program space.
 	}
 
-	public void run(String[] args) {
+	public void run() {
 		logger.info("Simulator is starting.");
 		try {
 			loadAssemFile();
 			if (!batch) {
-				gui(args);
+				gui();
 			} else // We are in batch mode, run to the end of the program
 					// execution.
 			{
 				runAssem();
 			}
 		} catch (final Exception e) {
-			logger.fatal("Encountered fatal error while parsing...", e);
+			logger.fatal("Encountered fatal error...", e);
 		}
 	}
 
