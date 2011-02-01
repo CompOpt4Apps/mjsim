@@ -1,6 +1,7 @@
 package ui;
 
 import org.apache.log4j.Logger;
+import org.apache.pivot.beans.*;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;

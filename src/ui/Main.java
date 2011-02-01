@@ -9,6 +9,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.Logger;
+import org.apache.log4j.Level;
 import org.apache.log4j.PropertyConfigurator;
 
 public class Main {
@@ -35,14 +36,22 @@ public class Main {
 
 		// Need 2 different arguments both of which are optional
 		final Options options = new Options();
-		options.addOption("f", true, "initial AVR assembly file to read in");
-		options.addOption("b", false, "run in batch mode");
+		options.addOption("f", "file", true, "initial AVR assembly file to read in");
+		options.addOption("b", "batch", false, "run in batch mode");
 		options.addOption("j", true, "number of jumps allowed on a label");
+		options.addOption("v", false, "verbose logging output");
+		options.addOption("t", false, "trace logging output (only use for debugging)");
+		options.addOption("h", "help", false, "print usage info");
 
 		logger.info("Processing Command Line Arguments.");
 		try {
 			final CommandLine line = parser.parse(options, args);
-
+            if(line.hasOption('h'))
+            {
+                final HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp("AVRSim", options);
+                System.exit(1);
+            }
 			if (line.hasOption('f')) {
 				assemblyFile = line.getOptionValue('f');
 				logger.info("Initial assembly file: " + assemblyFile + ".");
@@ -61,6 +70,14 @@ public class Main {
 					System.exit(1);
 				}
 			}
+            if(line.hasOption('v'))
+            {
+                Logger.getRootLogger().setLevel(Level.DEBUG);
+            }
+            if(line.hasOption('t'))
+            {
+                Logger.getRootLogger().setLevel(Level.TRACE);
+            }
 			if (!batch && (jumps != null)) {
 				System.err
 						.println("Invalid commandline combination: j can only be set if j is also set.");

@@ -51,10 +51,12 @@ SIM_MAIN_DEPS = $(SIM_SRC_DIR)/ui/Main.java \
 jars:
 	cd $(SIM_SRC_DIR) && jar xf commons-cli-1.2.jar;
 	cd $(SIM_SRC_DIR) && jar xf log4j-1.2.16.jar;
+	cd $(SIM_SRC_DIR) && jar xf pivot-core-2.0.jar;
+	cd $(SIM_SRC_DIR) && jar xf pivot-wtk-2.0.jar;
 
 $(SIM_SRC_DIR)/ui/Main.class: $(SIM_MAIN_DEPS)
 	$(JCC) -classpath \
-	$(JAVA_CUP_RUNTIME):$(SIM_SRC_DIR):$(SIM_SRC_DIR)/commons-cli-1.2.jar:$(SIM_SRC_DIR)/log4j-1.2.16.jar $(SIM_SRC_DIR)/ui/Main.java
+	$(JAVA_CUP_RUNTIME):$(SIM_SRC_DIR):$(SIM_SRC_DIR)/commons-cli-1.2.jar:$(SIM_SRC_DIR)/log4j-1.2.16.jar:$(SIM_SRC_DIR)/pivot-core-2.0.jar:$(SIM_SRC_DIR)/pivot-wtk-2.0.jar $(SIM_SRC_DIR)/ui/Main.java
 
 #### mj_ast parser
 $(SIM_PARSE_DIR)/sim_inst.java: $(SIM_PARSE_DIR)/sim_inst.cup
