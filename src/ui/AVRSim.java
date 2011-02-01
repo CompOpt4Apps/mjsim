@@ -8,6 +8,7 @@ import java.io.File;
 import machine.MachineState;
 
 import org.apache.log4j.Logger;
+import org.apache.pivot.wtk.DesktopApplicationContext;
 
 import parse.ReadAssem;
 
@@ -34,8 +35,9 @@ public class AVRSim {
 	 * Only run this is you are not in batch mode. If in batch mode, just run
 	 * the Assem.
 	 */
-	public void gui() {
+	public void gui(String[] args) {
 		logger.info("Starting the simulator in gui mode.");
+		DesktopApplicationContext.main(GUIBase.class,args);
 	}
 
 	public void initMachine() {
@@ -62,12 +64,12 @@ public class AVRSim {
 											// the machine program space.
 	}
 
-	public void run() {
+	public void run(String[] args) {
 		logger.info("Simulator is starting.");
 		try {
 			loadAssemFile();
 			if (!batch) {
-				gui();
+				gui(args);
 			} else // We are in batch mode, run to the end of the program
 					// execution.
 			{

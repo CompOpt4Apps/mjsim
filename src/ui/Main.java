@@ -98,6 +98,6 @@ public class Main {
 		} else {
 			simulator = new AVRSim(assemFile, jumps);
 		}
-		simulator.run();
+		simulator.run(args);
 	}
 }
