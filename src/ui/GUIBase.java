@@ -1,11 +1,16 @@
 package ui;
 
+import java.net.URL;
+
 import org.apache.log4j.Logger;
-import org.apache.pivot.beans.*;
+import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
 import org.apache.pivot.wtk.Window;
+
+import ui.components.BaseWindow;
+
 
 public class GUIBase implements Application {
 	private Window window = null;
@@ -19,7 +24,10 @@ public class GUIBase implements Application {
 
 	@Override
 	public boolean shutdown(boolean arg0) throws Exception {
-		// TODO Auto-generated method stub
+		if(window != null)
+		{
+			window.close();
+		}
 		return false;
 	}
 
@@ -28,7 +36,14 @@ public class GUIBase implements Application {
 			throws Exception {
 		logger.info("Executing startup code in guibase.");
 		BXMLSerializer bxmlSerializer = new BXMLSerializer();
-		window = (Window) bxmlSerializer.readObject(GUIBase.class,"avrSim.bxml");
+		bxmlSerializer.getNamespace().put("application", this);
+		URL file = Main.class.getClassLoader().getResource(
+		"ui/components/avrSim.bxml");
+		if(file == null)
+		{
+			logger.fatal("Could not find avrSim.bxml");
+		}
+		window = (BaseWindow) bxmlSerializer.readObject(file);
 		window.open(arg0);
 	}
 

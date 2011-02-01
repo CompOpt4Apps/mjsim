@@ -1,0 +1,63 @@
+<avr:BaseWindow title="Hello BXML!" maximized="true"
+	xmlns:bxml="http://pivot.apache.org/bxml"
+	xmlns="org.apache.pivot.wtk"
+	xmlns:collections="org.apache.pivot.collections"
+	xmlns:content="org.apache.pivot.wtk.content"
+	xmlns:avr="ui.components">
+<BoxPane height="300">
+<Border>
+	<TabPane bxml:id="tabPane" height="300" preferredHeight="300" width="300" preferredWidth="300">			
+			<ScrollPane height="300" width="300" horizontalScrollBarPolicy="fill">
+			<TabPane.tabData>
+				<content:ButtonData text="Stack" />
+			</TabPane.tabData>
+			<view>
+				<Border>
+				<TableView bxml:id="stackTable" width="300">
+					<columns>
+						<TableView.Column name="stackPointer" width="20">
+							<cellRenderer>
+								<content:TableViewImageCellRenderer />
+							</cellRenderer>
+						</TableView.Column>
+						<TableView.Column name="address" width="3*" headerData="Address" />
+						<TableView.Column name="value" width="3*" headerData="Value" />
+					</columns>
+					<!-- some sample data -->
+				</TableView>
+				</Border>
+				</view>
+				<columnHeader>
+					<TableViewHeader tableView="$stackTable"/>
+				</columnHeader>
+		</ScrollPane>
+		
+		<ScrollPane height="300" horizontalScrollBarPolicy="fill">
+			<TabPane.tabData>
+				<content:ButtonData text="Heap" />
+			</TabPane.tabData>
+			<view>
+				<Border>
+				<TableView bxml:id="heapTable">
+					<columns>
+						<TableView.Column name="stackPointer" width="20">
+							<cellRenderer>
+								<content:TableViewImageCellRenderer />
+							</cellRenderer>
+						</TableView.Column>
+						<TableView.Column name="address" width="3*" headerData="Address" />
+						<TableView.Column name="value" width="3*" headerData="Value" />
+					</columns>
+					<collections:HashMap address="0x2" value="12" />
+					<collections:HashMap address="0x3" value="13" />
+				</TableView>
+				</Border>
+			</view>
+			<columnHeader>
+				<TableViewHeader tableView="$heapTable" />
+			</columnHeader>
+		</ScrollPane>
+	</TabPane>
+	</Border>
+	</BoxPane>
+</avr:BaseWindow>
