@@ -1,3 +1,9 @@
+/*
+    PA3bluedot.cpp
+    
+    C++ version of PA3bluedot.java.
+    
+*/
 #include "MeggyJrSimple.h"
 
 int main (void)
