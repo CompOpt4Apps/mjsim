@@ -42,10 +42,10 @@ public class AVRSim {
 
 	public void initMachine() {
 		if (jumps == null) {
-			this.machine = new MachineState("AVR", batch);
+			this.machine = MachineState.createMachine("AVR", batch);
 		} else {
 			logger.debug("Max jumps:" + jumps);
-			this.machine = new MachineState("AVR", jumps);
+			this.machine = MachineState.createMachine("AVR", jumps);
 		}
 
 	}

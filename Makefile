@@ -48,7 +48,7 @@ clean:
 
 $(SIMPROG).jar: $(SIM_SRC_DIR)/ui/Main.class 
 	cd $(SIM_SRC_DIR); $(JAR) cf $(SIMPROG).jar *.jar \
-	log.conf */*.class */*/*.class */*/*.bxml -C $(JAVA_CUP_RUNTIME) java_cup
+	log.conf */*.class */*/*.class */*/*.bxml */*/*.png -C $(JAVA_CUP_RUNTIME) java_cup
 	cd ..
 	mv $(SIM_SRC_DIR)/$(SIMPROG).jar .
 

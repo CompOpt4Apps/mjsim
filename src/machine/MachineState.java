@@ -41,7 +41,44 @@ public class MachineState {
 	private int returnAddress = -1;
 	final private SREG statusReg;
 
-	public MachineState(String name) {
+	
+	//use the singleton pattern for this.
+	
+	private static MachineState machine = null;
+	
+	public static MachineState createMachine(String name) 
+	{
+		if(machine == null)
+		{
+			machine = new MachineState(name);
+		}
+		return machine;
+	}
+	
+	public static MachineState createMachine(String name, int jmps) {
+		if(machine == null)
+		{
+			machine = new MachineState(name,jmps);
+		}
+		return machine;		
+	}
+
+	public static MachineState createMachine(String name, boolean batch)
+	{
+		if(machine == null)
+		{
+			machine = new MachineState(name,batch);
+		}
+		return machine;		
+	}
+	
+	public static void uninitMachine()
+	{
+		machine = null;
+	}
+	
+	
+	protected MachineState(String name) {
 		// Using a TreeMap instead of a HashMap because after a large number of
 		// addresses have been accessed
 		// the speed of the HashMap will greatly decrease. The number of
@@ -50,22 +87,18 @@ public class MachineState {
 		stack = new TreeMap<Integer, Integer>();
 		heap = new TreeMap<Integer, Integer>();
 		registers = new HashMap<Integer, Integer>();
-		labelJumps = new HashMap<String, Integer>();// This will be used to
-													// determine how many jumps
-													// a function makes before
-													// we exit.
+		// This will be used to determine how many jumps 
+		// a function makes before we exit.
+		labelJumps = new HashMap<String, Integer>();
+
 		programSpace = new ArrayList<Instr>();
-		functionMapping = new HashMap<String, Integer>();// This records the
-															// function name and
-															// maps it to a
-															// integer where the
-															// function starts
-															// in the
-															// programSpace.
-		labelMapping = new HashMap<String, Integer>();// This records the
-														// mapping from a label
-														// (not a function) to a
-														// pc value.
+
+		// This records the function name and maps it to a integer where the
+		// function starts in the programSpace.
+		functionMapping = new HashMap<String, Integer>();
+		// This records the mapping from a label (not a function) to a pc value.
+		labelMapping = new HashMap<String, Integer>();
+
 		statusReg = new SREG();
 		this.name = name;
 		// set up the return address for main
@@ -87,12 +120,12 @@ public class MachineState {
 		predefinedFunctions.put("malloc", new FuncMalloc(this));
 	}
 
-	public MachineState(String name, boolean batch) {
+	protected MachineState(String name, boolean batch) {
 		this(name);
 		this.batch = batch;
 	}
 
-	public MachineState(String name, int jmps) {
+	protected MachineState(String name, int jmps) {
 		this(name);
 		this.batch = true;
 		this.labelJmps = jmps;
