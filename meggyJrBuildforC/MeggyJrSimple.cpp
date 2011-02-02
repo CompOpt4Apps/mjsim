@@ -227,5 +227,13 @@ void MeggyJrSimpleSetup(void)
 	//	 Tone_Update();
 		 SoundOff();
   }
-  
-  
+
+/* MMS, added this */  
+void delay_ms(unsigned int time) {
+	uint32_t i;
+	for (i = 0; i < time; i++) {
+		_delay_ms(1);
+	}
+}
+
+

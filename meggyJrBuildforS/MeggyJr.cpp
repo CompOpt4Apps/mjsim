@@ -29,7 +29,7 @@ extern "C" {
 #include <inttypes.h>
 #include <avr/interrupt.h>
 #include <avr/io.h> 
-#include "wiring.h" 
+//#include "wiring.h" 
 } 
 
 #include "MeggyJr.h" 

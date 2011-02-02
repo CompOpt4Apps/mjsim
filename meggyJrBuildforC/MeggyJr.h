@@ -32,6 +32,7 @@
 #include <inttypes.h>
 #include <avr/interrupt.h>
 #include <avr/io.h>
+#include <util/delay.h>
 
 #define FPS 120						// Frames per second; value can be changed somewhat.
 #define DISP_BUFFER_SIZE 192		// 8 rows * 24 bytes per row == 192. Don't mess with it. :)

@@ -211,3 +211,4 @@ void EditColor(byte WhichColor, byte RedComponent, byte GreenComponent, byte Blu
 void MeggyJrSimpleSetup(void);
  
   
+void delay_ms(unsigned int time);

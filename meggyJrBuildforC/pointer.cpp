@@ -3,12 +3,14 @@
 
 void displayRow(byte row, byte *p) {
     int i;
+    int y = 42;
 
     i=0;
     while (i<8) {
         DrawPx(i, row, p[i]);
         DisplaySlate();        
         i = i+1;
+        y = i - y;
     }
 }
 

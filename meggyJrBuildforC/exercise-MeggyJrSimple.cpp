@@ -5,6 +5,7 @@
           will need for the MeggyJava compiler.
 */
 #include "MeggyJrSimple.h"
+#include <util/delay.h>
 
 int main (void)
 {
@@ -30,6 +31,8 @@ int main (void)
         if (Button_Up) {
             SetAuxLEDs(31);
         }
+        
+        delay_ms(256);
         
     }
 
