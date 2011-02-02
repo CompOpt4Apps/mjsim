@@ -208,12 +208,12 @@ public class MachineState {
 	 */
 	public Integer getMemory(int address) {
 		Integer memValue = null;
-		if ((memValue = heap.get(address)) == null) {
+		if ((memValue = heap.get(address)) != null) {
 			return memValue;
-		} else if ((memValue = stack.get(address)) == null) {
+		} else if ((memValue = stack.get(address)) != null) {
 			return memValue;
 		}
-		return memValue;
+		return new Integer(0); //return the default value of zero.
 	}
 
 	/**
