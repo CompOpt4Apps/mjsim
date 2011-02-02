@@ -1,4 +1,4 @@
-#########################################################################
+########################################################################
 # Makefile for MJ
 #
 # The dependencies are not set up properly in this Makefile.  If you want
@@ -9,6 +9,9 @@
 # issue a make upload command.
 #
 # Michelle Strout February 2009 -- Initial version
+# Ryan Moore February 2011 -- Added build system to package multiple jars
+#   together to run without requiring to un-jar and then re-jar everything 
+#   togther.
 #########################################################################
 
 # We need classes from the JavaCUP runtime library.
@@ -33,7 +36,8 @@ JAR = jar
 all: $(SIMPROG).jar jars
 	mkdir $(BUILDDIR)/main/
 	mv $(SIMPROG).jar $(BUILDDIR)/main/
-	cd $(BUILDDIR) && jar -cvfm ../$(SIMPROGFINAL).jar boot-manifest.mf . 
+	cd $(BUILDDIR) && jar -cvfm ../$(SIMPROGFINAL).jar boot-manifest.mf \
+	*.class *.jar */*/*/*.class lib/*.jar main/*.jar
 
 .PHONY:clean
 clean:
@@ -47,8 +51,9 @@ clean:
 	rm -rf $(BUILDDIR)/main
 
 $(SIMPROG).jar: $(SIM_SRC_DIR)/ui/Main.class 
-	cd $(SIM_SRC_DIR); $(JAR) cf $(SIMPROG).jar *.jar \
-	log.conf */*.class */*/*.class */*/*.bxml */*/*.png -C $(JAVA_CUP_RUNTIME) java_cup
+	cd $(SIM_SRC_DIR); $(JAR) cf $(SIMPROG).jar \
+	log.conf */*.class */*/*.class */*/*.bxml */*/*.png -C $(JAVA_CUP_RUNTIME) \
+	java_cup 
 	cd ..
 	mv $(SIM_SRC_DIR)/$(SIMPROG).jar .
 
