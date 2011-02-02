@@ -44,7 +44,7 @@ parser code {:
 terminal EOL;
 terminal ASSIGN, COMMA, LPARAN, RPARAN, AVR_HI, AVR_LO;
 terminal TokenValue NUM, HEX, QSTRING;
-terminal TokenValue DOT_FILE, DOT_GLOBAL, DOT_TEXT, DOT_TYPE, SIZE_TYPE, MINUS, DOT;
+terminal TokenValue MINUS, DOT;
 terminal TokenValue SP_L, SP_H;
 terminal TokenValue REG, LABEL, GLOBAL, TYPE, ID;
 
@@ -65,17 +65,17 @@ pgrm	::=	header instrs:s
 		:}
 	;
 
-header	::=	DOT_FILE QSTRING eol
+header	::=	ID QSTRING eol
 		GLOBAL ASSIGN HEX eol
 		SP_H ASSIGN HEX eol
 		SP_L ASSIGN HEX eol
 		GLOBAL ASSIGN exp eol
 		GLOBAL ASSIGN exp eol
-		DOT_GLOBAL ID eol
-		DOT_GLOBAL ID eol
-		DOT_TEXT eol
-		DOT_GLOBAL ID eol
-		DOT_TYPE ID COMMA TYPE eol
+		ID ID eol
+		ID ID eol
+		ID eol
+		ID ID eol
+		ID ID COMMA TYPE eol
 		LABEL eol
 		AVR_PUSH REG eol
 		AVR_PUSH REG eol
@@ -216,7 +216,7 @@ instr	::=	AVR_PUSH REG:r eol
 			RESULT=new InstrLabel(sim_inst.machine,label);
 		:}
     |
-        SIZE_TYPE ID COMMA DOT MINUS ID eol
+        ID ID COMMA DOT MINUS ID eol
         {:
             /* Do not do anything... */
         :}

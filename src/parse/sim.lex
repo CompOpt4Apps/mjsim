@@ -17,7 +17,7 @@ NOT_ZERO=[1-9]
 NUMBER=([-+]?{NOT_ZERO}{DIGIT}*)|0
 HEX=0x[0-9A-Fa-f]+
 LETTER=[A-Za-z]
-ID=[_A-Za-z][_A-Za-z0-9]+
+ID="."*[_A-Za-z][_A-Za-z0-9]+
 QSTRING=\"[^\"]*\"
 
 WHITESPACE=[ \t\n\r\f]
@@ -35,11 +35,6 @@ TYPE=@{LETTER}+
 
 "," { return new Symbol(sym.COMMA, new TokenValue(",", yyline, yychar)); }
 "=" { return new Symbol(sym.ASSIGN, new TokenValue("=", yyline, yychar)); }
-
-".file" { return new Symbol(sym.DOT_FILE, new TokenValue(".file", yyline, yychar)); }
-".global" { return new Symbol(sym.DOT_GLOBAL, new TokenValue(".global", yyline, yychar)); }
-".text" { return new Symbol(sym.DOT_TEXT, new TokenValue(".text", yyline, yychar)); }
-".type" { return new Symbol(sym.DOT_TYPE, new TokenValue(".type", yyline, yychar)); }
 
 "__SP_L__" { return new Symbol(sym.SP_L, new TokenValue("__SP_L__", yyline, yychar)); }
 "__SP_H__" { return new Symbol(sym.SP_H, new TokenValue("__SP_H__", yyline, yychar)); }
@@ -64,11 +59,11 @@ TYPE=@{LETTER}+
 "and" { return new Symbol(sym.AVR_AND, new TokenValue("and", yyline, yychar)); }
 "eor" { return new Symbol(sym.AVR_EOR, new TokenValue("eor", yyline, yychar)); }
 "jmp" { return new Symbol(sym.AVR_JMP, new TokenValue("jmp", yyline, yychar)); }
+"rjmp" { return new Symbol(sym.AVR_JMP, new TokenValue("rjmp", yyline, yychar)); }
 "neg" { return new Symbol(sym.AVR_NEG, new TokenValue("neg", yyline, yychar)); }
 "or" { return new Symbol(sym.AVR_OR, new TokenValue("or", yyline, yychar)); }
 "call" { return new Symbol(sym.AVR_CALL, new TokenValue("call", yyline, yychar)); }
 "ret" { return new Symbol(sym.AVR_RET, new TokenValue("ret", yyline, yychar)); }
-".size" { return new Symbol(sym.SIZE_TYPE, new TokenValue(".size",yyline,yychar)); }
 "-" { return new Symbol(sym.MINUS, new TokenValue("-",yyline,yychar)); }
 "." { return new Symbol(sym.DOT, new TokenValue(".",yyline,yychar)); }
 "(" { return new Symbol(sym.LPARAN, new TokenValue("(.",yyline,yychar)); }
