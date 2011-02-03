@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import machine.functions.Func;
+import machine.functions.FuncButtonPress;
 import machine.functions.FuncDisplaySlate;
 import machine.functions.FuncMalloc;
 import machine.functions.FuncSetPix;
@@ -27,6 +28,7 @@ public class MachineState {
 	final private Map<Integer, Integer> heap;
 	final private Map<Integer, Integer> registers;
 	final private ArrayList<Instr> programSpace;
+	final private ArrayList<MachineUpdate> updateObj;
 	final private Map<String, Integer> functionMapping;
 	final private Map<String, Integer> labelMapping;
 	final private Map<String, Integer> labelJumps;
@@ -87,6 +89,7 @@ public class MachineState {
 		stack = new TreeMap<Integer, Integer>();
 		heap = new TreeMap<Integer, Integer>();
 		registers = new HashMap<Integer, Integer>();
+		updateObj = new ArrayList<MachineUpdate>();
 		// This will be used to determine how many jumps 
 		// a function makes before we exit.
 		labelJumps = new HashMap<String, Integer>();
@@ -117,6 +120,7 @@ public class MachineState {
 		// add all of the predefined functions
 		predefinedFunctions.put("_Z6DrawPxhhh", new FuncSetPix(this));
 		predefinedFunctions.put("_Z12DisplaySlatev", new FuncDisplaySlate(this));
+		predefinedFunctions.put("_Z16CheckButtonsDownv",new FuncButtonPress(this));
 		predefinedFunctions.put("malloc", new FuncMalloc(this));
 	
 		//add the values for the buttons into the memory space.
@@ -361,6 +365,18 @@ public class MachineState {
 	public void setReturnAddress(int address) {
 		this.returnAddress = address;
 	}
+	
+	/**
+	 * Add an object to receive updates from the MachineState.
+	 * @param obj
+	 */
+	public void addUpdate(MachineUpdate obj)
+	{
+		if(!updateObj.contains(obj))
+		{
+			updateObj.add(obj);
+		}
+	}
 
 	@Override
 	public String toString() {
@@ -396,7 +412,8 @@ public class MachineState {
 
 	public void updateState(UpdateEvent event) {
 		logger.info("Received UpdateEvent...processing...");
-
+		MachineUpdateData updatedData = new MachineUpdateData();
+		
 		if (event.getRd() != null) {
 			final HashMap<Integer, Integer> rds = event.getRd();
 			for(Integer key:rds.keySet())
@@ -404,6 +421,7 @@ public class MachineState {
 				logger.info("Updating register r(" + key
 						+ ") with the value (" + rds.get(key) + ")");	
 				registers.put(key, rds.get(key));				
+				updatedData.putReg(key, rds.get(key));
 			}
 		}
 
@@ -412,12 +430,22 @@ public class MachineState {
 			logger.info("Updating memory location (" + pair.getLeft()
 					+ ") with the value (" + pair.getRight() + ")");
 			stack.put(pair.getLeft(), pair.getRight());
+
+			if(pair.getLeft() < stackPointer) //this should be the heap then?
+			{
+				updatedData.putHeap(pair.getLeft(), pair.getRight());
+			}
+			else
+			{
+				updatedData.putStack(pair.getLeft(), pair.getRight());
+			}
 		}
 
 		if (event.getStackPointer() >= 0) {
 			logger.info("Updating stack pointer to (0x"
 					+ Integer.toHexString(event.getStackPointer()) + ")");
 			this.stackPointer = event.getStackPointer();
+			updatedData.setStackPointer(stackPointer);
 		}
 
 		if (event.getSREG() != null) {
@@ -431,15 +459,23 @@ public class MachineState {
 			// store the high value in the lower memory, store the low value in
 			// high memory.
 			final Pair<Integer, Integer> tempPair = event.getLongMemory();
-			this.stack.put(tempPair.getLeft(),
-					(tempPair.getRight() & 0xFF00) >> 8);// get the high 8 bits,
-															// and shift them to
-															// the right.
-			this.stack
-					.put(tempPair.getLeft() + 1, (tempPair.getRight() & 0xFF)); 
+			this.stack.put(tempPair.getLeft(),(tempPair.getRight() & 0xFF00) >> 8);
+			// get the high 8 bits, and shift them to the right.
+			this.stack.put(tempPair.getLeft() + 1, (tempPair.getRight() & 0xFF)); 
 			// get the low 8 bits.
+			//TODO: need to add the updating event code here.
 		}
 
 		pc = event.getPc();// this should be set in every instruction.
+		
+		setUpdates(updatedData);
+	}
+	
+	private void setUpdates(MachineUpdateData updatedData)
+	{
+		for(MachineUpdate obj: updateObj)
+		{
+			obj.update(updatedData);
+		}
 	}
 }

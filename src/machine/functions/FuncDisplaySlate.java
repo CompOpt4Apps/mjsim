@@ -12,7 +12,6 @@ public class FuncDisplaySlate extends Func {
 	
 	public FuncDisplaySlate(MachineState machine) {
 		super(machine, "_Z12DisplaySlatev");
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

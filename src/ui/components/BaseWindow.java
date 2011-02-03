@@ -8,6 +8,7 @@ import machine.MachineUpdateData;
 import org.apache.log4j.Logger;
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
@@ -23,12 +24,20 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	@BXML private FileBrowserSheet fileBrowserSheet;
 	private TableView stackPane;
 	private TableView heapPane;
+	private List<Address> stackSpace;
+	private List<Address> heapSpace;
+	private int stackPointer;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(Map<String, Object> arg0, URL arg1, Resources arg2) {
 		logger.info("Initializing window.");
 		stackPane = (TableView) arg0.get("stackTable");
 		heapPane = (TableView) arg0.get("heapTable");
+
+		stackSpace = (List<Address>)stackPane.getTableData();
+		heapSpace = (List<Address>)heapPane.getTableData();
+
 		}
 	
 	public BaseWindow()
@@ -53,7 +62,12 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 
 	@Override
 	public void update(MachineUpdateData data) {
-		// TODO Auto-generated method stub
+		java.util.Map<Integer,Integer> regUpdates = data.getRegUpdates();
+		
+		for(Integer reg:regUpdates.keySet())
+		{
+			//update the registers when I have them set up in the gui.
+		}
 		
 	}
 }
