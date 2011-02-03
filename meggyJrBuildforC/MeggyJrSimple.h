@@ -28,6 +28,7 @@
 #define MeggyJrSimple_h
  
 #include <MeggyJr.h>
+#include <stdlib.h> // for malloc
 
 extern byte Button_A;		 
 extern byte Button_B;

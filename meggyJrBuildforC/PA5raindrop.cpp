@@ -24,10 +24,15 @@ int main (void)
     
         // new Cloud().rain((byte)3,(byte)7);
         rain(3,7);
+        
     
-        //Meggy.delay(1000);
-        delay_ms(1000);
+        //Meggy.delay(500);
+        delay_ms(500);
         CheckButtonsDown();
+
+        // get rid of last dot
+        DrawPx(3, 0, Dark);
+        DisplaySlate();        
     }
     
     return 0;
@@ -55,8 +60,8 @@ void rain(byte x, byte y) {
         //} else {}
         }
         
-        //Meggy.delay(500);
-        delay_ms(500);
+        //Meggy.delay(100);
+        delay_ms(100);
         CheckButtonsDown();
         
         //this.rain(x, (byte)(y-(byte)1));
