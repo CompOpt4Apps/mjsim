@@ -118,6 +118,15 @@ public class MachineState {
 		predefinedFunctions.put("_Z6DrawPxhhh", new FuncSetPix(this));
 		predefinedFunctions.put("_Z12DisplaySlatev", new FuncDisplaySlate(this));
 		predefinedFunctions.put("malloc", new FuncMalloc(this));
+	
+		//add the values for the buttons into the memory space.
+		//add these values above the stack pointer.
+		labelMapping.put("Button_A", stackPointer+1);
+		labelMapping.put("Button_B", stackPointer+2);
+		labelMapping.put("Button_Up", stackPointer+3);
+		labelMapping.put("Button_Down", stackPointer+4);
+		labelMapping.put("Button_Left", stackPointer+5);
+		labelMapping.put("Button_Right", stackPointer+6);
 	}
 
 	protected MachineState(String name, boolean batch) {
@@ -427,11 +436,8 @@ public class MachineState {
 															// and shift them to
 															// the right.
 			this.stack
-					.put(tempPair.getLeft() + 1, (tempPair.getRight() & 0xFF)); // get
-																				// the
-																				// low
-																				// 8
-																				// bits.
+					.put(tempPair.getLeft() + 1, (tempPair.getRight() & 0xFF)); 
+			// get the low 8 bits.
 		}
 
 		pc = event.getPc();// this should be set in every instruction.
