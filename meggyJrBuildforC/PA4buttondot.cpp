@@ -3,8 +3,6 @@
     
     C++ version of PA4buttondot.java.
     
-    FIXME: Appears to not work as expected on the device.
-    
     MMS, 2/1/11
 */
 #include "MeggyJrSimple.h"
@@ -12,6 +10,7 @@
 int main (void)
 {
     MeggyJrSimpleSetup();
+    CheckButtonsDown();
     
     // Meggy.setPixel( (byte)7, (byte)7, Meggy.Color.ORANGE );
     DrawPx(7, 7, Orange);
@@ -19,33 +18,44 @@ int main (void)
 
     while (true) {
         // if (Meggy.checkButton(Meggy.Button.A)) {
-        CheckButtonsPress();
         if (Button_A) {
 
             // Meggy.setPixel( (byte)0, (byte)0, Meggy.Color.VIOLET );
             DrawPx(0, 0, Violet);
+            // Meggy.setPixel( (byte)7, (byte)0, Meggy.Color.DARK );
+            DrawPx(7, 0, Dark);
+            // Meggy.setPixel( (byte)7, (byte)7, Meggy.Color.DARK );
+            DrawPx(7, 7, Dark);
             DisplaySlate();
         
         } else {
             // if (Meggy.checkButton(Meggy.Button.B)) {
-            CheckButtonsPress();
             if (Button_B) {
             
-                // Meggy.setPixel( (byte)7, (byte)1, Meggy.Color.GREEN );
-                DrawPx(7, 1, Green);
+                // Meggy.setPixel( (byte)7, (byte)0, Meggy.Color.GREEN );
+                DrawPx(7, 0, Green);
+                // Meggy.setPixel( (byte)0, (byte)0, Meggy.Color.DARK );
+                DrawPx(0, 0, Dark);
+                // Meggy.setPixel( (byte)7, (byte)7, Meggy.Color.DARK );
+                DrawPx(7, 7, Dark);
                 DisplaySlate();
                 
             } else {
                 // Meggy.setPixel( (byte)7, (byte)7, Meggy.Color.ORANGE );                    
                 DrawPx(7, 7, Orange);
+                // Meggy.setPixel( (byte)7, (byte)0, Meggy.Color.DARK );
+                DrawPx(7, 0, Dark);
+                // Meggy.setPixel( (byte)0, (byte)0, Meggy.Color.DARK );
+                DrawPx(0, 0, Dark);
                 DisplaySlate();
             }
 
         }
             
-        // half second delay, 500 milliseconds
-        // Meggy.delay(500);
-        delay_ms(500);
+        // tenth second delay, 100 milliseconds
+        // Meggy.delay(100);
+        delay_ms(100);
+        CheckButtonsDown();
 
     }
 
