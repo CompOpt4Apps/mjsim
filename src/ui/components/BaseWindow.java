@@ -69,5 +69,36 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			//update the registers when I have them set up in the gui.
 		}
 		
+		java.util.Map<Integer,Integer> stackUpdates = data.getStackUpdates();
+		
+		for(Integer stackMem: stackUpdates.keySet())
+		{
+			Address add = getStackAddress(stackMem);
+			if(add == null)
+			{
+				stackSpace.add(new Address(Integer.toString(stackMem),stackUpdates.get(stackMem)));
+			}
+			else
+			{
+				add.setValue(stackUpdates.get(stackMem));
+			}
+		}
+
+		//sort the data after adding.
+		
+	}
+	
+	private Address getStackAddress(int address)
+	{
+		Address ret = null;
+		for(Address add: stackSpace)
+		{
+			if(add.getAddress().trim().equals(Integer.toString(address)))
+			{
+				ret = add;
+				break;
+			}
+		}
+		return ret;
 	}
 }

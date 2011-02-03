@@ -9,6 +9,13 @@ public class Address {
 	private Image stackPointer = null;
 	private String address = null;
 	private int value = 0;
+
+	public Address(String address, int value)
+	{
+		this.address = address;
+		this.value = value;
+	}
+	
 	public Image getStackPointer() {
 		return stackPointer;
 	}
