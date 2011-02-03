@@ -22,6 +22,8 @@ int main (void)
 
     // display a rainbow on row 5
     run(rptr, 5);
+
+    while (1) {}
     
     return 0;
 }
@@ -37,10 +39,9 @@ void run(struct Rainbow * thisptr, byte row) {
     thisptr->p[5] = Violet;
     thisptr->p[6] = White;
     thisptr->p[7] = Dark;
+
+    displayRow(thisptr,5,thisptr->p);
     
-    while (1) {
-        displayRow(thisptr,5,thisptr->p);
-    }
 
 }
 
