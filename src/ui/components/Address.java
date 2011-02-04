@@ -10,6 +10,10 @@ public class Address {
 	private String address = null;
 	private int value = 0;
 
+	public Address()
+	{	
+	}
+	
 	public Address(String address, int value)
 	{
 		this.address = address;
@@ -35,7 +39,9 @@ public class Address {
 	}
 
 	public String getAddress() {
-		return address;
+		//I don't like this but it will format the text in hex.
+		
+		return "0x"+Integer.toHexString(Integer.parseInt(address));
 	}
 	public void setAddress(String address) {
 		this.address = address;

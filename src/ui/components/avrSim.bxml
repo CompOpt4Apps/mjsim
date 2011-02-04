@@ -50,7 +50,12 @@
 								<TableView.Column name="value"
 									width="3*" headerData="Value" />
 							</columns>
-							<!-- some sample data -->
+							<tableViewSortListeners>
+                    function sortChanged(tableView) {
+                        var tableData = tableView.getTableData();
+                        tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                    }
+                </tableViewSortListeners>
 						</TableView>
 					</Border>
 				</view>
@@ -78,6 +83,12 @@
 								<TableView.Column name="value"
 									width="3*" headerData="Value" />
 							</columns>
+							<tableViewSortListeners>
+                    function sortChanged(tableView) {
+                        var tableData = tableView.getTableData();
+                        tableData.setComparator(new org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+                    }
+                </tableViewSortListeners>
 						</TableView>
 					</Border>
 				</view>

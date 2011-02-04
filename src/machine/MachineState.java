@@ -375,6 +375,27 @@ public class MachineState {
 		if(!updateObj.contains(obj))
 		{
 			updateObj.add(obj);
+			//after an add, send the entire machine state to the newly added object.
+			MachineUpdateData updateData = new MachineUpdateData();
+			
+			for(int reg: registers.keySet())
+			{
+				updateData.putReg(reg, registers.get(reg));
+			}
+			
+			for(int addr: stack.keySet())
+			{
+				updateData.putStack(addr, stack.get(addr));
+			}
+			
+			for(int addr: heap.keySet())
+			{
+				updateData.putHeap(addr, heap.get(addr));
+			}
+			
+			updateData.setStackPointer(stackPointer);
+			
+			obj.update(updateData);
 		}
 	}
 

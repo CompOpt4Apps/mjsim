@@ -2,10 +2,12 @@ package ui.components;
 
 import java.net.URL;
 
+import machine.MachineState;
 import machine.MachineUpdate;
 import machine.MachineUpdateData;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.chainsaw.Main;
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
 import org.apache.pivot.collections.List;
@@ -27,6 +29,8 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	private List<Address> stackSpace;
 	private List<Address> heapSpace;
 	private int stackPointer;
+	private MachineState machine = null;
+	private URL stackImage = Main.class.getClassLoader().getResource("ui/images/sp.png");
 	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -38,7 +42,10 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		stackSpace = (List<Address>)stackPane.getTableData();
 		heapSpace = (List<Address>)heapPane.getTableData();
 
-		}
+		//get the machine state and then register this class with it.
+		machine = MachineState.createMachine("AVRMachine");
+		machine.addUpdate(this);
+	}
 	
 	public BaseWindow()
 	{
@@ -83,9 +90,22 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 				add.setValue(stackUpdates.get(stackMem));
 			}
 		}
+		if(data.getStackPointer() > 0)
+		{
+			stackPointer = data.getStackPointer();
+			if(getStackAddress(stackPointer)!= null)
+			{
+				getStackAddress(stackPointer).setStackPointer(stackImage);
+			}
+			else
+			{
+				Address newAddr = new Address();
+				newAddr.setAddress(Integer.toString(stackPointer));
+				newAddr.setStackPointer(stackImage);
+				stackSpace.insert(newAddr,0);
+			}
+		}
 
-		//sort the data after adding.
-		
 	}
 	
 	private Address getStackAddress(int address)
