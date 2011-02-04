@@ -131,6 +131,10 @@ public class MachineState {
 		labelMapping.put("Button_Down", stackPointer+4);
 		labelMapping.put("Button_Left", stackPointer+5);
 		labelMapping.put("Button_Right", stackPointer+6);
+		
+		//Just a test
+		//TODO: remove
+		registers.put(0, 23);
 	}
 
 	protected MachineState(String name, boolean batch) {

@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.chainsaw.Main;
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
@@ -26,8 +27,10 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	@BXML private FileBrowserSheet fileBrowserSheet;
 	private TableView stackPane;
 	private TableView heapPane;
+	private TableView registerTable;
 	private List<Address> stackSpace;
 	private List<Address> heapSpace;
+	private List<HashMap<String,String>> registers;
 	private int stackPointer;
 	private MachineState machine = null;
 	private URL stackImage = Main.class.getClassLoader().getResource("ui/images/sp.png");
@@ -35,13 +38,15 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(Map<String, Object> arg0, URL arg1, Resources arg2) {
-		logger.info("Initializing window.");
+		logger.info("Initializing window...");
 		stackPane = (TableView) arg0.get("stackTable");
 		heapPane = (TableView) arg0.get("heapTable");
-
+		registerTable = (TableView) arg0.get("registersTable");
+		
 		stackSpace = (List<Address>)stackPane.getTableData();
 		heapSpace = (List<Address>)heapPane.getTableData();
-
+		registers = (List<HashMap<String,String>>)registerTable.getTableData();
+		
 		//get the machine state and then register this class with it.
 		machine = MachineState.createMachine("AVRMachine");
 		machine.addUpdate(this);
@@ -73,7 +78,8 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		
 		for(Integer reg:regUpdates.keySet())
 		{
-			//update the registers when I have them set up in the gui.
+			logger.debug("Updating register: " + reg);
+			registers.get(reg).put(Integer.toString(reg), Integer.toString(regUpdates.get(reg)));
 		}
 		
 		java.util.Map<Integer,Integer> stackUpdates = data.getStackUpdates();
@@ -106,6 +112,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			}
 		}
 
+		this.repaint(true);
 	}
 	
 	private Address getStackAddress(int address)
