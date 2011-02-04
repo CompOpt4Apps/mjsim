@@ -3,7 +3,10 @@
 	xmlns:collections="org.apache.pivot.collections" xmlns:content="org.apache.pivot.wtk.content"
 	xmlns:avr="ui.components">
 	<bxml:define>
-		<FileBrowserSheet bxml:id="fileBrowserSheet"></FileBrowserSheet>
+		<FileBrowserSheet bxml:id="fileBrowserSheet" />
+		<collections:ArrayList bxml:id="registerTableData"/>
+		<collections:ArrayList bxml:id="stackTableData"/>
+		<collections:ArrayList bxml:id="heapTableData"/>
 	</bxml:define>
 	<actionMappings>
 		<Window.ActionMapping action="fileOpen"
@@ -60,7 +63,7 @@
 								<view>
 									<Border>
 										<TableView bxml:id="stackTable"
-											width="300">
+											width="300" tableData="$stackTableData">
 											<columns>
 												<TableView.Column
 													name="stackPointer" width="80">
@@ -99,7 +102,7 @@
 								<view>
 									<Border>
 										<TableView
-											bxml:id="heapTable">
+											bxml:id="heapTable" tableData="$heapTableData">
 											<columns>
 												<TableView.Column
 													name="stackPointer" width="80">
@@ -136,78 +139,14 @@
 							horizontalScrollBarPolicy="fill" preferredWidth="150" preferredHeight="300">
 							<view>
 								<Border>
-									<TableView bxml:id="registersTable"
-										width="300">
+									<TableView bxml:id="registersTable" tableData="$registerTableData" width="300">
 										<columns>
 											<TableView.Column
 												name="register" width="3*" headerData="Register" />
 											<TableView.Column
 												name="value" width="3*" headerData="Value" />
 										</columns>
-										<collections:HashMap
-											register="0" value="0" />
-										<collections:HashMap
-											register="1" value="0" />
-										<collections:HashMap
-											register="2" value="0" />
-										<collections:HashMap
-											register="3" value="0" />
-										<collections:HashMap
-											register="4" value="0" />
-										<collections:HashMap
-											register="5" value="0" />
-											<collections:HashMap
-											register="6" value="0" />
-											<collections:HashMap
-											register="7" value="0" />
-											<collections:HashMap
-											register="8" value="0" />
-											<collections:HashMap
-											register="9" value="0" />
-											<collections:HashMap
-											register="10" value="0" />
-											<collections:HashMap
-											register="11" value="0" />
-											<collections:HashMap
-											register="12" value="0" />
-											<collections:HashMap
-											register="13" value="0" />
-											<collections:HashMap
-											register="14" value="0" />
-											<collections:HashMap
-											register="15" value="0" />
-											<collections:HashMap
-											register="16" value="0" />
-											<collections:HashMap
-											register="17" value="0" />
-											<collections:HashMap
-											register="18" value="0" />
-											<collections:HashMap
-											register="19" value="0" />
-											<collections:HashMap
-											register="20" value="0" />
-											<collections:HashMap
-											register="21" value="0" />
-											<collections:HashMap
-											register="22" value="0" />
-											<collections:HashMap
-											register="23" value="0" />
-											<collections:HashMap
-											register="24" value="0" />
-											<collections:HashMap
-											register="25" value="0" />
-											<collections:HashMap
-											register="26" value="0" />
-											<collections:HashMap
-											register="27" value="0" />
-											<collections:HashMap
-											register="28" value="0" />
-											<collections:HashMap
-											register="29" value="0" />
-											<collections:HashMap
-											register="30" value="0" />
-											<collections:HashMap
-											register="31" value="0" />
+										
 									</TableView>
 								</Border>
 							</view>

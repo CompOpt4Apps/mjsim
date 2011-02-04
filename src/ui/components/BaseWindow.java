@@ -25,30 +25,24 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	private static final Logger logger = Logger.getLogger(BaseWindow.class);
 	
 	@BXML private FileBrowserSheet fileBrowserSheet;
-	private TableView stackPane;
-	private TableView heapPane;
-	private TableView registerTable;
-	private List<Address> stackSpace;
-	private List<Address> heapSpace;
-	private List<HashMap<String,String>> registers;
+	@BXML private List<Register> registerTableData;
+	@BXML private List<Address> stackTableData;
+	@BXML private List<Address> heapTableData;
 	private int stackPointer;
 	private MachineState machine = null;
 	private URL stackImage = Main.class.getClassLoader().getResource("ui/images/sp.png");
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void initialize(Map<String, Object> arg0, URL arg1, Resources arg2) {
-		logger.info("Initializing window...");
-		stackPane = (TableView) arg0.get("stackTable");
-		heapPane = (TableView) arg0.get("heapTable");
-		registerTable = (TableView) arg0.get("registersTable");
-		
-		stackSpace = (List<Address>)stackPane.getTableData();
-		heapSpace = (List<Address>)heapPane.getTableData();
-		registers = (List<HashMap<String,String>>)registerTable.getTableData();
+		logger.info("Initializing window...");		
 		
 		//get the machine state and then register this class with it.
 		machine = MachineState.createMachine("AVRMachine");
+		for(int i = 0; i < 32;i++)
+		{
+			registerTableData.add(new Register(Integer.toString(i),"0"));
+		}
+		
 		machine.addUpdate(this);
 	}
 	
@@ -79,7 +73,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		for(Integer reg:regUpdates.keySet())
 		{
 			logger.debug("Updating register: " + reg);
-			registers.get(reg).put(Integer.toString(reg), Integer.toString(regUpdates.get(reg)));
+			((Register)registerTableData.get(reg)).setValue(Integer.toString(regUpdates.get(reg)));
 		}
 		
 		java.util.Map<Integer,Integer> stackUpdates = data.getStackUpdates();
@@ -89,7 +83,8 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			Address add = getStackAddress(stackMem);
 			if(add == null)
 			{
-				stackSpace.add(new Address(Integer.toString(stackMem),stackUpdates.get(stackMem)));
+				//will it always be first?
+				stackTableData.insert(new Address(stackMem.toString(),stackUpdates.get(stackMem)) , 0);
 			}
 			else
 			{
@@ -108,7 +103,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 				Address newAddr = new Address();
 				newAddr.setAddress(Integer.toString(stackPointer));
 				newAddr.setStackPointer(stackImage);
-				stackSpace.insert(newAddr,0);
+				stackTableData.insert(newAddr,0);
 			}
 		}
 
@@ -118,7 +113,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	private Address getStackAddress(int address)
 	{
 		Address ret = null;
-		for(Address add: stackSpace)
+		for(Address add:stackTableData)
 		{
 			if(add.getAddress().trim().equals(Integer.toString(address)))
 			{
