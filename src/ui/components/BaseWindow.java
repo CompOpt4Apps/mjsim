@@ -10,14 +10,12 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.chainsaw.Main;
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
-import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
 import org.apache.pivot.wtk.Action;
 import org.apache.pivot.wtk.Component;
 import org.apache.pivot.wtk.FileBrowserSheet;
-import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.Window;
 
 public class BaseWindow extends Window implements Bindable,MachineUpdate {
@@ -64,6 +62,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 				System.exit(0);
 			}
 		});
+		
 	}
 
 	@Override
@@ -76,8 +75,8 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			((Register)registerTableData.get(reg)).setValue(Integer.toString(regUpdates.get(reg)));
 		}
 		
-		java.util.Map<Integer,Integer> stackUpdates = data.getStackUpdates();
-		
+		final java.util.Map<Integer,Integer> stackUpdates = data.getStackUpdates();
+		final java.util.Map<Integer,Integer> heapUpdates = data.getHeapUpdates();		
 		for(Integer stackMem: stackUpdates.keySet())
 		{
 			Address add = getStackAddress(stackMem);
@@ -106,8 +105,21 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 				stackTableData.insert(newAddr,0);
 			}
 		}
+		
+		for(Integer heapMem: heapUpdates.keySet())
+		{
+			Address add = getStackAddress(heapMem);
+			if(add == null)
+			{
+				//will it always be first?
+				heapTableData.add(new Address(heapMem.toString(),stackUpdates.get(heapMem)));
+			}
+			else
+			{
+				add.setValue(stackUpdates.get(heapMem));
+			}
+		}
 
-		this.repaint(true);
 	}
 	
 	private Address getStackAddress(int address)

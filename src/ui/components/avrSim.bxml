@@ -38,131 +38,134 @@
 				</MenuBar.Item>
 			</MenuBar>
 		</Border>
-		<Border>
+		<Border styles="{padding:'2'}">
 			<BoxPane orientation="vertical">
 				<BoxPane>
+					<Label text="Instruction:"></Label>
+					<Label text="LDR 9, 4" bxml:id="currentInstruction"></Label>
+				</BoxPane>
+				<BoxPane>
 					<PushButton bxml:id="runButton">
-						<content:ButtonData icon="/ui/images/runButton.png"></content:ButtonData>
+						<content:ButtonData
+							icon="/ui/images/runButton.png">
+						</content:ButtonData>
 					</PushButton>
 					<PushButton bxml:id="stepButton">
-						<content:ButtonData icon="/ui/images/stepOnceButton.png"></content:ButtonData>
+						<content:ButtonData
+							icon="/ui/images/stepOnceButton.png">
+						</content:ButtonData>
 					</PushButton>
 					<PushButton bxml:id="stopButton" enabled="false">
-						<content:ButtonData icon="/ui/images/stopButton.png"></content:ButtonData>
+						<content:ButtonData
+							icon="/ui/images/stopButton.png">
+						</content:ButtonData>
 					</PushButton>
 				</BoxPane>
-				<BoxPane styles="{fill:true}">
-					<Border>
-						<TabPane bxml:id="tabPane" height="300"
-							preferredHeight="300" width="300" preferredWidth="300">
-							<ScrollPane height="300" width="300"
-								horizontalScrollBarPolicy="fill">
-								<TabPane.tabData>
-									<content:ButtonData text="Stack" />
-								</TabPane.tabData>
-								<view>
-									<Border>
-										<TableView bxml:id="stackTable"
-											width="300" tableData="$stackTableData">
-											<columns>
-												<TableView.Column
-													name="stackPointer" width="80">
-													<cellRenderer>
-														<content:TableViewImageCellRenderer />
-													</cellRenderer>
-												</TableView.Column>
-												<TableView.Column
-													name="address" width="3*" headerData="Address" />
-												<TableView.Column
-													name="value" width="3*" headerData="Value" />
-											</columns>
-											<tableViewSortListeners>
-												function
-												sortChanged(tableView) {
-												var tableData =
-												tableView.getTableData();
-												tableData.setComparator(new
-												org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-												}
-											</tableViewSortListeners>
-										</TableView>
-									</Border>
-								</view>
-								<columnHeader>
-									<TableViewHeader
-										tableView="$stackTable" />
-								</columnHeader>
-							</ScrollPane>
-
-							<ScrollPane height="300"
-								horizontalScrollBarPolicy="fill">
-								<TabPane.tabData>
-									<content:ButtonData text="Heap" />
-								</TabPane.tabData>
-								<view>
-									<Border>
-										<TableView
-											bxml:id="heapTable" tableData="$heapTableData">
-											<columns>
-												<TableView.Column
-													name="stackPointer" width="80">
-													<cellRenderer>
-														<content:TableViewImageCellRenderer />
-													</cellRenderer>
-												</TableView.Column>
-												<TableView.Column
-													name="address" width="3*" headerData="Address" />
-												<TableView.Column
-													name="value" width="3*" headerData="Value" />
-											</columns>
-											<tableViewSortListeners>
-												function
-												sortChanged(tableView) {
-												var tableData =
-												tableView.getTableData();
-												tableData.setComparator(new
-												org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
-												}
-											</tableViewSortListeners>
-										</TableView>
-									</Border>
-								</view>
-								<columnHeader>
-									<TableViewHeader
-										tableView="$heapTable" />
-								</columnHeader>
-							</ScrollPane>
-						</TabPane>
-					</Border>
-					<Border>
-						<ScrollPane height="300" width="150"
-							horizontalScrollBarPolicy="fill" preferredWidth="150" preferredHeight="300">
-							<view>
-								<Border>
-									<TableView bxml:id="registersTable" tableData="$registerTableData" width="300">
-										<columns>
-											<TableView.Column
-												name="register" width="3*" headerData="Register" />
-											<TableView.Column
-												name="value" width="3*" headerData="Value" />
-										</columns>
-										
-									</TableView>
-								</Border>
-							</view>
-							<columnHeader>
-								<TableViewHeader
-									tableView="$registersTable" />
-							</columnHeader>
-						</ScrollPane>
-					</Border>
-				</BoxPane>
-
-				
-				
-
 			</BoxPane>
 		</Border>
+		<BoxPane styles="{fill:true}" orientation="horizontal">
+			<Border>
+				<TabPane bxml:id="tabPane" height="300"
+					preferredHeight="300" width="300" preferredWidth="300">
+					<ScrollPane height="300" width="300"
+						horizontalScrollBarPolicy="fill">
+						<TabPane.tabData>
+							<content:ButtonData text="Stack" />
+						</TabPane.tabData>
+						<view>
+							<Border>
+								<TableView bxml:id="stackTable"
+									width="300" tableData="$stackTableData">
+									<columns>
+										<TableView.Column
+											name="stackPointer" width="80">
+											<cellRenderer>
+												<content:TableViewImageCellRenderer />
+											</cellRenderer>
+										</TableView.Column>
+										<TableView.Column name="address"
+											width="3*" headerData="Address" />
+										<TableView.Column name="value"
+											width="3*" headerData="Value" />
+									</columns>
+									<tableViewSortListeners>
+										function sortChanged(tableView)
+										{ var tableData =
+										tableView.getTableData();
+										tableData.setComparator(new
+										org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+										}
+									</tableViewSortListeners>
+								</TableView>
+							</Border>
+						</view>
+						<columnHeader>
+							<TableViewHeader tableView="$stackTable" />
+						</columnHeader>
+					</ScrollPane>
+
+					<ScrollPane height="300"
+						horizontalScrollBarPolicy="fill">
+						<TabPane.tabData>
+							<content:ButtonData text="Heap" />
+						</TabPane.tabData>
+						<view>
+							<Border>
+								<TableView bxml:id="heapTable"
+									tableData="$heapTableData">
+									<columns>
+										<TableView.Column
+											name="stackPointer" width="80">
+											<cellRenderer>
+												<content:TableViewImageCellRenderer />
+											</cellRenderer>
+										</TableView.Column>
+										<TableView.Column name="address"
+											width="3*" headerData="Address" />
+										<TableView.Column name="value"
+											width="3*" headerData="Value" />
+									</columns>
+									<tableViewSortListeners>
+										function sortChanged(tableView)
+										{ var tableData =
+										tableView.getTableData();
+										tableData.setComparator(new
+										org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+										}
+									</tableViewSortListeners>
+								</TableView>
+							</Border>
+						</view>
+						<columnHeader>
+							<TableViewHeader tableView="$heapTable" />
+						</columnHeader>
+					</ScrollPane>
+				</TabPane>
+			</Border>
+			<Border>
+				<ScrollPane height="300" width="150"
+					horizontalScrollBarPolicy="fill" preferredWidth="150"
+					preferredHeight="300">
+					<view>
+						<Border>
+							<TableView bxml:id="registersTable"
+								tableData="$registerTableData" width="300">
+								<columns>
+									<TableView.Column name="register"
+										width="3*" headerData="Register" />
+									<TableView.Column name="value"
+										width="3*" headerData="Value" />
+								</columns>
+
+							</TableView>
+						</Border>
+					</view>
+					<columnHeader>
+						<TableViewHeader tableView="$registersTable" />
+					</columnHeader>
+				</ScrollPane>
+			</Border>
+		</BoxPane>
 
 	</BoxPane>
 </avr:BaseWindow>
