@@ -230,10 +230,16 @@ void MeggyJrSimpleSetup(void)
 
 /* MMS, added this */  
 void delay_ms(unsigned int time) {
-	uint32_t i;
+    _delay_ms(time);
+    
+	/*uint32_t i;
 	for (i = 0; i < time; i++) {
 		_delay_ms(1);
-	}
+	}*/
 }
 
-
+byte GetButtons() {
+    return Meg.GetButtons();
+    
+    // FIXME: make consistent with rest of interface
+}

@@ -213,3 +213,5 @@ void MeggyJrSimpleSetup(void);
  
   
 void delay_ms(unsigned int time);
+
+byte GetButtons();

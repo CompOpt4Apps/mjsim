@@ -10,7 +10,6 @@
 int main (void)
 {
     MeggyJrSimpleSetup();
-    CheckButtonsDown();
     
     // Meggy.setPixel( (byte)7, (byte)7, Meggy.Color.ORANGE );
     DrawPx(7, 7, Orange);
@@ -18,7 +17,9 @@ int main (void)
 
     while (true) {
         // if (Meggy.checkButton(Meggy.Button.A)) {
-        if (Button_A) {
+        //CheckButtonsDown();
+        //if (Button_A) {
+        if (2 & GetButtons()) {
 
             // Meggy.setPixel( (byte)0, (byte)0, Meggy.Color.VIOLET );
             DrawPx(0, 0, Violet);
@@ -30,7 +31,9 @@ int main (void)
         
         } else {
             // if (Meggy.checkButton(Meggy.Button.B)) {
-            if (Button_B) {
+            //CheckButtonsDown();
+            //if (Button_B) {
+            if ( 1 & GetButtons()) {
             
                 // Meggy.setPixel( (byte)7, (byte)0, Meggy.Color.GREEN );
                 DrawPx(7, 0, Green);
@@ -55,7 +58,6 @@ int main (void)
         // tenth second delay, 100 milliseconds
         // Meggy.delay(100);
         delay_ms(100);
-        CheckButtonsDown();
 
     }
 
