@@ -53,4 +53,9 @@ public class Address {
 		this.value = value;
 	}
 
+	public void clearImage() {
+		stackPointer = null;
+		
+	}
+
 }

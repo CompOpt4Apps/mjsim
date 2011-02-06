@@ -131,10 +131,7 @@ public class MachineState {
 		labelMapping.put("Button_Down", stackPointer+4);
 		labelMapping.put("Button_Left", stackPointer+5);
 		labelMapping.put("Button_Right", stackPointer+6);
-		
-		//Just a test
-		//TODO: remove
-		registers.put(0, 23);
+
 	}
 
 	protected MachineState(String name, boolean batch) {
@@ -187,6 +184,11 @@ public class MachineState {
 		}
 	}
 
+	public ArrayList<Instr> getProgramSpace()
+	{
+		return programSpace;
+	}
+	
 	public String getDisplaySlate(int x, int y) {
 		return displaySlate[x][y];
 	}
@@ -465,7 +467,7 @@ public class MachineState {
 				updatedData.putStack(pair.getLeft(), pair.getRight());
 			}
 		}
-
+		logger.debug("Getting event StackPointer" + event.getStackPointer());
 		if (event.getStackPointer() >= 0) {
 			logger.info("Updating stack pointer to (0x"
 					+ Integer.toHexString(event.getStackPointer()) + ")");

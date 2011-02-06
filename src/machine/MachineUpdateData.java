@@ -8,7 +8,7 @@ public class MachineUpdateData {
 	private final Map<Integer,Integer> registerUpdates;
 	private final Map<Integer, Integer> stackUpdates;
 	private final Map<Integer, Integer> heapUpdates;
-	private Integer stackPointer;
+	private Integer stackPointer = null;
 	
 	public MachineUpdateData()
 	{
@@ -52,7 +52,7 @@ public class MachineUpdateData {
 		this.stackPointer = stackPointer;
 	}
 	
-	public int getStackPointer()
+	public Integer getStackPointer()
 	{
 		return stackPointer;
 	}

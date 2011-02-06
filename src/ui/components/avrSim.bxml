@@ -7,6 +7,7 @@
 		<collections:ArrayList bxml:id="registerTableData"/>
 		<collections:ArrayList bxml:id="stackTableData"/>
 		<collections:ArrayList bxml:id="heapTableData"/>
+		<collections:ArrayList bxml:id="programSpaceData"/> 
 	</bxml:define>
 	<actionMappings>
 		<Window.ActionMapping action="fileOpen"
@@ -38,33 +39,56 @@
 				</MenuBar.Item>
 			</MenuBar>
 		</Border>
-		<Border styles="{padding:'2'}">
+		
+		<BoxPane styles="{fill:true}" orientation="horizontal">
+			<Border styles="{padding:'2'}">
 			<BoxPane orientation="vertical">
-				<BoxPane>
-					<Label text="Instruction:"></Label>
-					<Label text="LDR 9, 4" bxml:id="currentInstruction"></Label>
-				</BoxPane>
+				
 				<BoxPane>
 					<PushButton bxml:id="runButton">
-						<content:ButtonData
-							icon="/ui/images/runButton.png">
+						<content:ButtonData icon="/ui/images/runButton.png">
 						</content:ButtonData>
 					</PushButton>
 					<PushButton bxml:id="stepButton">
-						<content:ButtonData
-							icon="/ui/images/stepOnceButton.png">
+						<content:ButtonData icon="/ui/images/stepOnceButton.png">
 						</content:ButtonData>
 					</PushButton>
 					<PushButton bxml:id="stopButton" enabled="false">
-						<content:ButtonData
-							icon="/ui/images/stopButton.png">
+						<content:ButtonData icon="/ui/images/stopButton.png">
 						</content:ButtonData>
 					</PushButton>
 				</BoxPane>
+				<ScrollPane height="300" width="300"
+					horizontalScrollBarPolicy="fill">
+					<view>
+						<Border>
+							<TableView bxml:id="programSpace" tableData="$programSpaceData">
+							<columns>
+							<TableView.Column
+											name="programCounter" width="80">
+											<cellRenderer>
+												<content:TableViewImageCellRenderer />
+											</cellRenderer>
+										</TableView.Column>
+										<TableView.Column width="120" name="pcValue" headerData="Instruction Address" />
+										<TableView.Column name="instruction"
+											width="120" headerData="Instruction" />
+											</columns>
+										<tableViewSortListeners>
+										function sortChanged(tableView)
+										{ var tableData =
+										tableView.getTableData();
+										tableData.setComparator(new
+										org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+										}
+									</tableViewSortListeners></TableView></Border></view>
+					<columnHeader>
+						
+													<TableViewHeader tableView="$programSpace" />
+						</columnHeader>
+				</ScrollPane>
 			</BoxPane>
-		</Border>
-		<BoxPane styles="{fill:true}" orientation="horizontal">
-			<Border>
+		</Border><Border>
 				<TabPane bxml:id="tabPane" height="300"
 					preferredHeight="300" width="300" preferredWidth="300">
 					<ScrollPane height="300" width="300"
