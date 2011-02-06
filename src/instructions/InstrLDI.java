@@ -50,7 +50,7 @@ public class InstrLDI extends Instr {
 	
 	@Override
 	public String toString() {
-		return "LDI r" + rd + " " + k;
+		return "LDI r" + rd + ", " + k;
 	}
 
 	@Override

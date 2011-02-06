@@ -2,8 +2,8 @@ package ui.components;
 
 public class Register {
 
-	private String register;
-	private String value;
+	private String register = null;
+	private String value = null;
 	
 	public Register()
 	{	
