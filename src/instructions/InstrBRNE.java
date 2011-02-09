@@ -4,20 +4,24 @@ import machine.MachineState;
 
 import org.apache.log4j.Logger;
 
-public class InstrBRLT extends Instr {
+public class InstrBRNE extends Instr {
 
-	static private final Logger logger = Logger.getLogger(InstrBRLT.class);
-
+	static final private Logger logger = Logger.getLogger(InstrBRNE.class);
 	private final String label;
-
-	public InstrBRLT(MachineState machine, String label) {
+	
+	public InstrBRNE(MachineState machine, String label) {
 		super(machine);
 		this.label = label;
 	}
 
 	@Override
+	public String toString() {
+		return "BRNE " + label;
+	}
+
+	@Override
 	public void execute() throws RuntimeError {
-		logger.debug("Executing BRLT instruction...");
+		logger.debug("Executing BRNE instruction...");
 		if (this.machine.getLabel(label) == null) {
 			throw new RuntimeError("Could not find label: " + label);
 		}
@@ -30,12 +34,8 @@ public class InstrBRLT extends Instr {
 		}
 		logger.debug("Setting PC value to (0x"
 				+ Integer.toHexString(this.machine.getLabel(label))
-				+ ") for a BRLT.");
-	}
+				+ ") for a BRLO.");
 
-	@Override
-	public String toString() {
-		return "BRLT " + label;
 	}
 
 }

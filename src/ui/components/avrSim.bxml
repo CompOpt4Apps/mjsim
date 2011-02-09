@@ -58,7 +58,7 @@
 						</content:ButtonData>
 					</PushButton>
 				</BoxPane>
-				<ScrollPane height="300" width="300"
+				<ScrollPane height="300" width="300" preferredHeight="300"
 					horizontalScrollBarPolicy="fill">
 					<view>
 						<Border>
@@ -83,15 +83,14 @@
 										}
 									</tableViewSortListeners></TableView></Border></view>
 					<columnHeader>
-						
-													<TableViewHeader tableView="$programSpace" />
+							<TableViewHeader tableView="$programSpace" />
 						</columnHeader>
 				</ScrollPane>
 			</BoxPane>
 		</Border><Border>
 				<TabPane bxml:id="tabPane" height="300"
 					preferredHeight="300" width="300" preferredWidth="300">
-					<ScrollPane height="300" width="300"
+					<ScrollPane height="300"  width="300"
 						horizontalScrollBarPolicy="fill">
 						<TabPane.tabData>
 							<content:ButtonData text="Stack" />
@@ -190,6 +189,5 @@
 				</ScrollPane>
 			</Border>
 		</BoxPane>
-
 	</BoxPane>
 </avr:BaseWindow>

@@ -1,11 +1,11 @@
 package ui.components;
 
-import instructions.ATmegaProgram;
 import instructions.Instr;
 import instructions.RuntimeError;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Comparator;
 
 import machine.MachineState;
 import machine.MachineUpdate;
@@ -46,7 +46,6 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	@BXML private List<Address> stackTableData;
 	@BXML private List<Address> heapTableData;
 	@BXML private List<PCInstruction> programSpaceData;
-	private boolean running = false;
 	private int stackPointer;
 	private int pcValue;
 	private MachineState machine;
@@ -56,6 +55,14 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	private SimulateMachineState simulateMachine = null;
 	final private URL stackImage = Main.class.getClassLoader().getResource("ui/images/sp.png");
 	final private URL cpImage = Main.class.getClassLoader().getResource("ui/images/pc.png");
+	final private Comparator<Address> addressSort = new Comparator<Address>(){
+
+		@Override
+		public int compare(Address o1, Address o2) {
+			return o1.getAddress().compareTo(o2.getAddress());
+		}
+		
+	}; 
 
 	@Override
 	public void initialize(Map<String, Object> arg0, URL arg1, Resources arg2) {
@@ -266,6 +273,9 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 
 		String address = "0x" + Integer.toHexString(machine.getStackPointer());
 		String oldValue = "0x" +Integer.toHexString(stackPointer);
+		logger.debug("Updating gui -");
+		logger.debug("Old stack pointer = " + oldValue);
+		logger.debug("New stack pointer = " + address);
 		boolean foundNew = false,foundOld=false;
 		for(Address addr : stackTableData)
 		{
@@ -305,8 +315,10 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 
 		for(Integer reg:regUpdates.keySet())
 		{
-			logger.debug("Updating register: " + reg);
+			logger.debug("Updating register r" + reg + " to value: " + regUpdates.get(reg));
+			
 			((Register)registerTableData.get(reg)).setValue(Integer.toString(regUpdates.get(reg)));
+			
 		}
 
 		final java.util.Map<Integer,Integer> stackUpdates = data.getStackUpdates();
@@ -317,28 +329,28 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			if(add == null)
 			{
 				//will it always be first?
-				stackTableData.insert(new Address(stackMem.toString(),stackUpdates.get(stackMem)) , 0);
+				stackTableData.add(new Address(stackMem.toString(),stackUpdates.get(stackMem)));
 			}
 			else
 			{
 				add.setValue(stackUpdates.get(stackMem));
 			}
+			stackTableData.setComparator(addressSort);
 		}
 		if(data.getStackPointer() != null && data.getStackPointer() > 0)
 		{
-			stackPointer = data.getStackPointer();
-			if(getStackAddress(stackPointer)!= null)
-			{
-				getStackAddress(stackPointer).setStackPointer(stackImage);
-			}
-			else
+			int stackPointer = data.getStackPointer();
+			logger.debug("Updating stack pointer in gui to value of:  " + stackPointer);
+			if(getStackAddress(stackPointer)== null)
 			{
 				Address newAddr = new Address();
 				newAddr.setAddress(Integer.toString(stackPointer));
 				newAddr.setStackPointer(stackImage);
-				stackTableData.insert(newAddr,0);
+				stackTableData.add(newAddr);
 			}
 		}
+		
+		
 
 		for(Integer heapMem: heapUpdates.keySet())
 		{
@@ -361,7 +373,8 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		Address ret = null;
 		for(Address add:stackTableData)
 		{
-			if(add.getAddress().trim().equals(Integer.toString(address)))
+			logger.trace("Trying to find address " + address + " and comparing against address " + add.getAddress());
+			if(add.getAddress().equals("0x" + Integer.toHexString(address)))
 			{
 				ret = add;
 				break;
