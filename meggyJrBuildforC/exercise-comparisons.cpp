@@ -29,6 +29,10 @@ int main (void)
             DisplaySlate();
         }
         
+        if ( not (z<y)) {
+            DrawPx(0, 2, Blue);
+            DisplaySlate();
+        }
     }
 
     while (1) {

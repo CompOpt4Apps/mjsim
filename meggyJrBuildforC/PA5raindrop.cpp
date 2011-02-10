@@ -15,7 +15,6 @@ bool inBounds(byte x, byte y);
 int main (void)
 {
     MeggyJrSimpleSetup();
-    CheckButtonsDown();
 
     // For PA5 not actually constructing object in PA5 compiler,
     // but syntax needs to be there.
@@ -23,12 +22,10 @@ int main (void)
     while (true) {
     
         // new Cloud().rain((byte)3,(byte)7);
-        rain(3,7);
-        
+        rain(3,7);     
     
         //Meggy.delay(500);
         delay_ms(500);
-        CheckButtonsDown();
 
         // get rid of last dot
         DrawPx(3, 0, Dark);
@@ -48,8 +45,8 @@ void rain(byte x, byte y) {
     if (inBounds(x,y)) {
     
         // Meggy.setPixel(x, y, Meggy.Color.BLUE);
-            DrawPx(x, y, Blue);
-            DisplaySlate();        
+        DrawPx(x, y, Blue);
+        DisplaySlate();        
         
         // if (this.inBounds(x,(byte)(y+(byte)1))) {
         if (inBounds( x, y+1) ) {
@@ -62,7 +59,6 @@ void rain(byte x, byte y) {
         
         //Meggy.delay(100);
         delay_ms(100);
-        CheckButtonsDown();
         
         //this.rain(x, (byte)(y-(byte)1));
         rain(x,y-1);
