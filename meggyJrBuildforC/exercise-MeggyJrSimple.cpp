@@ -20,7 +20,7 @@ int main (void)
     }
 
     while (1) {
-        CheckButtonsPress();
+        CheckButtonsDown();
         if (Button_A) {
             Tone_Start(ToneC3, 1000);
         }
@@ -28,7 +28,9 @@ int main (void)
         if (Button_B) {
             SetAuxLEDs(16);
         }
-        if (Button_Up) {
+        
+        //if (Button_Up) {
+        if (4 & GetButtons()) {
             SetAuxLEDs(31);
         }
         

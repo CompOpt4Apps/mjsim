@@ -17,8 +17,6 @@ int main (void)
 
     while (true) {
         // if (Meggy.checkButton(Meggy.Button.A)) {
-        //CheckButtonsDown();
-        //if (Button_A) {
         if (2 & GetButtons()) {
 
             // Meggy.setPixel( (byte)0, (byte)0, Meggy.Color.VIOLET );
@@ -31,8 +29,6 @@ int main (void)
         
         } else {
             // if (Meggy.checkButton(Meggy.Button.B)) {
-            //CheckButtonsDown();
-            //if (Button_B) {
             if ( 1 & GetButtons()) {
             
                 // Meggy.setPixel( (byte)7, (byte)0, Meggy.Color.GREEN );
