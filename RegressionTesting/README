@@ -1,0 +1,25 @@
+======================================
+README for MeggySim/RegressionTesting/
+======================================
+MJ.jar (revision 97), 2/16/11, MMS
+
+To run the regression tests:
+
+    (1) do a "make" in the MeggySim/ home directory
+       to create MeggySim/MJSIM.jar
+       
+    (2) cd RegressionTesting
+    
+    (3) ./regress.sh
+    
+All of the .java files in the RegressionTesting/ subdirectory will
+be run with the Java-only version and be run through the MJ.jar
+compiler to generate AVR assembly that is then run through the
+MJSIM.jar in batch mode.  The text output from both should match.
+
+Anytime a new version of the MeggyJava compiler (MJ.jar) is generated,
+this file should be updated with the revision number for that program.
+
+TODO
+----
+- modify MJSIM.jar so that it can read in an arg_opts file as well
