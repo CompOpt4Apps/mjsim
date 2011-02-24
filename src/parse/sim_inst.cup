@@ -126,11 +126,13 @@ instr	::=	AVR_PUSH REG:r eol
 		:}		
 	|	AVR_LDI REG:r COMMA AVR_LO LPARAN exp:e RPARAN eol 
 		{:
-			RESULT= new InstrLDI(sim_inst.machine,Integer.parseInt(r.toString()),Integer.parseInt(e.toString()));
+			RESULT= new
+            InstrLDI(sim_inst.machine,Integer.parseInt(r.toString()),Integer.parseInt(e.toString()),InstrLDI.LDIType.LO);
 		:}
 	|	AVR_LDI REG:r COMMA AVR_HI LPARAN exp:e RPARAN eol 
 		{:
-			RESULT= new InstrLDI(sim_inst.machine,Integer.parseInt(r.toString()),Integer.parseInt(e.toString()));
+			RESULT= new
+            InstrLDI(sim_inst.machine,Integer.parseInt(r.toString()),Integer.parseInt(e.toString()),InstrLDI.LDIType.HI);
 		:}
 	|	AVR_LDI REG:r COMMA exp:e eol 
 		{:
