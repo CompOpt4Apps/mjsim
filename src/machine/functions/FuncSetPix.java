@@ -24,5 +24,6 @@ public class FuncSetPix extends Func {
 			throw new RuntimeError("Color is null.");
 		}
 		this.machine.setDisplaySlate(x, y, color);
+        System.out.println("Setting pixel (" + x + "," + y + ") to " + color);
 	}
 }
