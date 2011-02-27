@@ -112,8 +112,8 @@ public class MachineState {
 		// init the 2 slate datastructures.
 		for (int x = 0; x < 8; x++) {
 			for (int y = 0; y < 8; y++) {
-				displaySlate[x][y] = "NONE";
-				ledGrid[x][y] = "NONE";
+				displaySlate[x][y] = "DARK";
+				ledGrid[x][y] = "DARK";
 			}
 		}
 
@@ -121,6 +121,7 @@ public class MachineState {
 		predefinedFunctions.put("_Z6DrawPxhhh", new FuncSetPix(this));
 		predefinedFunctions.put("_Z12DisplaySlatev", new FuncDisplaySlate(this));
 		predefinedFunctions.put("_Z16CheckButtonsDownv",new FuncButtonPress(this));
+		//predefinedFunctions.put("_Z10GetButtonsv",new FuncGetButton(this));
 		predefinedFunctions.put("malloc", new FuncMalloc(this));
 	
 		//add the values for the buttons into the memory space.

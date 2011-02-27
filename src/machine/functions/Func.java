@@ -39,7 +39,7 @@ public abstract class Func {
 			case 5: return "BLUE";
 			case 6: return "VIOLET";
 			case 7: return "WHITE";
-			case 0: return "NONE";
+			case 0: return "DARK";
 			default: logger.fatal("Unknown color value (" +value +")" );
 				return null;
 		}
