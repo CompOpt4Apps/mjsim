@@ -13,9 +13,9 @@ public class FuncGetButton extends Func {
 
 	@Override
 	public void exec() throws RuntimeError {
-		//TODO: check for button presses here.
-		//this will return all the buttons that are currently pressed in a bit string.
-		logger.fatal("This method is not implemented yet.");
+		final int button = this.machine.getRegister(24);
+		
+        System.out.println("Checking button "+ button + " and returning false");
 	}
 
 }

@@ -17,6 +17,8 @@ import machine.functions.FuncButtonPress;
 import machine.functions.FuncDisplaySlate;
 import machine.functions.FuncMalloc;
 import machine.functions.FuncSetPix;
+import machine.functions.FuncDelay;
+import machine.functions.FuncGetButton;
 
 import org.apache.log4j.Logger;
 
@@ -121,7 +123,8 @@ public class MachineState {
 		predefinedFunctions.put("_Z6DrawPxhhh", new FuncSetPix(this));
 		predefinedFunctions.put("_Z12DisplaySlatev", new FuncDisplaySlate(this));
 		predefinedFunctions.put("_Z16CheckButtonsDownv",new FuncButtonPress(this));
-		//predefinedFunctions.put("_Z10GetButtonsv",new FuncGetButton(this));
+		predefinedFunctions.put("_Z8delay_msj", new FuncDelay(this));
+		predefinedFunctions.put("_Z10GetButtonsv",new FuncGetButton(this));
 		predefinedFunctions.put("malloc", new FuncMalloc(this));
 	
 		//add the values for the buttons into the memory space.
@@ -152,7 +155,7 @@ public class MachineState {
 	 * @throws RuntimeError
 	 */
 	public void executeInstruction() throws RuntimeError {
-		logger.trace("Execute Instruction: Pc value is (" + pc + ")");
+		logger.trace("Execute Instruction: PC value is (" + pc + ")");
 
 		final Instr currentInstr = programSpace.get(pc);
 		// check to see if we are in batch mode, and if so check to see how many
