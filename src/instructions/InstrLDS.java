@@ -36,6 +36,33 @@ public class InstrLDS extends Instr {
 		}
 		this.event.setPC(machine.getPC()+1);
 		this.event.setRd(rd, machine.getMemory(address));
+		
+		// Print out the check button message.
+		boolean value = false;
+		if (machine.getMemory(address)!=0) { value = true; }
+		
+	    if (addressPointer.equals("Button_B")) {
+            System.out.println("Checking button B and returning " + value);
+            
+        } else if (addressPointer.equals("Button_A")) {
+            System.out.println("Checking button A and returning " + value);
+            
+        } else if (addressPointer.equals("Button_Up")) {
+            System.out.println("Checking button Up and returning " + value);
+            
+        } else if (addressPointer.equals("Button_Down")) {
+            System.out.println("Checking button Down and returning " + value);
+            
+        } else if (addressPointer.equals("Button_Left")) {
+            System.out.println("Checking button Left and returning " + value);
+            
+        } else if (addressPointer.equals("Button_Right")) {
+            System.out.println("Checking button Right and returning " + value);
+            
+        }
+
+
+
 	}
 
 }

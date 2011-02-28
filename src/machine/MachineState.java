@@ -13,12 +13,11 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import machine.functions.Func;
-import machine.functions.FuncButtonPress;
+import machine.functions.FuncButtonDown;
 import machine.functions.FuncDisplaySlate;
 import machine.functions.FuncMalloc;
 import machine.functions.FuncSetPix;
 import machine.functions.FuncDelay;
-import machine.functions.FuncGetButton;
 
 import org.apache.log4j.Logger;
 
@@ -122,9 +121,8 @@ public class MachineState {
 		// add all of the predefined functions
 		predefinedFunctions.put("_Z6DrawPxhhh", new FuncSetPix(this));
 		predefinedFunctions.put("_Z12DisplaySlatev", new FuncDisplaySlate(this));
-		predefinedFunctions.put("_Z16CheckButtonsDownv",new FuncButtonPress(this));
+		predefinedFunctions.put("_Z16CheckButtonsDownv",new FuncButtonDown(this));
 		predefinedFunctions.put("_Z8delay_msj", new FuncDelay(this));
-		predefinedFunctions.put("_Z10GetButtonsv",new FuncGetButton(this));
 		predefinedFunctions.put("malloc", new FuncMalloc(this));
 	
 		//add the values for the buttons into the memory space.
