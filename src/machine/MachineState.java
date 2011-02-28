@@ -492,7 +492,17 @@ public class MachineState {
 			// get the high 8 bits, and shift them to the right.
 			this.stack.put(tempPair.getLeft() + 1, (tempPair.getRight() & 0xFF)); 
 			// get the low 8 bits.
-			//TODO: need to add the updating event code here.
+			if(tempPair.getLeft() < stackPointer) //this should be the heap then?
+			{
+				updatedData.putHeap(tempPair.getLeft(), (tempPair.getRight() & 0xFF00)>>8);
+				updatedData.putHeap(tempPair.getLeft(), (tempPair.getRight() & 0xFF));
+			}
+			else
+			{
+				updatedData.putStack(tempPair.getLeft(), (tempPair.getRight() & 0xFF00)>>8);
+				updatedData.putStack(tempPair.getLeft(), (tempPair.getRight() & 0xFF));
+			}
+
 		}
 
 		pc = event.getPc();// this should be set in every instruction.
