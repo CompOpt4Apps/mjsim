@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class UpdateEvent {
 	private final HashMap<Integer, Integer> rd = new HashMap<Integer, Integer>();
-	private int pc;
+	private int pc = -1;
 	private Pair<Integer,Integer> memory = null;
 	private Pair<Integer,Integer> longMemory= null;
 	private int stackPointer = -1; //this is the default value.

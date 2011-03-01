@@ -73,7 +73,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		runButton = (PushButton) arg0.get("runButton");
 		stepButton = (PushButton) arg0.get("stepButton");
 		stopButton = (PushButton) arg0.get("stopButton");
-
+		
 		runButton.getButtonPressListeners().add(new ButtonPressListener() {
 
 			@Override
@@ -261,6 +261,8 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		}
 		readInProgram();
 		machine.addUpdate(this);
+		runButton.setEnabled(true);
+		stepButton.setEnabled(true);
 		repaint();
 	}
 
@@ -269,6 +271,13 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		//need to update the pc pointer and the stack pointer.
 		//first unset the old values.
 		programSpaceData.get(pcValue).clearImage();
+		if(machine.getPC()==0xFFFF)
+		{
+			runButton.setEnabled(false);
+			stepButton.setEnabled(false);
+			stopButton.setEnabled(false);
+			return;
+		}
 		programSpaceData.get(machine.getPC()).setProgramCounter(cpImage);
 
 		String address = "0x" + Integer.toHexString(machine.getStackPointer());

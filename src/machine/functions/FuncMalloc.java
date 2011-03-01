@@ -18,7 +18,8 @@ public class FuncMalloc extends Func {
 		//For this need to create a special event object since there isn't on in the Func base class.
 		final UpdateEvent event = new UpdateEvent();
 		//get the value passed on the stack.
-		final int size = this.machine.getRegister(24); 
+		int size = this.machine.getRegister(24); 
+		size &= (this.machine.getRegister(25) & 0xFF) << 8;
 		//get the current stack pointer
 		final int currentStack = this.machine.getStackPointer();
 		//check to see of the amount of memory that is being requested can be allocated.

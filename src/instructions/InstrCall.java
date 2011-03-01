@@ -3,6 +3,7 @@ package instructions;
 import org.apache.log4j.Logger;
 
 import machine.MachineState;
+import machine.UpdateEvent;
 
 /**
  * CALL - Long Call to a Subroutine
@@ -26,9 +27,16 @@ public class InstrCall extends Instr {
 
 	@Override
 	public void execute() throws RuntimeError {
+		//this method requires some hacking around the current design.
+		//I need to create another UpdateEvent for this call, and not fill in
+		//the one that is created in the base abstract class.
+		logger.info("Executing InstrCall...");
+		
 		if(this.machine.isPredefinedFunction(this.functionName))
-		{
+		{	
+			logger.debug("PredefinedFunction");
 			this.machine.getPreDefinedFunction(this.functionName).exec();//run the function. all side effects should be in the machine.
+			logger.trace("End of PredefinedFunction");
 			this.event.setPC(this.machine.getPC()+1);
 			return;
 		}

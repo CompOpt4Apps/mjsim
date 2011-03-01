@@ -177,12 +177,14 @@ public class MachineState {
 		}
 		currentInstr.executeWrapper();
 		// after this instruction the pc value should be updated.
+		logger.trace("Printing the pc value for determining if it is the end case.\nPC=(" + Integer.toHexString(pc) + ")");
 		if ((pc >= programSpace.size()) || (pc == 0xFFFF))// all Fs should be
 															// the return
 															// address for the
 															// main function.
 		{
 			finished = true;
+			logger.info("Hit the finished case.");
 		}
 	}
 
@@ -505,8 +507,12 @@ public class MachineState {
 
 		}
 
-		pc = event.getPc();// this should be set in every instruction.
-		
+		if(event.getPc() >=0)
+		{
+			logger.trace("Updating PC value: " + event.getPc());
+			pc = event.getPc();
+		}
+			
 		setUpdates(updatedData);
 	}
 	
