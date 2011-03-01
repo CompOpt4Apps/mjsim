@@ -23,14 +23,14 @@ public class FuncButtonDown extends Func {
 		UpdateEvent event = new UpdateEvent();
 		
 		// Trying just one because multiple seems to confuse things.
-		//event.setMemory(machine.getLabel("Button_B"), 1);
-		event.setMemory(machine.getLabel("Button_A"), 1);
+		event.setMemory(machine.getLabel("Button_A"), 0);
+		event.setMemory(machine.getLabel("Button_B"), 0);
 		//event.setMemory(machine.getLabel("Button_Up"), 1);
 		//event.setMemory(machine.getLabel("Button_Down"), 1);
 		//event.setMemory(machine.getLabel("Button_Right"), 1);
 		//event.setMemory(machine.getLabel("Button_Left"), 1);
 		
 		// have machine update using event object
-    	//machine.updateState(event); // RYAN help!  Why doesn't this work?
+    	machine.updateState(event); // RYAN help!  Why doesn't this work?
 	}
 }
