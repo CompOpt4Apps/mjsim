@@ -5,8 +5,7 @@ import java.util.HashMap;
 public class UpdateEvent {
 	private final HashMap<Integer, Integer> rd = new HashMap<Integer, Integer>();
 	private int pc = -1;
-	private Pair<Integer,Integer> memory = null;
-	private Pair<Integer,Integer> longMemory= null;
+	private final HashMap<Integer,Integer> memory = new HashMap<Integer, Integer>();
 	private int stackPointer = -1; //this is the default value.
 	private SREG sreg = null;
     
@@ -21,12 +20,13 @@ public class UpdateEvent {
     
     public void setMemory(int address, int value)
     {
-    	memory= new Pair<Integer, Integer>(address, value);
+    	memory.put(address, value);
     }
     
     public void setLongMemory(int address, int value)
     {
-    	longMemory = new Pair<Integer,Integer>(address, value);
+    	memory.put(address,value & 0xFF);
+    	memory.put(address+1, (value & 0xFF00)>>8);
     }
     
     public void setPC(int value)
@@ -56,13 +56,8 @@ public class UpdateEvent {
 	/**
 	 * @return the memory
 	 */
-	public Pair<Integer, Integer> getMemory() {
+	public HashMap<Integer, Integer> getMemory() {
 		return memory;
-	}
-	
-	public Pair<Integer, Integer> getLongMemory()
-	{
-		return longMemory;
 	}
     
 	public int getStackPointer(){

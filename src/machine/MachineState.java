@@ -40,15 +40,15 @@ public class MachineState {
 	private int pc = 0;// set to the beginning of the programSpace.
 	private boolean finished = false;
 	private int stackPointer = 0x3e3d; // this value is taken from the SPL and
-										// SPH from the main.s file.
+	// SPH from the main.s file.
 	private int returnAddress = -1;
 	final private SREG statusReg;
 
-	
+
 	//use the singleton pattern for this.
-	
+
 	private static MachineState machine = null;
-	
+
 	public static MachineState createMachine(String name) 
 	{
 		if(machine == null)
@@ -57,7 +57,7 @@ public class MachineState {
 		}
 		return machine;
 	}
-	
+
 	public static MachineState createMachine(String name, int jmps) {
 		if(machine == null)
 		{
@@ -74,13 +74,13 @@ public class MachineState {
 		}
 		return machine;		
 	}
-	
+
 	public static void uninitMachine()
 	{
 		machine = null;
 	}
-	
-	
+
+
 	protected MachineState(String name) {
 		// Using a TreeMap instead of a HashMap because after a large number of
 		// addresses have been accessed
@@ -124,7 +124,7 @@ public class MachineState {
 		predefinedFunctions.put("_Z16CheckButtonsDownv",new FuncButtonDown(this));
 		predefinedFunctions.put("_Z8delay_msj", new FuncDelay(this));
 		predefinedFunctions.put("malloc", new FuncMalloc(this));
-	
+
 		//add the values for the buttons into the memory space.
 		//add these values above the stack pointer.
 		labelMapping.put("Button_A", stackPointer+1);
@@ -166,7 +166,7 @@ public class MachineState {
 				if (currentJmps > labelJmps) {
 					throw new RuntimeError(
 							"Hit max number of jumps for label: "
-									+ currentInstr.toString());
+							+ currentInstr.toString());
 				}
 				currentJmps++;
 				labelJumps.put(currentInstr.toString(), currentJmps);
@@ -179,9 +179,9 @@ public class MachineState {
 		// after this instruction the pc value should be updated.
 		logger.trace("Printing the pc value for determining if it is the end case.\nPC=(" + Integer.toHexString(pc) + ")");
 		if ((pc >= programSpace.size()) || (pc == 0xFFFF))// all Fs should be
-															// the return
-															// address for the
-															// main function.
+			// the return
+			// address for the
+			// main function.
 		{
 			finished = true;
 			logger.info("Hit the finished case.");
@@ -192,7 +192,7 @@ public class MachineState {
 	{
 		return programSpace;
 	}
-	
+
 	public String getDisplaySlate(int x, int y) {
 		return displaySlate[x][y];
 	}
@@ -262,7 +262,7 @@ public class MachineState {
 	public int getRegister(int reg) {
 		final Integer tempReg = registers.get(reg);
 		if (tempReg == null)// check to make sure it is not null. if it is
-							// return 0.
+			// return 0.
 		{
 			return 0;
 		}
@@ -291,7 +291,7 @@ public class MachineState {
 		}
 		return tempReg;
 	}
-	
+
 	/**
 	 * Only use this for debugging and possibly gui purposes.
 	 * 
@@ -375,7 +375,7 @@ public class MachineState {
 	public void setReturnAddress(int address) {
 		this.returnAddress = address;
 	}
-	
+
 	/**
 	 * Add an object to receive updates from the MachineState.
 	 * @param obj
@@ -387,24 +387,24 @@ public class MachineState {
 			updateObj.add(obj);
 			//after an add, send the entire machine state to the newly added object.
 			MachineUpdateData updateData = new MachineUpdateData();
-			
+
 			for(int reg: registers.keySet())
 			{
 				updateData.putReg(reg, registers.get(reg));
 			}
-			
+
 			for(int addr: stack.keySet())
 			{
 				updateData.putStack(addr, stack.get(addr));
 			}
-			
+
 			for(int addr: heap.keySet())
 			{
 				updateData.putHeap(addr, heap.get(addr));
 			}
-			
+
 			updateData.setStackPointer(stackPointer);
-			
+
 			obj.update(updateData);
 		}
 	}
@@ -444,7 +444,7 @@ public class MachineState {
 	public void updateState(UpdateEvent event) {
 		logger.info("Received UpdateEvent...processing...");
 		MachineUpdateData updatedData = new MachineUpdateData();
-		
+
 		if (event.getRd() != null) {
 			final HashMap<Integer, Integer> rds = event.getRd();
 			for(Integer key:rds.keySet())
@@ -457,18 +457,21 @@ public class MachineState {
 		}
 
 		if (event.getMemory() != null) {
-			final Pair<Integer, Integer> pair = event.getMemory();
-			logger.info("Updating memory location (" + pair.getLeft()
-					+ ") with the value (" + pair.getRight() + ")");
-			stack.put(pair.getLeft(), pair.getRight());
+			final HashMap<Integer, Integer> updateMemory = event.getMemory();
+			for(Integer key:updateMemory.keySet())
+			{
+				logger.info("Updating memory location (" + key
+						+ ") with the value (" + updateMemory.get(key) + ")");
+				stack.put(key, updateMemory.get(key));
 
-			if(pair.getLeft() < stackPointer) //this should be the heap then?
-			{
-				updatedData.putHeap(pair.getLeft(), pair.getRight());
-			}
-			else
-			{
-				updatedData.putStack(pair.getLeft(), pair.getRight());
+				if(key < stackPointer) //this should be the heap then?
+				{
+					updatedData.putHeap(key, updateMemory.get(key));
+				}
+				else
+				{
+					updatedData.putStack(key, updateMemory.get(key));
+				}
 			}
 		}
 		logger.debug("Getting event StackPointer" + event.getStackPointer());
@@ -483,39 +486,15 @@ public class MachineState {
 			updateSREG(event.getSREG());
 		}
 
-		if (event.getLongMemory() != null) {
-			logger.info("Adding long memory to the stack at (0x"
-					+ Integer.toHexString(event.getLongMemory().getLeft())
-					+ ")");
-			// store the high value in the lower memory, store the low value in
-			// high memory.
-			final Pair<Integer, Integer> tempPair = event.getLongMemory();
-			this.stack.put(tempPair.getLeft(),(tempPair.getRight() & 0xFF00) >> 8);
-			// get the high 8 bits, and shift them to the right.
-			this.stack.put(tempPair.getLeft() + 1, (tempPair.getRight() & 0xFF)); 
-			// get the low 8 bits.
-			if(tempPair.getLeft() < stackPointer) //this should be the heap then?
-			{
-				updatedData.putHeap(tempPair.getLeft(), (tempPair.getRight() & 0xFF00)>>8);
-				updatedData.putHeap(tempPair.getLeft(), (tempPair.getRight() & 0xFF));
-			}
-			else
-			{
-				updatedData.putStack(tempPair.getLeft(), (tempPair.getRight() & 0xFF00)>>8);
-				updatedData.putStack(tempPair.getLeft(), (tempPair.getRight() & 0xFF));
-			}
-
-		}
-
 		if(event.getPc() >=0)
 		{
 			logger.trace("Updating PC value: " + event.getPc());
 			pc = event.getPc();
 		}
-			
+
 		setUpdates(updatedData);
 	}
-	
+
 	private void setUpdates(MachineUpdateData updatedData)
 	{
 		for(MachineUpdate obj: updateObj)
