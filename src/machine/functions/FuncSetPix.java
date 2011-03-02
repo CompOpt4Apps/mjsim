@@ -19,11 +19,16 @@ public class FuncSetPix extends Func {
 		final int x = this.machine.getRegister(24);
 		final int y = this.machine.getRegister(22);
 		final String color = Func.valueToColor(this.machine.getRegister(20));
+
+        // machine keeps a count
+		this.machine.noteMeggyCall();
+
 		if(color == null)
 		{
 			throw new RuntimeError("Color is null.");
 		}
 		this.machine.setDisplaySlate(x, y, color);
+
         System.out.println("Setting pixel (" + x + "," + y + ") to " + color);
 	}
 }

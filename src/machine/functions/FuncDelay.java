@@ -16,6 +16,11 @@ public class FuncDelay extends Func {
 		final int lo = this.machine.getRegister(24);
 		final int hi = this.machine.getRegister(25);
 		final int duration_ms = lo + hi*256;
+
+        // machine keeps a count
+		this.machine.noteMeggyCall();
+		this.machine.noteDelay();
+		
         System.out.println("Delaying for "+ duration_ms + " milliseconds");	
     }
 

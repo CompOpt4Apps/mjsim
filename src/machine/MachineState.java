@@ -53,7 +53,7 @@ public class MachineState {
     //private File argoptsfile = null;
     private boolean mUsingArgOpts = false;
     private int mMaxCalls = 0;  // Max number of calls to Meggy 
-                                       // interface before halting
+                                // interface before halting
     private boolean mDelaySim = false; // Are we simulating delays?
     private enum Button { B,
         A,
@@ -207,6 +207,39 @@ public class MachineState {
         }
 
 	}
+	
+	public void noteDelay() {
+	    if (this.mUsingArgOpts) {
+	        this.mCurrPhase ++;
+	    }
+	}
+	
+	public void noteMeggyCall() {
+	    if (this.mUsingArgOpts) {
+	        this.mMaxCalls--; if (this.mMaxCalls<0) { System.exit(0); }
+	    }
+	}
+	
+	// Need an int value to represent true or false in simulated machine.
+	public int checkButton(String bstr) {
+
+        if (this.mUsingArgOpts) {
+
+            // Do we have a phase for the current phase?
+            // && Check to see if it's a button press for this phase
+            if (this.mButtonPresses.size()>this.mCurrPhase && 
+                this.mButtonPresses.get(this.mCurrPhase).contains(
+                                                        Button.valueOf(bstr)) ) 
+            {
+                return 1;
+            } else {
+                return 0;
+            }
+            
+        } else {
+            return 0;
+        }
+    }
 
 	protected MachineState(String name, boolean batch, File argoptsfile) {
 		this(name);		
@@ -237,7 +270,8 @@ public class MachineState {
 			Integer currentJmps = labelJumps.get(currentInstr.toString());
 			if (currentJmps != null) {
 				logger.debug("Max jumps: " + labelJmps);
-				if (currentJmps > labelJmps) {
+				// If not using arg_opts file and over max jumps then exit.
+				if (!this.mUsingArgOpts && (currentJmps > labelJmps)) {
 					throw new RuntimeError(
 							"Hit max number of jumps for label: "
 							+ currentInstr.toString());

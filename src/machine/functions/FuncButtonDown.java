@@ -17,20 +17,26 @@ public class FuncButtonDown extends Func {
 	public void exec() throws RuntimeError {
 		logger.info("Executing FuncButtonDown...");
 		
-		// === to start with just assume that all buttons are down
+        // machine keeps a count
+		this.machine.noteMeggyCall();
 		
 		// create an event object for the machine
 		UpdateEvent event = new UpdateEvent();
 		
-		// Trying just one because multiple seems to confuse things.
-		event.setMemory(machine.getLabel("Button_A"), 0);
-		event.setMemory(machine.getLabel("Button_B"), 0);
-		//event.setMemory(machine.getLabel("Button_Up"), 1);
-		//event.setMemory(machine.getLabel("Button_Down"), 1);
-		//event.setMemory(machine.getLabel("Button_Right"), 1);
-		//event.setMemory(machine.getLabel("Button_Left"), 1);
+		// Gradeable message to stdout will be generated when one of 
+		// the button variables is read in InstrLDS.java.
+		event.setMemory(machine.getLabel("Button_A"), machine.checkButton("A"));
+		event.setMemory(machine.getLabel("Button_B"), machine.checkButton("A"));
+		event.setMemory(machine.getLabel("Button_Up"), 
+		    machine.checkButton("Up"));
+		event.setMemory(machine.getLabel("Button_Down"), 
+		    machine.checkButton("Down"));
+		event.setMemory(machine.getLabel("Button_Right"),     
+		    machine.checkButton("Right"));
+		event.setMemory(machine.getLabel("Button_Left"), 
+		    machine.checkButton("Left"));
 		
 		// have machine update using event object
-    	machine.updateState(event); // RYAN help!  Why doesn't this work?
+    	machine.updateState(event);
 	}
 }
