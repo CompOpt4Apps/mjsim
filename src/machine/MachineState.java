@@ -22,6 +22,7 @@ import machine.functions.FuncButtonDown;
 import machine.functions.FuncDisplaySlate;
 import machine.functions.FuncMalloc;
 import machine.functions.FuncSetPix;
+import machine.functions.FuncGetPix;
 import machine.functions.FuncDelay;
 
 import org.apache.log4j.Logger;
@@ -158,6 +159,7 @@ public class MachineState {
 
 		// add all of the predefined functions
 		predefinedFunctions.put("_Z6DrawPxhhh", new FuncSetPix(this));
+		predefinedFunctions.put("_Z6ReadPxhh", new FuncGetPix(this));
 		predefinedFunctions.put("_Z12DisplaySlatev", new FuncDisplaySlate(this));
 		predefinedFunctions.put("_Z16CheckButtonsDownv",new FuncButtonDown(this));
 		predefinedFunctions.put("_Z8delay_msj", new FuncDelay(this));
@@ -222,6 +224,8 @@ public class MachineState {
 	
 	// Need an int value to represent true or false in simulated machine.
 	public int checkButton(String bstr) {
+        logger.debug("checkButton, bstr="+bstr+", this.mButtonPresses = "
+            +this.mButtonPresses);
 
         if (this.mUsingArgOpts) {
 
@@ -231,6 +235,7 @@ public class MachineState {
                 this.mButtonPresses.get(this.mCurrPhase).contains(
                                                         Button.valueOf(bstr)) ) 
             {
+                logger.debug("checkButton returning 1");
                 return 1;
             } else {
                 return 0;

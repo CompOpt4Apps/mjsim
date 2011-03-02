@@ -26,7 +26,7 @@ public class FuncButtonDown extends Func {
 		// Gradeable message to stdout will be generated when one of 
 		// the button variables is read in InstrLDS.java.
 		event.setMemory(machine.getLabel("Button_A"), machine.checkButton("A"));
-		event.setMemory(machine.getLabel("Button_B"), machine.checkButton("A"));
+		event.setMemory(machine.getLabel("Button_B"), machine.checkButton("B"));
 		event.setMemory(machine.getLabel("Button_Up"), 
 		    machine.checkButton("Up"));
 		event.setMemory(machine.getLabel("Button_Down"), 
