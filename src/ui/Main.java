@@ -109,9 +109,19 @@ public class Main {
 					.println("Cannot be in batch mode without an assembly file.");
 			System.exit(1);
 		}
+		
+		// Attempt to open an opt_args file
+		File argoptsfile = new File("meggy/arg_opts");
+		if (argoptsfile.exists()) {
+		    logger.info("Was able to open meggy/arg_opts file.");
+	    } else {
+		    logger.info("Was NOT able to open meggy/arg_opts file.");
+	    }
+		
+		
 		AVRSim simulator = null;
 		if (jumps == null) {
-			simulator = new AVRSim(assemFile, batch);
+			simulator = new AVRSim(assemFile, batch, argoptsfile);
 		} else {
 			simulator = new AVRSim(assemFile, jumps);
 		}

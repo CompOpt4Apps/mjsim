@@ -20,14 +20,16 @@ public class AVRSim {
 	private MachineState machine;
 	private ATmegaProgram program = null;
 	private Integer jumps = null;
+	private File argoptsfile = null;
 
-	public AVRSim(File assemFile, boolean batch) {
+	public AVRSim(File assemFile, boolean batch, File argoptsfile) {
 		this.assemFile = assemFile;
 		this.batch = batch;
+		this.argoptsfile = argoptsfile;
 	}
 
 	public AVRSim(File assemFile, Integer jumps) {
-		this(assemFile, true);
+		this(assemFile, true, null);
 		this.jumps = jumps;
 	}
 
@@ -42,10 +44,12 @@ public class AVRSim {
 
 	public void initMachine() {
 		if (jumps == null) {
-			this.machine = MachineState.createMachine("AVR", batch);
+			this.machine = MachineState.createMachine("AVR", 
+			    this.batch, this.argoptsfile);
 		} else {
 			logger.debug("Max jumps:" + jumps);
-			this.machine = MachineState.createMachine("AVR", jumps);
+			this.machine = MachineState.createMachine("AVR", jumps,
+			    this.argoptsfile);
 		}
 
 	}
@@ -54,7 +58,6 @@ public class AVRSim {
 		// check to make sure that the assem file is not null.
 		// If it is, just return.
 		logger.info("Loading the assembly file.");
-		initMachine();
 		if (assemFile == null) {
 			return;
 		}
@@ -67,7 +70,8 @@ public class AVRSim {
 	public void run() {
 		logger.info("Simulator is starting.");
 		try {
-			loadAssemFile();
+		    initMachine();
+		    loadAssemFile();
 			if (!batch) {
 				gui();
 			} else // We are in batch mode, run to the end of the program

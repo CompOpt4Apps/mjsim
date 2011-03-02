@@ -11,6 +11,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+import java.io.*;
 
 import machine.functions.Func;
 import machine.functions.FuncButtonDown;
@@ -44,6 +49,26 @@ public class MachineState {
 	private int returnAddress = -1;
 	final private SREG statusReg;
 
+    //--------- Fields for implementing the arg_opts file like Meggy.java uses.
+    //private File argoptsfile = null;
+    private boolean mUsingArgOpts = false;
+    private int mMaxCalls = 0;  // Max number of calls to Meggy 
+                                       // interface before halting
+    private boolean mDelaySim = false; // Are we simulating delays?
+    private enum Button { B,
+        A,
+        Up,
+        Down,
+        Left,
+        Right }
+    // A list of button press sets.  Each phase has a set.  Phases are
+    // occur between delay calls.
+    private LinkedList<HashSet<Button>> mButtonPresses 
+        = new LinkedList<HashSet<Button>>();
+    private int mCurrPhase = 0;
+
+    //--------- End of fields for implementing the arg_opts file
+
 
 	//use the singleton pattern for this.
 
@@ -58,10 +83,22 @@ public class MachineState {
 		return machine;
 	}
 
-	public static MachineState createMachine(String name, int jmps) {
+	public static MachineState createMachine(String name, int jmps,
+	    File argoptsfile) 
+	{
 		if(machine == null)
 		{
-			machine = new MachineState(name,jmps);
+			machine = new MachineState(name,jmps,argoptsfile);
+		}
+		return machine;		
+	}
+
+	public static MachineState createMachine(String name, boolean batch,
+	    File argoptsfile)
+	{
+		if(machine == null)
+		{
+			machine = new MachineState(name,batch,argoptsfile);
 		}
 		return machine;		
 	}
@@ -70,10 +107,11 @@ public class MachineState {
 	{
 		if(machine == null)
 		{
-			machine = new MachineState(name,batch);
+			machine = new MachineState(name,batch,null);
 		}
 		return machine;		
 	}
+
 
 	public static void uninitMachine()
 	{
@@ -133,18 +171,54 @@ public class MachineState {
 		labelMapping.put("Button_Down", stackPointer+4);
 		labelMapping.put("Button_Left", stackPointer+5);
 		labelMapping.put("Button_Right", stackPointer+6);
+		
+	}
+	
+	private void readArgOptsFile(File argoptsfile) {
+		// Initializing data structures from arg_opts file if it exists.
+		if (argoptsfile!=null) {
+		    logger.debug("Going to read in meggy/arg_opts file");
+		    this.mUsingArgOpts = true;
+		    
+	        HashSet<Button> currSet;
+        
+            // zeroth phase
+            this.mButtonPresses.add(currSet = new HashSet<Button>());
+            try {
+                Scanner sc = new Scanner( argoptsfile );
+
+                String line = sc.nextLine();
+                this.mMaxCalls = Integer.valueOf( line );
+                this.mDelaySim = Boolean.parseBoolean( sc.nextLine() );
+                // Parse and run commands
+                while(sc.hasNextLine()){
+                    String st = sc.nextLine().trim();
+                    if (st.equals("delay")) {
+                        this.mButtonPresses.add(
+                            currSet = new HashSet<Button>());
+                    } else {
+                        currSet.add(Button.valueOf(st));
+                    }
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            logger.debug("this.mButtonPresses = "+this.mButtonPresses);
+        }
 
 	}
 
-	protected MachineState(String name, boolean batch) {
-		this(name);
+	protected MachineState(String name, boolean batch, File argoptsfile) {
+		this(name);		
 		this.batch = batch;
+		this.readArgOptsFile(argoptsfile);
 	}
 
-	protected MachineState(String name, int jmps) {
+	protected MachineState(String name, int jmps, File argoptsfile) {
 		this(name);
 		this.batch = true;
 		this.labelJmps = jmps;
+		this.readArgOptsFile(argoptsfile);
 	}
 
 	/**
