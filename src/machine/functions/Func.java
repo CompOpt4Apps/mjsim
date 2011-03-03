@@ -44,4 +44,27 @@ public abstract class Func {
 				return null;
 		}
 	}
+	static public int colorToValue(String str)
+	{
+		if (str.equals( "RED" ) ) {
+		    return 1;
+		} else if (str.equals("ORANGE")) {
+		    return 2;
+		} else if (str.equals("YELLOW")) {
+		    return 3;
+		} else if (str.equals("GREEN")) {
+		    return 4;
+		} else if (str.equals("BLUE" )) {
+		    return 5;
+		} else if (str.equals("VIOLET")) {
+		    return 6;
+		} else if (str.equals("WHITE")) {
+		    return 7;
+		} else if (str.equals("DARK")) {
+		    return 0;
+		} else {
+            logger.fatal("Unknown color value (" +str +")" );
+            return 0;
+		}
+	}
 }
