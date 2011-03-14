@@ -167,12 +167,12 @@ public class MachineState {
 
 		//add the values for the buttons into the memory space.
 		//add these values above the stack pointer.
-		labelMapping.put("Button_A", stackPointer+1);
-		labelMapping.put("Button_B", stackPointer+2);
-		labelMapping.put("Button_Up", stackPointer+3);
-		labelMapping.put("Button_Down", stackPointer+4);
-		labelMapping.put("Button_Left", stackPointer+5);
-		labelMapping.put("Button_Right", stackPointer+6);
+		labelMapping.put("Button_A", stackPointer+10);
+		labelMapping.put("Button_B", stackPointer+11);
+		labelMapping.put("Button_Up", stackPointer+12);
+		labelMapping.put("Button_Down", stackPointer+13);
+		labelMapping.put("Button_Left", stackPointer+14);
+		labelMapping.put("Button_Right", stackPointer+15);
 		
 	}
 	
