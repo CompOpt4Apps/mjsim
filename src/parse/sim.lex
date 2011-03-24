@@ -14,7 +14,7 @@ import parse.TokenValue;
 
 DIGIT=[0-9]
 NOT_ZERO=[1-9]
-NUMBER=([-+]?{NOT_ZERO}{DIGIT}*)|0
+NUMBER=({NOT_ZERO}{DIGIT}*)|0
 HEX=0x[0-9A-Fa-f]+
 LETTER=[A-Za-z]
 ID="."*[_A-Za-z][_A-Za-z0-9]+
@@ -52,8 +52,10 @@ TYPE=@{LETTER}+
 "muls" { return new Symbol(sym.AVR_MULS, new TokenValue("muls", yyline, yychar)); }
 "in" { return new Symbol(sym.AVR_IN, new TokenValue("in", yyline, yychar)); }
 "ld" { return new Symbol(sym.AVR_LD, new TokenValue("ld", yyline, yychar));  }
+"ldd" { return new Symbol(sym.AVR_LDD, new TokenValue("ldd", yyline, yychar));  }
 "ldi" { return new Symbol(sym.AVR_LDI, new TokenValue("ldi", yyline, yychar)); }
 "lds" { return new Symbol(sym.AVR_LDS, new TokenValue("lds", yyline, yychar)); }
+"std" { return new Symbol(sym.AVR_STD, new TokenValue("std", yyline, yychar)); }
 "add" { return new Symbol(sym.AVR_ADD, new TokenValue("add", yyline, yychar)); }
 "lo8" { return new Symbol(sym.AVR_LO, new TokenValue("lo8", yyline, yychar)); }
 "hi8" { return new Symbol(sym.AVR_HI, new TokenValue("hi8", yyline, yychar)); }
@@ -68,14 +70,19 @@ TYPE=@{LETTER}+
 "ret" { return new Symbol(sym.AVR_RET, new TokenValue("ret", yyline, yychar)); }
 "-" { return new Symbol(sym.MINUS, new TokenValue("-",yyline,yychar)); }
 "." { return new Symbol(sym.DOT, new TokenValue(".",yyline,yychar)); }
-"(" { return new Symbol(sym.LPARAN, new TokenValue("(.",yyline,yychar)); }
-")" { return new Symbol(sym.RPARAN, new TokenValue(")",yyline,yychar)); }
+"(" { return new Symbol(sym.LPAREN, new TokenValue("(.",yyline,yychar)); }
+")" { return new Symbol(sym.RPAREN, new TokenValue(")",yyline,yychar)); }
+"+" { return new Symbol(sym.PLUS, new TokenValue(")",yyline,yychar)); }
+
+".text" { return new Symbol(sym.DOTTEXT, new TokenValue(yytext(), yyline, yychar)); }
+".global" { return new Symbol(sym.DOTGLOBAL, new TokenValue(yytext(), yyline, yychar)); }
+".type" { return new Symbol(sym.DOTTYPE, new TokenValue(yytext(), yyline, yychar)); }
 
 {NUMBER} { return new Symbol(sym.NUM, new TokenValue(yytext(), yyline, yychar)); }
 {HEX} { return new Symbol(sym.HEX, new TokenValue(yytext(), yyline, yychar)); }
 {QSTRING} { return new Symbol(sym.QSTRING, new TokenValue(yytext(), yyline, yychar)); }
 
-{REG} { return new Symbol(sym.REG, new TokenValue(yytext().substring(1), yyline, yychar)); }
+{REG} { return new Symbol(sym.REG, new TokenValue(yytext(), yyline, yychar)); }
 {GLOBAL} { return new Symbol(sym.GLOBAL, new TokenValue(yytext(), yyline, yychar)); }
 {LABEL} { return new Symbol(sym.LABEL, new TokenValue(yytext(), yyline, yychar)); }
 {TYPE} { return new Symbol(sym.TYPE, new TokenValue(yytext(), yyline, yychar)); }

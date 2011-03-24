@@ -4,6 +4,9 @@ import machine.MachineState;
 
 import org.apache.log4j.Logger;
 
+/**
+ * Appears to implement various indirect loads.
+ */
 public class InstrLD extends Instr {
 	
 	private static final Logger logger = Logger.getLogger(InstrLD.class);

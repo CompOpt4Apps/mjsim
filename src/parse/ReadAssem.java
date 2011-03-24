@@ -33,7 +33,7 @@ public class ReadAssem {
 			// final List<Instr> instructions = (List<Instr>)
 			// p.debug_parse().value;// development
 			// print
-			final List<Instr> instructions = (List<Instr>) p.parse().value;
+			final List<Instr> instructions = (List<Instr>) p.debug_parse().value;
 			logger.info("Filling out the ATmegaProgram now.");
 			for (final Instr inst : instructions) {
 				if (inst == null) {
