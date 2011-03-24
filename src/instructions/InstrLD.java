@@ -50,9 +50,9 @@ public class InstrLD extends Instr {
 	 */
 	public void execute() throws RuntimeError {
 		int baseReg = getBaseRegister();
-		int address = this.machine.getRegister(baseReg) & 0xFF;
+		int address = this.machine.getRegister(baseReg+1) & 0xFF;
 		address <<=8;
-		address = address & (this.machine.getRegister(baseReg+1) & 0xFF);
+		address = address + (this.machine.getRegister(baseReg) & 0xFF);
 
 		Integer value = null;
 		

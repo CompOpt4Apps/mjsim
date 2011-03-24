@@ -49,12 +49,14 @@ public class InstrSTD extends Instr {
 	 */
 	public void execute() throws RuntimeError {
 		int baseReg = getBaseRegister();
-		int address = this.machine.getRegister(baseReg) & 0xFF;
+		//logger.debug("baseReg = "+baseReg
+		//                   +", val(baseReg+1) = //"+this.machine.getRegister(baseReg+1));
+		int address = this.machine.getRegister(baseReg+1) & 0xFF;
 		address <<=8;
-		address = address & (this.machine.getRegister(baseReg+1) & 0xFF);
+		address = address + (this.machine.getRegister(baseReg) & 0xFF);
 
         // add offset to address
-	    address+=q;
+	    address+=this.q;
 		this.event.setMemory(address, this.machine.getRegister(this.reg));	
 		this.event.setPC(this.machine.getPC()+1);
 
