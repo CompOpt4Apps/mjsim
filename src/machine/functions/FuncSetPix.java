@@ -1,10 +1,14 @@
 package machine.functions;
 
+import org.apache.log4j.Logger;
+
 import instructions.RuntimeError;
 import machine.MachineState;
 
 public class FuncSetPix extends Func {
-
+	
+	private static final Logger logger = Logger.getLogger(FuncSetPix.class);
+	
 	public FuncSetPix(MachineState machine) {
 		super(machine, "_Z6DrawPxhhh");// this value was taken from the assembly
 										// compiled from gcc.
@@ -22,7 +26,7 @@ public class FuncSetPix extends Func {
 
         // machine keeps a count
 		this.machine.noteMeggyCall();
-
+		logger.debug("Color is null.");
 		if(color == null)
 		{
 			throw new RuntimeError("Color is null.");

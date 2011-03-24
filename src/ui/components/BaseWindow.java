@@ -103,8 +103,15 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 					public void executeFailed(Task<String> arg0) {
 						resetButtons();
 						//update gui state.
-						updateGui();
-						errorPrompt(arg0.getFault());
+						try
+						{
+							updateGui();
+						}
+						catch(Exception e)
+						{
+							logger.fatal(e);
+						}
+						errorPrompt("Reporting Error from within internal execution: "+ arg0.getFault());
 					}
 				};
 
@@ -176,16 +183,16 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		}
 		catch(RuntimeError e)
 		{
-			errorPrompt(e);
+			errorPrompt(e.getMessage());
 		}
 
 		//update gui state.
 		updateGui();
 	}
 
-	private void errorPrompt(Exception e)
+	private void errorPrompt(String e)
 	{
-		Prompt.prompt(MessageType.ERROR,e.getMessage(), this);
+		Prompt.prompt(MessageType.ERROR,e, this);
 	}
 
 	public BaseWindow()
@@ -285,24 +292,16 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		logger.debug("Updating gui -");
 		logger.debug("Old stack pointer = " + oldValue);
 		logger.debug("New stack pointer = " + address);
-		boolean foundNew = false,foundOld=false;
 		for(Address addr : stackTableData)
 		{
-			if(addr.getAddress().equals(oldValue))
-			{
-				addr.clearImage();
-				foundOld= true;
-			}
 			if(addr.getAddress().equals(address))
 			{
 				addr.setStackPointer(stackImage);
-				foundNew=true;
 			}
-			if(foundNew && foundOld)
+			else
 			{
-				break;
+				addr.clearImage();
 			}
-
 		}
 
 		this.repaint();
@@ -367,11 +366,11 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			if(add == null)
 			{
 				//will it always be last?
-				heapTableData.add(new Address(heapMem.toString(),stackUpdates.get(heapMem)));
+				heapTableData.add(new Address(heapMem.toString(),heapUpdates.get(heapMem)));
 			}
 			else
 			{
-				add.setValue(stackUpdates.get(heapMem));
+				add.setValue(heapUpdates.get(heapMem));
 			}
 		}
 

@@ -178,7 +178,8 @@ public class MachineState {
 	
 	private void readArgOptsFile(File argoptsfile) {
 		// Initializing data structures from arg_opts file if it exists.
-		if (argoptsfile!=null) {
+		logger.trace(argoptsfile);
+		if (argoptsfile!=null && argoptsfile.exists()) {
 		    logger.debug("Going to read in meggy/arg_opts file");
 		    this.mUsingArgOpts = true;
 		    
@@ -217,8 +218,9 @@ public class MachineState {
 	}
 	
 	public void noteMeggyCall() {
+		logger.debug("Checking opt_arg file logic.");
 	    if (this.mUsingArgOpts) {
-	        this.mMaxCalls--; if (this.mMaxCalls<0) { System.exit(0); }
+	        this.mMaxCalls--; if (this.mMaxCalls<0) {logger.info("Exiting Systems due to Max Calls being reached."); System.exit(0); }
 	    }
 	}
 	
