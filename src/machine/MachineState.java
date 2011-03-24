@@ -581,6 +581,7 @@ public class MachineState {
 
 				if(key < stackPointer) //this should be the heap then?
 				{
+					logger.trace("Adding data to the heap.");
 					updatedData.putHeap(key, updateMemory.get(key));
 				}
 				else
@@ -607,10 +608,10 @@ public class MachineState {
 			pc = event.getPc();
 		}
 
-		setUpdates(updatedData);
+		sendUpdates(updatedData);
 	}
 
-	private void setUpdates(MachineUpdateData updatedData)
+	private void sendUpdates(MachineUpdateData updatedData)
 	{
 		for(MachineUpdate obj: updateObj)
 		{

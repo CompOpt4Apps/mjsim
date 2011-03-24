@@ -32,6 +32,7 @@ import org.apache.pivot.wtk.Prompt;
 import org.apache.pivot.wtk.PushButton;
 import org.apache.pivot.wtk.Sheet;
 import org.apache.pivot.wtk.SheetCloseListener;
+import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
 
@@ -52,6 +53,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	private PushButton runButton;
 	private PushButton stepButton;
 	private PushButton stopButton;
+	private TableView pcTableView;
 	private SimulateMachineState simulateMachine = null;
 	final private URL stackImage = Main.class.getClassLoader().getResource("ui/images/sp.png");
 	final private URL cpImage = Main.class.getClassLoader().getResource("ui/images/pc.png");
@@ -73,6 +75,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		runButton = (PushButton) arg0.get("runButton");
 		stepButton = (PushButton) arg0.get("stepButton");
 		stopButton = (PushButton) arg0.get("stopButton");
+		pcTableView = (TableView) arg0.get("programSpace");
 		
 		runButton.getButtonPressListeners().add(new ButtonPressListener() {
 
@@ -278,6 +281,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		//need to update the pc pointer and the stack pointer.
 		//first unset the old values.
 		programSpaceData.get(pcValue).clearImage();
+		pcTableView.clearSelection();
 		if(machine.getPC()==0xFFFF)
 		{
 			runButton.setEnabled(false);
@@ -286,12 +290,14 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			return;
 		}
 		programSpaceData.get(machine.getPC()).setProgramCounter(cpImage);
-
+		pcTableView.setSelectedIndex(machine.getPC());
+		
 		String address = "0x" + Integer.toHexString(machine.getStackPointer());
 		String oldValue = "0x" +Integer.toHexString(stackPointer);
 		logger.debug("Updating gui -");
 		logger.debug("Old stack pointer = " + oldValue);
 		logger.debug("New stack pointer = " + address);
+		
 		for(Address addr : stackTableData)
 		{
 			if(addr.getAddress().equals(address))
@@ -357,8 +363,6 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 				stackTableData.add(newAddr);
 			}
 		}
-		
-		
 
 		for(Integer heapMem: heapUpdates.keySet())
 		{
@@ -366,6 +370,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			if(add == null)
 			{
 				//will it always be last?
+				logger.trace("Adding data to the heap.");
 				heapTableData.add(new Address(heapMem.toString(),heapUpdates.get(heapMem)));
 			}
 			else

@@ -128,7 +128,7 @@
 					</ScrollPane>
 
 					<ScrollPane height="300"
-						horizontalScrollBarPolicy="fill">
+						horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="auto">
 						<TabPane.tabData>
 							<content:ButtonData text="Heap" />
 						</TabPane.tabData>
