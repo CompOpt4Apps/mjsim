@@ -25,9 +25,11 @@ public class InstrRet extends Instr {
 
 	@Override
 	public void execute() {
+	    logger.debug("Executing a function return");
+	    
 		//need to load the PC from the stack and then 
-		int topMost = this.machine.getStack(this.machine.getStackPointer()+1);
-		int bottomMost = this.machine.getStack(this.machine.getStackPointer()+2);
+		int bottomMost = this.machine.getStack(this.machine.getStackPointer()+1);
+		int topMost = this.machine.getStack(this.machine.getStackPointer()+2);
 		topMost= topMost << 8;
 		int realPC = topMost | bottomMost;
 		logger.debug("The PC returned from the stack is (0x"+ Integer.toHexString(realPC)+")");

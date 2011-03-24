@@ -183,11 +183,11 @@ instr	::=
 		:}
 	|	AVR_MULS REG:r1 COMMA REG:r2 eol 
 		{:
-			RESULT= new InstrMuls(sim_inst.machine,Integer.parseInt(r1.toString()),Integer.parseInt(r2.toString().substring(1)));
+			RESULT= new InstrMuls(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
 		:}
 	|	AVR_ADC REG:r1 COMMA REG:r2 eol 
 		{:
-			RESULT= new InstrAdc(sim_inst.machine,Integer.parseInt(r1.toString()),Integer.parseInt(r2.toString().substring(1)));
+			RESULT= new InstrAdc(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
 		:}
 	|	AVR_CALL ID:l eol
 		{:
@@ -199,11 +199,11 @@ instr	::=
 		:}
 	|	AVR_LDS REG:rd COMMA ID:l eol
 		{:
-			RESULT= new InstrLDS(sim_inst.machine,Integer.parseInt(rd.toString()),l.toString());
+			RESULT= new InstrLDS(sim_inst.machine,Integer.parseInt(rd.toString().substring(1)),l.toString());
 		:}
 	|	AVR_AND REG:r1 COMMA REG:r2 eol
 		{:
-			RESULT= new InstrAnd(sim_inst.machine,Integer.parseInt(r1.toString()),Integer.parseInt(r2.toString().substring(1)));
+			RESULT= new InstrAnd(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
 		:}
 	|	AVR_EOR REG:r1 COMMA REG:r2 eol 
 		{:
