@@ -69,7 +69,7 @@ public class InstrSTD extends Instr {
 
 	@Override
 	public String toString() {
-		return "STD";
+		return "STD "+this.pointer+"+"+this.q+", r"+this.reg;
 	}
 	
 	private int getBaseRegister()
