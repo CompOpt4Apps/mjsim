@@ -8,7 +8,7 @@ import machine.UpdateEvent;
 /**
  * CALL - Long Call to a Subroutine
  * PC <- k | STACK <- PC + 1 | SP <- SP - 2
- * The return value we store on the stack is PC +1 instead of PC + 2 because all of our instructions are the same size and do not take up more than one slot.
+ * The return address we store on the stack is PC +1 instead of PC + 2 because all of our instructions are the same size and do not take up more than one slot.
  * @author Ryan Moore
  *
  */

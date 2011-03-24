@@ -2,6 +2,7 @@ package parse;
 
 import instructions.ATmegaProgram;
 import instructions.Instr;
+import instructions.FuncStart;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,13 +34,17 @@ public class ReadAssem {
 			// final List<Instr> instructions = (List<Instr>)
 			// p.debug_parse().value;// development
 			// print
-			final List<Instr> instructions = (List<Instr>) p.debug_parse().value;
+			final List<Instr> instructions = (List<Instr>) p.parse().value;
 			logger.info("Filling out the ATmegaProgram now.");
 			for (final Instr inst : instructions) {
 				if (inst == null) {
 					continue;
 				}
-				program.addInstr(inst);
+				if (inst instanceof FuncStart) {
+				    program.beginFunction(((FuncStart)inst).getLabel());
+				} else {
+				    program.addInstr(inst);
+				}
 			}
 		} catch (final FileNotFoundException e) {
 			System.out

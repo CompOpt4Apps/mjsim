@@ -143,7 +143,6 @@ instr	::=
 		:}		
 	|	AVR_LDD REG:r COMMA REG:base PLUS NUM:offset eol 
 		{:
-		    System.out.println("base = " + base.toString());
 			RESULT= new InstrLD(sim_inst.machine,
 			                    Integer.parseInt(r.toString().substring(1)), 
 			                    base.toString().charAt(0), 
@@ -151,7 +150,6 @@ instr	::=
 		:}		
 	|	AVR_STD REG:base PLUS NUM:offset COMMA REG:r eol 
 		{:
-		    System.out.println("base = " + base.toString());
 			RESULT= new InstrSTD(sim_inst.machine,
 			                    Integer.parseInt(r.toString().substring(1)), 
 			                    base.toString().charAt(0), 
