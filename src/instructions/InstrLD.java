@@ -88,6 +88,10 @@ public class InstrLD extends Instr {
 		}
 		this.event.setRd(this.reg, value);
 		//TODO need to update the UpdateEvent class to include an addition update field for the X Y and Z registers.
+
+		logger.debug("Indirect load from "+this.pointer
+		            +"+"+this.q+" to r"+this.reg);
+
 	}
 
 	@Override
