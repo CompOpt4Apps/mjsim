@@ -22,6 +22,7 @@ import org.apache.pivot.util.concurrent.Task;
 import org.apache.pivot.util.concurrent.TaskExecutionException;
 import org.apache.pivot.util.concurrent.TaskListener;
 import org.apache.pivot.wtk.Action;
+import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
@@ -63,7 +64,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		public int compare(Address o1, Address o2) {
 			return o1.getAddress().compareTo(o2.getAddress());
 		}
-		
+
 	}; 
 
 	@Override
@@ -76,7 +77,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		stepButton = (PushButton) arg0.get("stepButton");
 		stopButton = (PushButton) arg0.get("stopButton");
 		pcTableView = (TableView) arg0.get("programSpace");
-		
+
 		runButton.getButtonPressListeners().add(new ButtonPressListener() {
 
 			@Override
@@ -99,7 +100,6 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 						resetButtons();
 						//update gui state.
 						updateGui();
-
 					}
 
 					@Override
@@ -276,41 +276,55 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		repaint();
 	}
 
+	//Update this in the Application UI context.
 	private void updateGui()
 	{
-		//need to update the pc pointer and the stack pointer.
-		//first unset the old values.
-		programSpaceData.get(pcValue).clearImage();
-		pcTableView.clearSelection();
-		if(machine.getPC()==0xFFFF)
-		{
-			runButton.setEnabled(false);
-			stepButton.setEnabled(false);
-			stopButton.setEnabled(false);
-			return;
-		}
-		programSpaceData.get(machine.getPC()).setProgramCounter(cpImage);
-		pcTableView.setSelectedIndex(machine.getPC());
-		
-		String address = "0x" + Integer.toHexString(machine.getStackPointer());
-		String oldValue = "0x" +Integer.toHexString(stackPointer);
-		logger.debug("Updating gui -");
-		logger.debug("Old stack pointer = " + oldValue);
-		logger.debug("New stack pointer = " + address);
-		
-		for(Address addr : stackTableData)
-		{
-			if(addr.getAddress().equals(address))
-			{
-				addr.setStackPointer(stackImage);
-			}
-			else
-			{
-				addr.clearImage();
-			}
-		}
+		ApplicationContext.queueCallback(new Runnable() {
 
-		this.repaint();
+			@Override
+			public void run() {
+				//need to update the pc pointer and the stack pointer.
+				//first unset the old values.
+				programSpaceData.get(pcValue).clearImage();
+				pcTableView.clearSelection();
+				if(machine.getPC()==0xFFFF)
+				{
+					runButton.setEnabled(false);
+					stepButton.setEnabled(false);
+					stopButton.setEnabled(false);
+					//clear out the stack pointer
+					for(Address addr: stackTableData)
+					{
+						addr.clearImage();		
+					}
+					return;
+				}
+				programSpaceData.get(machine.getPC()).setProgramCounter(cpImage);
+				pcTableView.setSelectedIndex(machine.getPC());
+
+				String address = "0x" + Integer.toHexString(machine.getStackPointer());
+				String oldValue = "0x" +Integer.toHexString(stackPointer);
+				logger.debug("Updating gui -");
+				logger.debug("Old stack pointer = " + oldValue);
+				logger.debug("New stack pointer = " + address);
+
+				for(Address addr : stackTableData)
+				{
+					if(addr.getAddress().equals(address))
+					{
+						addr.setStackPointer(stackImage);
+					}
+					else
+					{
+						addr.clearImage();
+					}
+				}
+
+
+			}
+		}
+		);
+
 	}
 
 	private void updateWindowState()
@@ -330,9 +344,9 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		for(Integer reg:regUpdates.keySet())
 		{
 			logger.debug("Updating register r" + reg + " to value: " + regUpdates.get(reg));
-			
+
 			((Register)registerTableData.get(reg)).setValue(Integer.toString(regUpdates.get(reg)));
-			
+
 		}
 
 		final java.util.Map<Integer,Integer> stackUpdates = data.getStackUpdates();
@@ -413,7 +427,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		public String execute() throws TaskExecutionException {
 			try
 			{
-				while(isRunning())
+				while(isRunning() && !machine.isFinished())
 				{
 					executeOne();
 				}

@@ -45,6 +45,10 @@ public class MachineState {
 	private boolean batch = true;
 	private int pc = 0;// set to the beginning of the programSpace.
 	private boolean finished = false;
+	public boolean isFinished() {
+		return finished;
+	}
+
 	private int stackPointer = 0x3e3d; // this value is taken from the SPL and
 	// SPH from the main.s file.
 	private int returnAddress = -1;
