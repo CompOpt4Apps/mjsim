@@ -7,7 +7,6 @@ import org.apache.pivot.beans.BXMLSerializer;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.wtk.Application;
 import org.apache.pivot.wtk.Display;
-import org.apache.pivot.wtk.Window;
 
 import ui.components.BaseWindow;
 
@@ -42,6 +41,7 @@ public class GUIBase implements Application {
 		if(file == null)
 		{
 			logger.fatal("Could not find avrSim.bxml");
+			System.exit(-1);
 		}
 		window = (BaseWindow) bxmlSerializer.readObject(file);
 		window.open(arg0);

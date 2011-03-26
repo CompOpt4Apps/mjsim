@@ -41,7 +41,6 @@ all: $(SIMPROG).jar jars
 
 .PHONY:clean
 clean:
-	rm -rf $(SIM_SRC_DIR)/*.class $(SIM_SRC_DIR)/*/*.class $(SIM_SRC_DIR)/*/*/*.class
 	rm -f $(SIM_PARSE_DIR)/sym.java $(SIM_PARSE_DIR)/sim_inst.java $(SIM_PARSE_DIR)/Yylex.java
 	rm -rf META_INF
 	rm -rf $(SIMPROGFINAL).jar
@@ -49,10 +48,12 @@ clean:
 	rm -rf $(SIM_SRC_DIR)/org
 	rm -rf $(BUILDDIR)/lib
 	rm -rf $(BUILDDIR)/main
+	find $(SIM_SRC_DIR) -iname *.class -exec rm -rf {} \;
 
 $(SIMPROG).jar: $(SIM_SRC_DIR)/ui/Main.class 
 	cd $(SIM_SRC_DIR); $(JAR) cf $(SIMPROG).jar \
-	log.conf */*.class */*/*.class */*/*.bxml */*/*.png -C $(JAVA_CUP_RUNTIME) \
+	log.conf */*.class */*/*.class */*/*/*.class */*/*/*.bxml */*/*/*.xml \
+	*/*/*/*/*.xsd */*/*.bxml */*/*.png -C $(JAVA_CUP_RUNTIME) \
 	java_cup 
 	cd ..
 	mv $(SIM_SRC_DIR)/$(SIMPROG).jar .
@@ -66,7 +67,8 @@ jars:
 
 $(SIM_SRC_DIR)/ui/Main.class: $(SIM_MAIN_DEPS)
 	$(JCC) -classpath \
-	$(JAVA_CUP_RUNTIME):$(SIM_SRC_DIR):$(SIM_SRC_DIR)/commons-cli-1.2.jar:$(SIM_SRC_DIR)/log4j-1.2.16.jar:$(SIM_SRC_DIR)/pivot-core-2.0.jar:$(SIM_SRC_DIR)/pivot-wtk-2.0.jar:$(SIM_SRC_DIR)/pivot-wtk-terra-2.0.jar $(SIM_SRC_DIR)/ui/Main.java
+	$(JAVA_CUP_RUNTIME):$(SIM_SRC_DIR):$(SIM_SRC_DIR)/commons-cli-1.2.jar:$(SIM_SRC_DIR)/log4j-1.2.16.jar:$(SIM_SRC_DIR)/pivot-core-2.0.jar:$(SIM_SRC_DIR)/pivot-wtk-2.0.jar:$(SIM_SRC_DIR)/pivot-wtk-terra-2.0.jar \
+	$(SIM_SRC_DIR)/ui/Main.java $(SIM_SRC_DIR)/ui/components/instructionViewer/InstructionViewer.java
 
 #### mj_ast parser
 $(SIM_PARSE_DIR)/sim_inst.java: $(SIM_PARSE_DIR)/sim_inst.cup

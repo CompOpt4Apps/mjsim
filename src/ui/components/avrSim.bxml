@@ -1,19 +1,20 @@
-<avr:BaseWindow title="AVR Assembly Simulator" maximized="true"
+<avr:BaseWindow bxml:id="window" title="AVR Assembly Simulator" maximized="true"
 	xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk"
 	xmlns:collections="org.apache.pivot.collections" xmlns:content="org.apache.pivot.wtk.content"
-	xmlns:avr="ui.components">
+	xmlns:avr="ui.components"
+	xmlns:instrView="ui.components.instructionViewer">
 	<bxml:define>
 		<FileBrowserSheet bxml:id="fileBrowserSheet" />
 		<collections:ArrayList bxml:id="registerTableData"/>
 		<collections:ArrayList bxml:id="stackTableData"/>
 		<collections:ArrayList bxml:id="heapTableData"/>
-		<collections:ArrayList bxml:id="programSpaceData"/> 
+		<collections:ArrayList bxml:id="programSpaceData"/>
+		<bxml:include bxml:id="instrDialog" src="instructionViewer/InstructionViewer.bxml" />
 	</bxml:define>
 	<actionMappings>
 		<Window.ActionMapping action="fileOpen"
 			keyStroke="CMD-O" />
-		<Window.ActionMapping action="exit" keyStroke="CMD-Q">
-		</Window.ActionMapping>
+		<Window.ActionMapping action="exit" keyStroke="CMD-Q" />
 	</actionMappings>
 	<BoxPane height="300" orientation="vertical" styles="{fill:true}">
 		<Border styles="{backgroundColor: '#7d966f'}">
@@ -24,15 +25,33 @@
 							<Menu.Item action="fileOpen">
 								<buttonData>
 									<content:MenuItemData text="Open"
-										keyboardShortcut="CMD-O"></content:MenuItemData>
+										keyboardShortcut="CMD-O" />
 								</buttonData>
 							</Menu.Item>
 							<Menu.Item action="exit">
 								<buttonData>
 									<content:MenuItemData text="Exit"
-										keyboardShortcut="CMD-Q">
-									</content:MenuItemData>
+										keyboardShortcut="CMD-Q" />
 								</buttonData>
+							</Menu.Item>
+						</Menu.Section>
+
+					</Menu>
+				</MenuBar.Item>
+				<MenuBar.Item buttonData="Help">
+					<Menu>
+						<Menu.Section>
+							<Menu.Item>
+								<buttonData>
+									<content:MenuItemData text="Supported Instructions" keyboardShortcut="CMD-I"/>
+								</buttonData>
+								<buttonPressListeners>
+									importPackage(org.apache.pivot.wtk);
+									function buttonPressed(button)
+									{
+										instrDialog.open(window,null);
+									}
+								</buttonPressListeners>
 							</Menu.Item>
 						</Menu.Section>
 					</Menu>

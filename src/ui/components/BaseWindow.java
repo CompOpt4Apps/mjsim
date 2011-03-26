@@ -4,6 +4,7 @@ import instructions.Instr;
 import instructions.RuntimeError;
 
 import java.io.File;
+
 import java.net.URL;
 import java.util.Comparator;
 
@@ -139,8 +140,6 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			@Override
 			public void buttonPressed(Button arg0) {
 				simulateMachine.setRunning(false);
-
-
 			}
 		});
 
@@ -222,7 +221,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 				});
 			}
 		});
-
+		
 		Action.getNamedActions().put("exit", new Action(){
 			public void perform(Component source)
 			{
@@ -232,7 +231,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		});
 
 	}
-
+	
 	private void processOpenFile(File selectedFile) {
 		boolean error = false;
 		logger.info("Loading file: " + selectedFile.toString());
@@ -283,50 +282,54 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 
 			@Override
 			public void run() {
-				//need to update the pc pointer and the stack pointer.
-				//first unset the old values.
-				programSpaceData.get(pcValue).clearImage();
-				pcTableView.clearSelection();
-				if(machine.getPC()==0xFFFF)
-				{
-					runButton.setEnabled(false);
-					stepButton.setEnabled(false);
-					stopButton.setEnabled(false);
-					//clear out the stack pointer
-					for(Address addr: stackTableData)
-					{
-						addr.clearImage();		
-					}
-					return;
-				}
-				programSpaceData.get(machine.getPC()).setProgramCounter(cpImage);
-				pcTableView.setSelectedIndex(machine.getPC());
-
-				String address = "0x" + Integer.toHexString(machine.getStackPointer());
-				String oldValue = "0x" +Integer.toHexString(stackPointer);
-				logger.debug("Updating gui -");
-				logger.debug("Old stack pointer = " + oldValue);
-				logger.debug("New stack pointer = " + address);
-
-				for(Address addr : stackTableData)
-				{
-					if(addr.getAddress().equals(address))
-					{
-						addr.setStackPointer(stackImage);
-					}
-					else
-					{
-						addr.clearImage();
-					}
-				}
-
-
+				updateGui__internal();
 			}
 		}
 		);
 
 	}
 
+	private void updateGui__internal()
+	{
+		//need to update the pc pointer and the stack pointer.
+		//first unset the old values.
+		programSpaceData.get(pcValue).clearImage();
+		pcTableView.clearSelection();
+		if(machine.getPC()==0xFFFF)
+		{
+			runButton.setEnabled(false);
+			stepButton.setEnabled(false);
+			stopButton.setEnabled(false);
+			//clear out the stack pointer
+			for(Address addr: stackTableData)
+			{
+				addr.clearImage();		
+			}
+			return;
+		}
+		programSpaceData.get(machine.getPC()).setProgramCounter(cpImage);
+		pcTableView.setSelectedIndex(machine.getPC());
+
+		String address = "0x" + Integer.toHexString(machine.getStackPointer());
+		String oldValue = "0x" +Integer.toHexString(stackPointer);
+		logger.debug("Updating gui -");
+		logger.debug("Old stack pointer = " + oldValue);
+		logger.debug("New stack pointer = " + address);
+
+		for(Address addr : stackTableData)
+		{
+			if(addr.getAddress().equals(address))
+			{
+				addr.setStackPointer(stackImage);
+			}
+			else
+			{
+				addr.clearImage();
+			}
+		}
+		this.repaint();
+	}
+	
 	private void updateWindowState()
 	{
 		stackPointer = machine.getStackPointer();

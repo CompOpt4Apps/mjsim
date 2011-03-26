@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="qualified">
+ <xsd:element name="instrInfo">
+  <xsd:complexType>
+   <xsd:sequence>
+    <xsd:element name="description" type="xsd:string"/>
+    <xsd:element name="instructions"/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name="instructions">
+  <xsd:complexType>
+   <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+    <xsd:element name="instr"/>
+   </xsd:sequence>
+  </xsd:complexType>
+ </xsd:element>
+
+ <xsd:element name="instr">
+  <xsd:complexType>
+   <xsd:all>
+    <xsd:element name="name" type="xsd:string"/>
+    <xsd:element name="shorthand" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+    <xsd:element name="description" type="xsd:string"/>
+    <xsd:element name="notes" minOccurs="0" maxOccurs="1" type="xsd:string"/>
+   </xsd:all>
+  </xsd:complexType>
+ </xsd:element>
+</xsd:schema>

@@ -1,0 +1,20 @@
+<avr:InstructionViewer modal="true" title="Instruction Summary"
+	xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk"
+	xmlns:collections="org.apache.pivot.collections" xmlns:content="org.apache.pivot.wtk.content"
+	xmlns:avr="ui.components.instructionViewer">
+<BoxPane styles="{fill:true}" orientation="vertical">
+
+		<Label bxml:id="descriptionTag" />
+		<Border>
+		<ScrollPane preferredWidth="400" maximumHeight="400" maximumWidth="500">
+			<TablePane bxml:id="instrInfoTable" styles="{showHorizontalGridLines:true,horizontalSpacing:1,showVerticalGridLines:true,verticalSpacing:1}">
+				<columns>
+					<TablePane.Column width="75" />
+					<TablePane.Column width="1*"/>
+					<TablePane.Column />
+				</columns>
+			</TablePane>
+		</ScrollPane>
+	</Border>
+</BoxPane>
+</avr:InstructionViewer>
