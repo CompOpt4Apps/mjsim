@@ -79,6 +79,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		stopButton = (PushButton) arg0.get("stopButton");
 		pcTableView = (TableView) arg0.get("programSpace");
 
+		
 		runButton.getButtonPressListeners().add(new ButtonPressListener() {
 
 			@Override
@@ -168,6 +169,11 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		{
 			registerTableData.add(new Register(Integer.toString(i),"0"));
 		}
+		if(machine.hasProgram())
+		{
+			resetButtons();
+		}
+
 	}
 
 	private void resetButtons() {

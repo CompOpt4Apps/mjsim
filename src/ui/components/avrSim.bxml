@@ -16,7 +16,11 @@
 			keyStroke="CMD-O" />
 		<Window.ActionMapping action="exit" keyStroke="CMD-Q" />
 	</actionMappings>
-	<BoxPane height="300" orientation="vertical" styles="{fill:true}">
+	<TablePane>
+		<columns>
+			<TablePane.Column width="1*" />
+		</columns>
+		<TablePane.Row>
 		<Border styles="{backgroundColor: '#7d966f'}">
 			<MenuBar>
 				<MenuBar.Item buttonData="File">
@@ -58,17 +62,23 @@
 				</MenuBar.Item>
 			</MenuBar>
 		</Border>
-		
-		<BoxPane styles="{fill:true}" orientation="horizontal">
-			<Border styles="{padding:'2'}">
-			<BoxPane orientation="vertical">
+		</TablePane.Row>
+		<TablePane.Row height="1*">
+		<TablePane minimumHeight="300">
+			<columns>
+				<TablePane.Column width="1*" />
+				<TablePane.Column width="1*" />
+				<TablePane.Column width="1*" />
+			</columns>
+
+			<TablePane.Row>
 				
 				<BoxPane>
-					<PushButton bxml:id="runButton">
+					<PushButton bxml:id="runButton" enabled="false">
 						<content:ButtonData icon="/ui/images/runButton.png">
 						</content:ButtonData>
 					</PushButton>
-					<PushButton bxml:id="stepButton">
+					<PushButton bxml:id="stepButton" enabled="false">
 						<content:ButtonData icon="/ui/images/stepOnceButton.png">
 						</content:ButtonData>
 					</PushButton>
@@ -77,11 +87,12 @@
 						</content:ButtonData>
 					</PushButton>
 				</BoxPane>
-				<ScrollPane height="300" width="300" preferredHeight="300"
-					horizontalScrollBarPolicy="fill">
+				</TablePane.Row>
+				<TablePane.Row height="1*">
+				<ScrollPane minimumHeight="300" preferredHeight="300" horizontalScrollBarPolicy="fill">
 					<view>
 						<Border>
-							<TableView bxml:id="programSpace" tableData="$programSpaceData">
+							<TableView bxml:id="programSpace" tableData="$programSpaceData" minimumWidth="300">
 							<columns>
 							<TableView.Column
 											name="programCounter" width="80">
@@ -90,8 +101,8 @@
 											</cellRenderer>
 										</TableView.Column>
 										<TableView.Column width="120" name="pcValue" headerData="Instruction Address" />
-										<TableView.Column name="instruction"
-											width="120" headerData="Instruction" />
+										<TableView.Column minimumWidth="100" name="instruction"
+											 headerData="Instruction" />
 											</columns>
 										<tableViewSortListeners>
 										function sortChanged(tableView)
@@ -105,11 +116,12 @@
 							<TableViewHeader tableView="$programSpace" />
 						</columnHeader>
 				</ScrollPane>
-			</BoxPane>
-		</Border><Border>
-				<TabPane bxml:id="tabPane" height="300"
-					preferredHeight="300" width="300" preferredWidth="300">
-					<ScrollPane height="300"  width="300"
+			
+		
+		<Border>
+				<TabPane bxml:id="tabPane" minimumHeight="300"
+					 width="300" preferredWidth="300">
+					<ScrollPane minimumHeight="300"  width="300"
 						horizontalScrollBarPolicy="fill">
 						<TabPane.tabData>
 							<content:ButtonData text="Stack" />
@@ -146,7 +158,7 @@
 						</columnHeader>
 					</ScrollPane>
 
-					<ScrollPane height="300"
+					<ScrollPane minimumHeight="300"
 						horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="auto">
 						<TabPane.tabData>
 							<content:ButtonData text="Heap" />
@@ -184,8 +196,9 @@
 					</ScrollPane>
 				</TabPane>
 			</Border>
+			
 			<Border>
-				<ScrollPane height="300" width="150"
+				<ScrollPane minimumHeight="300"
 					horizontalScrollBarPolicy="fill" preferredWidth="150"
 					preferredHeight="300">
 					<view>
@@ -207,6 +220,8 @@
 					</columnHeader>
 				</ScrollPane>
 			</Border>
-		</BoxPane>
-	</BoxPane>
+			</TablePane.Row>
+		</TablePane>
+		</TablePane.Row>
+	</TablePane>
 </avr:BaseWindow>

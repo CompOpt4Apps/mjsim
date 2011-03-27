@@ -230,6 +230,12 @@ public class MachineState {
 	    }
 	}
 	
+	public boolean hasProgram()
+	{
+		return !programSpace.isEmpty();
+		
+	}
+	
 	// Need an int value to represent true or false in simulated machine.
 	public int checkButton(String bstr) {
         logger.debug("checkButton, bstr="+bstr+", this.mButtonPresses = "
