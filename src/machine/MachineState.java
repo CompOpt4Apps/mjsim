@@ -24,6 +24,7 @@ import machine.functions.FuncMalloc;
 import machine.functions.FuncSetPix;
 import machine.functions.FuncGetPix;
 import machine.functions.FuncDelay;
+import machine.functions.FuncTone;
 
 import org.apache.log4j.Logger;
 
@@ -168,6 +169,7 @@ public class MachineState {
 		predefinedFunctions.put("_Z16CheckButtonsDownv",new FuncButtonDown(this));
 		predefinedFunctions.put("_Z8delay_msj", new FuncDelay(this));
 		predefinedFunctions.put("malloc", new FuncMalloc(this));
+		predefinedFunctions.put("_Z10Tone_Startjj", new FuncTone(this));
 
 		//add the values for the buttons into the memory space.
 		//add these values above the stack pointer.
