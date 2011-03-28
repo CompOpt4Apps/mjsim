@@ -73,6 +73,7 @@ TYPE=@{LETTER}+
 "(" { return new Symbol(sym.LPAREN, new TokenValue("(.",yyline,yychar)); }
 ")" { return new Symbol(sym.RPAREN, new TokenValue(")",yyline,yychar)); }
 "+" { return new Symbol(sym.PLUS, new TokenValue(")",yyline,yychar)); }
+"-" { return new Symbol(sym.MINUS, new TokenValue(")",yyline,yychar)); }
 
 ".text" { return new Symbol(sym.DOTTEXT, new TokenValue(yytext(), yyline, yychar)); }
 ".global" { return new Symbol(sym.DOTGLOBAL, new TokenValue(yytext(), yyline, yychar)); }

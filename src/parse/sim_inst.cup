@@ -51,7 +51,7 @@ terminal EOL;
 terminal ASSIGN, COMMA, LPAREN, RPAREN, AVR_HI, AVR_LO;
 terminal DOTTEXT, DOTGLOBAL, DOTTYPE;
 terminal TokenValue NUM, HEX, QSTRING;
-terminal TokenValue MINUS, DOT;
+terminal TokenValue DOT;
 terminal TokenValue SP_L, SP_H;
 terminal TokenValue REG, LABEL, GLOBAL, TYPE, ID;
 
@@ -62,7 +62,7 @@ non terminal header, eol;
 
 /* AVR Functions */
 terminal AVR_PUSH, AVR_POP, AVR_IN, AVR_LD, AVR_LDI, AVR_ADD, AVR_ADC, AVR_CALL, AVR_RET, AVR_AND, AVR_EOR, AVR_JMP, AVR_NEG, AVR_OR, AVR_CP, AVR_SUB, AVR_BREQ, AVR_BRLO, AVR_BRLT, AVR_TST, AVR_MULS, AVR_LDS, AVR_SBC, AVR_BRNE;
-terminal AVR_LDD, AVR_STD, PLUS;
+terminal AVR_LDD, AVR_STD, PLUS, MINUS;
 
 /* Grammar */
 start with pgrm;
