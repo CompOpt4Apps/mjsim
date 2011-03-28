@@ -61,7 +61,7 @@ non terminal Instr instr;
 non terminal header, eol; 
 
 /* AVR Functions */
-terminal AVR_PUSH, AVR_POP, AVR_IN, AVR_LD, AVR_LDI, AVR_ADD, AVR_ADC, AVR_CALL, AVR_RET, AVR_AND, AVR_EOR, AVR_JMP, AVR_NEG, AVR_OR, AVR_CP, AVR_SUB, AVR_BREQ, AVR_BRLO, AVR_BRLT, AVR_TST, AVR_MULS, AVR_LDS, AVR_SBC, AVR_BRNE;
+terminal AVR_PUSH, AVR_POP, AVR_MOV, AVR_IN, AVR_LD, AVR_LDI, AVR_ADD, AVR_ADC, AVR_CALL, AVR_RET, AVR_AND, AVR_EOR, AVR_JMP, AVR_NEG, AVR_OR, AVR_CP, AVR_SUB, AVR_BREQ, AVR_BRLO, AVR_BRLT, AVR_TST, AVR_MULS, AVR_LDS, AVR_SBC, AVR_BRNE;
 terminal AVR_LDD, AVR_STD, PLUS, MINUS;
 
 /* Grammar */
@@ -204,6 +204,10 @@ instr	::=
 	|	AVR_AND REG:r1 COMMA REG:r2 eol
 		{:
 			RESULT= new InstrAnd(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_MOV REG:r1 COMMA REG:r2 eol
+		{:
+			RESULT= new InstrMov(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
 		:}
 	|	AVR_EOR REG:r1 COMMA REG:r2 eol 
 		{:
