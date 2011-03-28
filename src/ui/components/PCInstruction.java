@@ -10,6 +10,7 @@ public class PCInstruction {
 	private String instruction;
 	private int pcValue;
 	private Image programCounter;
+	private Image breakPoint;
 	
 	public PCInstruction(String instruction, int pcValue)
 	{
@@ -21,6 +22,25 @@ public class PCInstruction {
 		return programCounter;
 	}
 
+	public Image getBreakPoint()
+	{
+		return breakPoint;
+	}
+	
+	public void setBreakPoint(Image breakPoint)
+	{
+		this.breakPoint = breakPoint;
+	}
+
+	public void setBreakPoint(URL breakPoint) 
+	{      
+		try {
+		setBreakPoint(Image.load(breakPoint));
+		} catch (TaskExecutionException exception) {
+			throw new IllegalArgumentException(exception);
+		}
+	}
+	
 	public void setProgramCounter(Image programCounter)
 	{
 		this.programCounter = programCounter;
@@ -45,8 +65,10 @@ public class PCInstruction {
 		return pcValue;
 	}
 
-	public void clearImage() {
+	public void clearPCImage() {
 		programCounter = null;
-		
+	}
+	public void clearBreakPointImage() {
+		breakPoint = null;
 	}
 }

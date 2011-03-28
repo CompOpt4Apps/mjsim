@@ -94,12 +94,19 @@
 						<Border>
 							<TableView bxml:id="programSpace" tableData="$programSpaceData" minimumWidth="300">
 							<columns>
-							<TableView.Column
+										<TableView.Column
+											name="breakPoint" width="20">
+											<cellRenderer>
+												<content:TableViewImageCellRenderer />
+											</cellRenderer>
+										</TableView.Column>
+										<TableView.Column
 											name="programCounter" width="80">
 											<cellRenderer>
 												<content:TableViewImageCellRenderer />
 											</cellRenderer>
 										</TableView.Column>
+
 										<TableView.Column width="120" name="pcValue" headerData="Instruction Address" />
 										<TableView.Column minimumWidth="100" name="instruction"
 											 headerData="Instruction" />

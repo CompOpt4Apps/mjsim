@@ -4,7 +4,6 @@ import instructions.Instr;
 import instructions.RuntimeError;
 
 import java.io.File;
-
 import java.net.URL;
 import java.util.Comparator;
 
@@ -16,6 +15,7 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.chainsaw.Main;
 import org.apache.pivot.beans.BXML;
 import org.apache.pivot.beans.Bindable;
+import org.apache.pivot.collections.HashMap;
 import org.apache.pivot.collections.List;
 import org.apache.pivot.collections.Map;
 import org.apache.pivot.util.Resources;
@@ -27,6 +27,7 @@ import org.apache.pivot.wtk.ApplicationContext;
 import org.apache.pivot.wtk.Button;
 import org.apache.pivot.wtk.ButtonPressListener;
 import org.apache.pivot.wtk.Component;
+import org.apache.pivot.wtk.ComponentMouseButtonListener;
 import org.apache.pivot.wtk.FileBrowserSheet;
 import org.apache.pivot.wtk.FileBrowserSheet.Mode;
 import org.apache.pivot.wtk.MessageType;
@@ -57,8 +58,10 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	private PushButton stopButton;
 	private TableView pcTableView;
 	private SimulateMachineState simulateMachine = null;
+	private HashMap<Integer,Boolean> breakPoints;
 	final private URL stackImage = Main.class.getClassLoader().getResource("ui/images/sp.png");
 	final private URL cpImage = Main.class.getClassLoader().getResource("ui/images/pc.png");
+	final private URL breakPointImage = Main.class.getClassLoader().getResource("ui/images/breakPoint.png");
 	final private Comparator<Address> addressSort = new Comparator<Address>(){
 
 		@Override
@@ -79,6 +82,47 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		stopButton = (PushButton) arg0.get("stopButton");
 		pcTableView = (TableView) arg0.get("programSpace");
 
+		pcTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
+			  
+			@Override
+			public boolean mouseUp(Component component,
+					org.apache.pivot.wtk.Mouse.Button button, int x, int y) {
+				logger.trace("MouseUp event occured on PCTable --ignoring.");
+				return false;
+			}
+			
+			@Override
+			public boolean mouseDown(Component component,
+					org.apache.pivot.wtk.Mouse.Button button, int x, int y) {
+				logger.trace("MouseDown event occured on PCTable --ignoring.");
+				return false;
+			}
+			
+			@Override
+			public boolean mouseClick(Component component,
+					org.apache.pivot.wtk.Mouse.Button button, int x, int y, int count) {
+				TableView tempTable = (TableView) component;
+				logger.info("MouseClick event on the PCTable.");
+				if(count == 2 && breakPoints != null)
+				{
+					int doubleClickAt = tempTable.getSelectedIndex();
+					logger.info("Double Click Event");
+					Boolean breakPointEnabled = breakPoints.get(doubleClickAt);
+					if(breakPointEnabled == null || breakPointEnabled == false)
+					{
+						breakPoints.put(doubleClickAt, true);
+						programSpaceData.get(doubleClickAt).setBreakPoint(breakPointImage);
+					}
+					else
+					{
+						breakPoints.put(doubleClickAt, false);
+						programSpaceData.get(doubleClickAt).clearBreakPointImage();
+					}
+				}
+				
+				return false;
+			}
+		});
 		
 		runButton.getButtonPressListeners().add(new ButtonPressListener() {
 
@@ -102,6 +146,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 						resetButtons();
 						//update gui state.
 						updateGui();
+						checkFinished();
 					}
 
 					@Override
@@ -133,6 +178,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 					return;
 				}
 				execStepButton();
+				checkFinished();
 			}
 		});
 
@@ -150,8 +196,17 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		machine.addUpdate(this);
 	}
 
+	private void checkFinished()
+	{
+		if(machine.isFinished())
+		{
+			Prompt.prompt(MessageType.INFO, "Reached the end of execution.  Please reload file to run again.",this);
+		}
+	}
+	
 	private void readInProgram() {
 		java.util.ArrayList<Instr> instructions = machine.getProgramSpace();
+		breakPoints = new HashMap<Integer, Boolean>();
 
 		for(int i = 0; i < instructions.size();i++)
 		{
@@ -192,6 +247,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		catch(RuntimeError e)
 		{
 			errorPrompt(e.getMessage());
+			logger.fatal(e);
 		}
 
 		//update gui state.
@@ -222,8 +278,6 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 							processOpenFile(selectedFile);
 						}
 					}
-
-
 				});
 			}
 		});
@@ -299,7 +353,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	{
 		//need to update the pc pointer and the stack pointer.
 		//first unset the old values.
-		programSpaceData.get(pcValue).clearImage();
+		programSpaceData.get(pcValue).clearPCImage();
 		pcTableView.clearSelection();
 		if(machine.getPC()==0xFFFF)
 		{
@@ -311,6 +365,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			{
 				addr.clearImage();		
 			}
+			breakPoints = null;
 			return;
 		}
 		programSpaceData.get(machine.getPC()).setProgramCounter(cpImage);
@@ -342,7 +397,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		pcValue = machine.getPC();
 		if(simulateMachine == null)
 		{
-			simulateMachine = new SimulateMachineState();
+			simulateMachine = new SimulateMachineState(breakPoints);
 		}
 	}
 
@@ -427,7 +482,9 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	private class SimulateMachineState extends Task<String>
 	{
 		private boolean run = true;
+		private boolean hitCurrentBreakPoint = false;
 		private final MachineState machine;
+		private final HashMap<Integer,Boolean> breakPoints;
 
 		@Override
 		/**
@@ -436,17 +493,46 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		public String execute() throws TaskExecutionException {
 			try
 			{
-				while(isRunning() && !machine.isFinished())
+				while(isRunning() && !machine.isFinished() && !hitBreakPoint(machine.getPC()))
 				{
+					hitCurrentBreakPoint = false;
 					executeOne();
 				}
 			}catch(RuntimeError e)	
 			{
 				throw new TaskExecutionException(e);
 			}
+			catch(Exception e)
+			{
+				logger.fatal("Fatal Error",e);
+			}
 			return "Done Executing...";
 		}
 
+		private boolean hitBreakPoint(int pcValue)
+		{
+			if(breakPoints == null)
+			{
+				return false;
+			}
+			Boolean breakPoint = breakPoints.get(pcValue);
+
+			if(breakPoint == null)
+			{
+				return false;
+			}
+			else
+			{
+				if(hitCurrentBreakPoint == true)
+				{
+					hitCurrentBreakPoint = false;
+					return false;
+				}
+				hitCurrentBreakPoint= breakPoint;
+				return breakPoint;
+			}
+		}
+		
 		/**
 		 * Use this method to make one step.
 		 */
@@ -455,9 +541,10 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			machine.executeInstruction();
 		}
 
-		public SimulateMachineState()
+		public SimulateMachineState(HashMap<Integer, Boolean> breakPoints)
 		{
 			this.machine = MachineState.createMachine("AVRSim");
+			this.breakPoints = breakPoints;
 		}
 
 		public synchronized boolean isRunning()
