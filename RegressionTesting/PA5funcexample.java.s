@@ -25,10 +25,14 @@ main:
     ldi    r20, 3
     ldi    r18, 4
     ldi    r16, 5
-    ldi    r14, lo8(6)
-    ldi    r15, hi8(6)
-    ldi    r12, 7
-    ldi    r10, 8
+    ldi    r26, lo8(6)
+    mov    r14, r26
+    ldi    r26, hi8(6)
+    mov    r15, r26
+    ldi    r26, 7
+    mov    r12, r26
+    ldi    r26, 8
+    mov    r10, r26
 
     call    FuncExhaste
 
