@@ -49,8 +49,14 @@ main:
 .global FuncExhaste
     .type  FuncExhaste, @function
 FuncExhaste:
+    # save off callee-saved registers being used in this func
     push   r29
     push   r28
+    push   r10
+    push   r12
+    push   r14
+    push   r15
+    push   r16
     # make space for locals and params
     ldi    r30, 0
     push   r30
@@ -69,16 +75,16 @@ FuncExhaste:
     in     r29,__SP_H__
 
     # save off parameters
-    std    Y+1, r24
-    std    Y+2, r22
-    std    Y+3, r23
-    std    Y+4, r20
-    std    Y+5, r18
-    std    Y+6, r16
-    std    Y+7, r14
-    std    Y+8, r15
-    std    Y+9, r12
-    std    Y+10, r10
+    std    Y+1, r24     ; p1
+    std    Y+2, r22     ; p2 lo
+    std    Y+3, r23     ; p2 hi
+    std    Y+4, r20     ; p3
+    std    Y+5, r18     ; p4
+    std    Y+6, r16     ; p5
+    std    Y+7, r14     ; p6 lo
+    std    Y+8, r15     ; p6 hi
+    std    Y+9, r12     ; p7
+    std    Y+10, r10    ; p8
 /* done with function FuncExhaste prologue */
 
 
@@ -91,11 +97,11 @@ FuncExhaste:
     push   r24
 
     # less than expression
-    # load constant for left
     # pop right since not constant
-    ldi    r25, 0
+    # load constant for left
     pop    r24
-    cp     r24, r25
+    ldi    r25, 0
+    cp     r25, r24
     brlt MJ_L4
 
     # load false
@@ -178,14 +184,14 @@ MJ_L1:
     push   r24
 
     # Do sub operation
-    # pop left operand
     # load right operand as constant
+    # pop left operand
     ldi    r24,3
     pop    r22
     sub    r22,r24
-    ldi    r23,0
+    ldi    r23,0    ; hi bits for result
     push   r23
-    push   r22
+    push   r22      ; lo bits for result
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -198,13 +204,13 @@ MJ_L1:
     # pop parameter values into appropriate registers
     pop    r10
     pop    r12
-    pop    r15
     pop    r14
+    pop    r15
     pop    r16
     pop    r18
     pop    r20
-    pop    r23
     pop    r22
+    pop    r23
     pop    r24
 
     call    FuncExhaste
@@ -277,9 +283,14 @@ MJ_L2:
     pop    r30
     pop    r30
     pop    r30
-    # restoring the frame pointer
-    pop   r28
-    pop   r29
+    # restoring the callee-saved registers
+    push   r16
+    push   r15
+    push   r14
+    push   r12
+    push   r10
+    pop    r28
+    pop    r29
     ret
     .size FuncExhaste, .-FuncExhaste
 
