@@ -21,16 +21,19 @@ public class InstrBRLT extends Instr {
 		if (this.machine.getLabel(label) == null) {
 			throw new RuntimeError("Could not find label: " + label);
 		}
-		if (!this.machine.getSREG().isZ()) {
+		if (this.machine.getSREG().isS()) {
 			logger.trace("Branching to label: " + label);
 			this.event.setPC(this.machine.getLabel(label));
+		    logger.debug("Setting PC value to (0x"
+				+ Integer.toHexString(this.machine.getLabel(label))
+				+ ") for a BRLT.");
 		} else {
 			logger.trace("No branching to label: " + label);
 			this.event.setPC(this.machine.getPC() + 1);
-		}
-		logger.debug("Setting PC value to (0x"
-				+ Integer.toHexString(this.machine.getLabel(label))
+		    logger.debug("Setting PC value to (0x"
+				+ Integer.toHexString(this.machine.getPC() + 1)
 				+ ") for a BRLT.");
+		}
 	}
 
 	@Override

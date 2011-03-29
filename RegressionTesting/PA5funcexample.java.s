@@ -284,11 +284,11 @@ MJ_L2:
     pop    r30
     pop    r30
     # restoring the callee-saved registers
-    push   r16
-    push   r15
-    push   r14
-    push   r12
-    push   r10
+    pop    r16
+    pop    r15
+    pop    r14
+    pop    r12
+    pop    r10
     pop    r28
     pop    r29
     ret

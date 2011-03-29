@@ -40,8 +40,10 @@ public class InstrCP extends Instr {
 		//get the values stored in the registers.
 		int dst = this.machine.getRegister(rd);
 		int src = this.machine.getRegister(rr);
+        logger.debug("dst = "+dst+", src = "+src);
 		int nMsb = (dst & msbMask) & (src & msbMask);//used for checking to see if the msb has changed.
 		int result = (dst - src) & bitMask;
+        logger.debug("result = "+result);
 		this.event.setPC(this.machine.getPC()+1);//update pc value.
 		//check for the C bit.
 		if(Math.abs(src) > Math.abs(dst))
@@ -86,6 +88,7 @@ public class InstrCP extends Instr {
 		
 		//determine S
 		newSREG.setS(newSREG.isN() ^ newSREG.isV());
+        logger.debug("S = "+newSREG.isS());
 		
 		this.event.setSREG(newSREG);
 	}
