@@ -10,6 +10,7 @@ public class InstrSub extends Instr {
 	final private int rr;
 	private final static int bitMask = 0xFF;
 	private final static int msbMask = 0x80;
+	private final static int bit7Mask = 0x40;
 	private static final Logger logger = Logger.getLogger(InstrSub.class);
 	public InstrSub(MachineState machine, int rd, int rr) throws MalformedInstruction {
 		super(machine);
@@ -38,7 +39,7 @@ public class InstrSub extends Instr {
 		int dst = machine.getRegister(rd);
 		int src = machine.getRegister(rr);
 		int nMsb = (dst & msbMask) & (src & msbMask);
-		dst = dst-src;
+		int result = dst-src;
 		if(Math.abs(src) > Math.abs(dst))
 		{
 			newStatus.setC(true);
@@ -47,12 +48,12 @@ public class InstrSub extends Instr {
 		{
 			newStatus.setC(false);
 		}
-		this.event.setRd(rd, dst);
+		this.event.setRd(rd, result);
 		this.event.setPC(machine.getPC()+1);
 		
 		//update the SREG
 		//check zero.
-		if(dst == 0)
+		if(result == 0)
 		{
 			newStatus.setZ(true);
 		}
@@ -62,7 +63,13 @@ public class InstrSub extends Instr {
 		}
 		
 		//determine the v bit.
-		if(nMsb != (dst & msbMask))//check to see if the msb changed to show 2's complement overflow
+		//if(nMsb != (dst & msbMask))//check to see if the msb changed to show 2's complement overflow
+		// Rd7 and !Rr7 and !R7 + !Rd7 and Rr7 and R7
+        // Set if two’s complement overflow resulted 
+        // from the operation; cleared otherwise.
+        if ( ((bit7Mask & dst)>0 && (bit7Mask & src)==0 && (bit7Mask&result)==0) 
+		  || ((bit7Mask & dst)==0 && (bit7Mask & src)>0 && (bit7Mask&result)>0) 
+		   )
 		{
 			newStatus.setV(true);
 		}
@@ -72,7 +79,7 @@ public class InstrSub extends Instr {
 		}
 		
 		//check the msb, if it is set, set the N bit in the SREG. 
-		if((dst & msbMask) == msbMask)
+		if((result & msbMask) == msbMask)
 		{
 			newStatus.setN(true);
 		}

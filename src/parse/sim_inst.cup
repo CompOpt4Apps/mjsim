@@ -273,6 +273,10 @@ exp	::=
 		{:
 			RESULT=n;
 		:}
+	|	MINUS NUM:n
+		{:
+			RESULT=new TokenValue("-"+n.toString(), n.line, n.pos);
+		:}
 	|	HEX:n
 		{:
 			RESULT=new TokenValue(n.toString(), n.line, n.pos);

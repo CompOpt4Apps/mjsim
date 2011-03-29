@@ -1,15 +1,3 @@
-# PA5funcexampleCalleeSaved.java.s
-# Doing register allocation for parameters.
-# p1 => r2
-# p2 => r5:r4
-# p3 => r6
-# p4 => r8
-# p5 and p8 use the register they came in on
-# p5 => r16
-# p6 => r15:r14
-# p7 => r12
-# p8 => r10
-
     .file  "main.java"
 __SREG__ = 0x3f
 __SP_H__ = 0x3e
@@ -69,11 +57,6 @@ FuncExhaste:
     push   r14
     push   r15
     push   r16
-    push   r2
-    push   r4
-    push   r5
-    push   r6
-    push   r8
     # make space for locals and params
     ldi    r30, 0
     push   r30
@@ -91,25 +74,17 @@ FuncExhaste:
     in     r28,__SP_L__
     in     r29,__SP_H__
 
-    ## save off parameters, taken out due to register allocation
-    #std    Y+1, r24     ; p1
-    #std    Y+2, r22     ; p2 lo
-    #std    Y+3, r23     ; p2 hi
-    #std    Y+4, r20     ; p3
-    #std    Y+5, r18     ; p4
-    #std    Y+6, r16     ; p5
-    #std    Y+7, r14     ; p6 lo
-    #std    Y+8, r15     ; p6 hi
-    #std    Y+9, r12     ; p7
-    #std    Y+10, r10    ; p8
-    
-    # save off parameters into registers
-    mov     r2, r24      ; p1
-    mov     r4, r22      ; p2 lo
-    mov     r5, r23      ; p2 hi
-    mov     r6, r20      ; p3
-    mov     r8, r18      ; p4
-    
+    # save off parameters
+    std    Y+1, r24     ; p1
+    std    Y+2, r22     ; p2 lo
+    std    Y+3, r23     ; p2 hi
+    std    Y+4, r20     ; p3
+    std    Y+5, r18     ; p4
+    std    Y+6, r16     ; p5
+    std    Y+7, r14     ; p6 lo
+    std    Y+8, r15     ; p6 hi
+    std    Y+9, r12     ; p7
+    std    Y+10, r10    ; p8
 /* done with function FuncExhaste prologue */
 
 
@@ -211,9 +186,9 @@ MJ_L1:
     # Do sub operation
     # load right operand as constant
     # pop left operand
-    ldi    r24,3
+    ldi    r24,lo8(-3)
     pop    r22
-    sub    r22,r24
+    add    r22,r24
     ldi    r23,0    ; hi bits for result
     push   r23
     push   r22      ; lo bits for result
@@ -255,33 +230,10 @@ MJ_L1:
     pop    r25
     push   r24
 
-    ## IdExp
-    ## load value for p5 and push onto stack
-    ## load local or param variable
-    #ldd    r24, Y + 6
-    #push   r24
-    
     # IdExp
-    # load value for p8 and push onto stack
+    # load value for p5 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 10
-    push   r24
-    
-    # subtraction
-    # load constant for right operand
-    # pop left operand
-    ldi    r24, 1
-    pop    r22
-    sub    r22, r24
-    ldi    r23,0    ; hi bits for result
-    push   r23
-    push   r22      ; lo bits for result
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
+    ldd    r24, Y + 6
     push   r24
 
     ### Meggy.setPixel(x,y,color) call
@@ -332,11 +284,6 @@ MJ_L2:
     pop    r30
     pop    r30
     # restoring the callee-saved registers
-    pop    r8
-    pop    r6
-    pop    r5
-    pop    r4
-    pop    r2
     pop    r16
     pop    r15
     pop    r14
