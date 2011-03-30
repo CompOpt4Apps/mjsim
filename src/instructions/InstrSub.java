@@ -40,7 +40,10 @@ public class InstrSub extends Instr {
 		int src = machine.getRegister(rr);
 		int nMsb = (dst & msbMask) & (src & msbMask);
 		int result = dst-src;
-		if(Math.abs(src) > Math.abs(dst))
+        if ( ( (bit7Mask & dst)==0 && (bit7Mask & src)>0)
+             || ( (bit7Mask & src)>0 && (bit7Mask&result)>0 ) 
+		     || ( (bit7Mask&result)>0 && (bit7Mask & dst)==0 ) 
+		   )
 		{
 			newStatus.setC(true);
 		}
