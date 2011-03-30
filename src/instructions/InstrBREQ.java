@@ -20,20 +20,22 @@ public class InstrBREQ extends Instr {
 
 	@Override
 	public void execute() throws RuntimeError {
-		logger.debug("Executing BREQ instruction...");
+		logger.debug("Executing BREQ "+label+" instruction...");
 		if(this.machine.getLabel(label)==null)
 		{
-			throw new RuntimeError("Could not find lable: " + label);
+			throw new RuntimeError("Could not find label: " + label);
 		}
+        logger.debug("Z is "+this.machine.getSREG().isZ());
 		if(this.machine.getSREG().isZ())
 		{
 			this.event.setPC(this.machine.getLabel(label));
+		    logger.debug("Setting PC value to (0x" + Integer.toHexString(this.machine.getLabel(label)) + ") for a BREQ.");
 		}
 		else
 		{
 			this.event.setPC(this.machine.getPC()+1);
+		    logger.debug("Setting PC value to (0x" + Integer.toHexString(this.machine.getPC()+1) + ") for a BREQ.");
 		}
-		logger.debug("Setting PC value to (0x" + Integer.toHexString(this.machine.getLabel(label)) + ") for a BREQ.");
 	}
 }
 

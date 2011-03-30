@@ -7,7 +7,7 @@ import machine.SREG;
 
 public class InstrCPC extends Instr {
 
-	private final static Logger logger = Logger.getLogger(InstrCP.class);
+	private final static Logger logger = Logger.getLogger(InstrCPC.class);
 	private final int rd;
 	private final int rr;
 	private final static int bitMask = 0xFF;
@@ -35,7 +35,7 @@ public class InstrCPC extends Instr {
 
 	@Override
 	public void execute() throws RuntimeError {
-		logger.debug("Executing CP instruction with registers " + rd + " and " + rr);
+		logger.debug("Executing CPC instruction with registers " + rd + " and " + rr);
 		SREG newSREG = new SREG();
 		
 		//get the values stored in the registers.
@@ -74,6 +74,7 @@ public class InstrCPC extends Instr {
 		// cleared otherwise.
 		if(result == 0)
 		{
+			newSREG.setZ(this.machine.getSREG().isZ());
 			logger.trace("Keeping Z the same");
 		}
 		else
