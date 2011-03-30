@@ -15,12 +15,12 @@ public class UpdateEvent {
 
     public void setRd(int reg, int value)
     {
-    	rd.put(reg, value);
+    	rd.put(reg, value & 0xFF);
     }
     
     public void setMemory(int address, int value)
     {
-    	memory.put(address, value);
+    	memory.put(address, value & 0xFF);
     }
     
     public void setLongMemory(int address, int value)
