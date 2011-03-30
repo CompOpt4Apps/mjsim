@@ -13,8 +13,8 @@ public class FuncDelay extends Func {
 
 	@Override
 	public void exec() throws RuntimeError {
-		final int lo = this.machine.getRegister(24);
-		final int hi = this.machine.getRegister(25);
+		final int lo = this.machine.getRegister(24) & 0xFF;
+		final int hi = this.machine.getRegister(25) & 0xFF;
 		final int duration_ms = lo + hi*256;
 
         // machine keeps a count

@@ -38,7 +38,7 @@ public class InstrSub extends Instr {
 		SREG newStatus = machine.getSREG();
 		int dst = machine.getRegister(rd);
 		int src = machine.getRegister(rr);
-		int nMsb = (dst & msbMask) & (src & msbMask);
+		//int nMsb = (dst & msbMask) & (src & msbMask);
 		int result = dst-src;
         if ( ( (bit7Mask & dst)==0 && (bit7Mask & src)>0)
              || ( (bit7Mask & src)>0 && (bit7Mask&result)>0 ) 
