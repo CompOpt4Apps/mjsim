@@ -43,9 +43,20 @@ public class InstrCPC extends Instr {
 		int src = this.machine.getRegister(rr);
         logger.debug("dst = "+dst+", src = "+src);
 		int nMsb = (dst & msbMask) & (src & msbMask);//used for checking to see if the msb has changed.
-		int result = (dst - src); // & bitMask;
-        logger.debug("result = "+result);
+		int result;
 		this.event.setPC(this.machine.getPC()+1);//update pc value.
+
+		if(machine.getSREG().isC())
+		{
+			result = dst-src-1;			
+		}
+		else
+		{
+			result = dst-src;
+		}
+        logger.debug("result = "+result);
+
+
 		//check for the C bit.
 		if(Math.abs(src) > Math.abs(dst))
 		{
@@ -58,10 +69,12 @@ public class InstrCPC extends Instr {
 		}
 		
 		//check for the Z bit
+		// DIFFERENT than many other instructions
+		// Previous value remains unchanged when the result is zero; 
+		// cleared otherwise.
 		if(result == 0)
 		{
-			newSREG.setZ(true);
-			logger.trace("Setting Z to true");
+			logger.trace("Keeping Z the same");
 		}
 		else
 		{
