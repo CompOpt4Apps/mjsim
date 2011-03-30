@@ -88,7 +88,6 @@ public class InstrCP extends Instr {
         if ( ((bit7Mask & dst)>0 && (bit7Mask & src)==0 && (bit7Mask&result)==0) 
 		  || ((bit7Mask & dst)==0 && (bit7Mask & src)>0 && (bit7Mask&result)>0) 
 		   )
-		//if((result & msbMask) != nMsb)
 		{
 			newSREG.setV(true);
 			logger.trace("Setting V to true");

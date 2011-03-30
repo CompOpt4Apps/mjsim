@@ -10,6 +10,7 @@ public class InstrSBC extends Instr {
 	final private int rr;
 	private final static int bitMask = 0xFF;
 	private final static int msbMask = 0x80;
+	private final static int bit7Mask = 0x40;
 	private static final Logger logger = Logger.getLogger(InstrSBC.class);
 	public InstrSBC(MachineState machine, int rd, int rr) throws MalformedInstruction
 	{
@@ -38,14 +39,15 @@ public class InstrSBC extends Instr {
 		SREG newStatus = machine.getSREG();
 		int dst = machine.getRegister(rd);
 		int src = machine.getRegister(rr);
-		int nMsb = (dst & msbMask) & (src & msbMask);
+		//int nMsb = (dst & msbMask) & (src & msbMask);
+		int result;
 		if(machine.getSREG().isC())
 		{
-			dst = dst-src-1;			
+			result = dst-src-1;			
 		}
 		else
 		{
-			dst = dst-src;
+			result = dst-src;
 		}
 		if(Math.abs(src) > Math.abs(dst))
 		{
@@ -55,12 +57,12 @@ public class InstrSBC extends Instr {
 		{
 			newStatus.setC(false);
 		}
-		this.event.setRd(rd, dst);
+		this.event.setRd(rd, result);
 		this.event.setPC(machine.getPC()+1);
 		
 		//update the SREG
 		//check zero.
-		if(dst == 0)
+		if(result == 0)
 		{
 			newStatus.setZ(true);
 		}
@@ -68,19 +70,26 @@ public class InstrSBC extends Instr {
 		{
 			newStatus.setZ(false);
 		}
-		
-		//determine the v bit.
-		if(nMsb != (dst & msbMask))//check to see if the msb changed to show 2's complement overflow
+
+		//check for the V bit.
+		// Rd7 and !Rr7 and !R7 + !Rd7 and Rr7 and R7
+        // Set if two’s complement overflow resulted 
+        // from the operation; cleared otherwise.
+        if ( ((bit7Mask & dst)>0 && (bit7Mask & src)==0 && (bit7Mask&result)==0) 
+		  || ((bit7Mask & dst)==0 && (bit7Mask & src)>0 && (bit7Mask&result)>0) 
+		   )
 		{
 			newStatus.setV(true);
+			logger.trace("Setting V to true");
 		}
 		else
 		{
 			newStatus.setV(false);
+			logger.trace("Setting V to false");
 		}
 		
 		//check the msb, if it is set, set the N bit in the SREG. 
-		if((dst & msbMask) == msbMask)
+		if((result & msbMask) == msbMask)
 		{
 			newStatus.setN(true);
 		}

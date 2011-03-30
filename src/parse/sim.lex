@@ -42,6 +42,7 @@ TYPE=@{LETTER}+
 "push" { return new Symbol(sym.AVR_PUSH, new TokenValue("push", yyline, yychar)); }
 "pop" { return new Symbol(sym.AVR_POP, new TokenValue("pop", yyline, yychar)); }
 "cp" { return new Symbol(sym.AVR_CP, new TokenValue("cp", yyline, yychar)); }
+"cpc" { return new Symbol(sym.AVR_CPC, new TokenValue("cpc", yyline, yychar)); }
 "sub" { return new Symbol(sym.AVR_SUB, new TokenValue("sub", yyline, yychar)); }
 "sbc" { return new Symbol(sym.AVR_SBC, new TokenValue("sbc", yyline, yychar)); }
 "breq" { return new Symbol(sym.AVR_BREQ, new TokenValue("breq", yyline, yychar)); }
