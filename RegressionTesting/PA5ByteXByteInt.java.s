@@ -65,18 +65,17 @@ main:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
-        # sign extension code
-        brmi   L2
-        ldi    r23,0
-        jmp    L3
-        L2:
-        ldi    r23,lo8(-1)
-        L3:
-#    ldi    r23,0
+    # sign extend into hi bits
+    brmi   MJ_L3  ; if neg
+    ldi    r23,0
+    jmp    MJ_L4
+MJ_L3:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L4:
     push   r23
     push   r22
 
@@ -111,19 +110,19 @@ main:
     pop    r25    ; hi bits
     cp     r24, r18
     cpc    r25, r19
-    brlt MJ_L4
+    brlt MJ_L6
 
     # load false
-MJ_L3:
+MJ_L5:
     ldi     r24, 0
-    jmp      MJ_L5
+    jmp      MJ_L7
 
     # load true
-MJ_L4:
+MJ_L6:
     ldi    r24, 1
 
     # push result of less than
-MJ_L5:
+MJ_L7:
     push   r24
 
     # pop condition off stack and branch if false
@@ -220,6 +219,112 @@ MJ_L0:
 
     # done label for if
 MJ_L2:
+
+    # Push constant int 0 onto stack
+    ldi    r24,lo8(0)
+    ldi    r25,hi8(0)
+    push   r25
+    push   r24
+
+    # Casting int to byte by popping
+    # 2 bytes off stack and only pushing low order bits
+    # back on.  Low order bits are on top of stack.
+    pop    r24
+    pop    r25
+    push   r24
+
+    # Push constant int 255 onto stack
+    ldi    r24,lo8(255)
+    ldi    r25,hi8(255)
+    push   r25
+    push   r24
+
+    # Push constant int 1 onto stack
+    ldi    r24,lo8(1)
+    ldi    r25,hi8(1)
+    push   r25
+    push   r24
+
+    # Do plus operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    add    r26,r24  
+    adc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
+
+    # Casting int to byte by popping
+    # 2 bytes off stack and only pushing low order bits
+    # back on.  Low order bits are on top of stack.
+    pop    r24
+    pop    r25
+    push   r24
+
+    # Push constant int 0 onto stack
+    ldi    r24,lo8(0)
+    ldi    r25,hi8(0)
+    push   r25
+    push   r24
+
+    # Push constant int 511 onto stack
+    ldi    r24,lo8(511)
+    ldi    r25,hi8(511)
+    push   r25
+    push   r24
+
+    # Do sub operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    sub    r26,r24  
+    sbc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
+
+    # Casting int to byte by popping
+    # 2 bytes off stack and only pushing low order bits
+    # back on.  Low order bits are on top of stack.
+    pop    r24
+    pop    r25
+    push   r24
+
+    # Do add operation on top 2 bytes on stack,
+    # Push a sign extended two-byte result
+    pop    r24
+    pop    r22
+    add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L8  ; if neg
+    ldi    r23,0
+    jmp    MJ_L9
+MJ_L8:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L9:
+    push   r23
+    push   r22
+
+    # Casting int to byte by popping
+    # 2 bytes off stack and only pushing low order bits
+    # back on.  Low order bits are on top of stack.
+    pop    r24
+    pop    r25
+    push   r24
+
+    # Push Meggy.Color.VIOLET onto the stack.
+    ldi    r22,6
+    push   r22
+
+    ### Meggy.setPixel(x,y,color) call
+    pop    r20
+    pop    r22
+    pop    r24
+    call   _Z6DrawPxhhh
+    call   _Z12DisplaySlatev
 
 
 /* epilogue start */
