@@ -1,4 +1,4 @@
-    .file  "main.java"
+	.file "PA5simplemath.java"
 __SREG__ = 0x3f
 __SP_H__ = 0x3e
 __SP_L__ = 0x3d
@@ -18,35 +18,32 @@ main:
     call _Z18MeggyJrSimpleSetupv 
     /* Need to call this so that the meggy library gets set up */
 
-
     # Push constant int 256 onto stack
-    ldi    r24,lo8(256)
-    ldi    r25,hi8(256)
-    push   r25
-    push   r24
+    ldi     r24, hi8(256)
+    push    r24
+    ldi     r24, lo8(256)
+    push    r24
 
     # Push constant int 1 onto stack
-    ldi    r24,lo8(1)
-    ldi    r25,hi8(1)
+    ldi     r24, hi8(1)
+    push    r24
+    ldi     r24, lo8(1)
+    push    r24
+
+    # subtract int x int -> int, byte x byte -> int
+    pop    r22
+    pop    r23
+    pop    r24
+    pop    r25
+    sub    r24, r22
+    sbc    r25, r23
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
+    # Output MeggyDelay
     pop    r24
     pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
+    call    _Z8delay_msj
 
-    ### Meggy.delay() call
-    # assume low bits on top
-    pop    r24
-    pop    r25
-    call   _Z8delay_msj
 
 
 /* epilogue start */

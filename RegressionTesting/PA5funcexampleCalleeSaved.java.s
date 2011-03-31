@@ -1,3 +1,15 @@
+# PA5funcexampleCalleeSaved.java.s
+# Doing register allocation for parameters.
+# p1 => r2
+# p2 => r5:r4
+# p3 => r6
+# p4 => r8
+# p5 and p8 use the register they came in on
+# p5 => r16
+# p6 => r15:r14
+# p7 => r12
+# p8 => r10
+
     .file  "main.java"
 __SREG__ = 0x3f
 __SP_H__ = 0x3e
@@ -18,123 +30,23 @@ main:
     call _Z18MeggyJrSimpleSetupv 
     /* Need to call this so that the meggy library gets set up */
 
-
-    # NewExp
-    ldi    r24, lo8(0)
-    ldi    r25, hi8(0)
-    # allocating object of size 0 on heap
-    call    malloc
-    # push object address
-    push    r25
-    push    r24
-
-    # Push constant int 1 onto stack
-    ldi    r24,lo8(1)
-    ldi    r25,hi8(1)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # Push constant int 2 onto stack
-    ldi    r24,lo8(2)
-    ldi    r25,hi8(2)
-    push   r25
-    push   r24
-
-    # Push constant int 3 onto stack
-    ldi    r24,lo8(3)
-    ldi    r25,hi8(3)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # Push constant int 4 onto stack
-    ldi    r24,lo8(4)
-    ldi    r25,hi8(4)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # Push constant int 5 onto stack
-    ldi    r24,lo8(5)
-    ldi    r25,hi8(5)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # Push constant int 6 onto stack
-    ldi    r24,lo8(6)
-    ldi    r25,hi8(6)
-    push   r25
-    push   r24
-
-    # Push constant int 7 onto stack
-    ldi    r24,lo8(7)
-    ldi    r25,hi8(7)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # Push constant int 8 onto stack
-    ldi    r24,lo8(8)
-    ldi    r25,hi8(8)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
     #### function call
-    # pop parameter values into appropriate registers
-    pop    r8
-    pop    r10
-    pop    r12
-    pop    r13
-    pop    r14
-    pop    r16
-    pop    r18
-    pop    r20
-    pop    r21
-    pop    r22
-    # receiver will be passed as first param
-    pop    r24
-    pop    r25
+    ldi    r24, 1
+    ldi    r22, lo8(2)
+    ldi    r23, hi8(2)
+    ldi    r20, 3
+    ldi    r18, 4
+    ldi    r16, 5
+    ldi    r26, lo8(6)
+    mov    r14, r26
+    ldi    r26, hi8(6)
+    mov    r15, r26
+    ldi    r26, 7
+    mov    r12, r26
+    ldi    r26, 8
+    mov    r10, r26
 
-    call    FuncEx2haste
+    call    FuncExhaste
 
 
 /* epilogue start */
@@ -146,15 +58,24 @@ main:
 
 
     .text
-.global FuncEx2haste
-    .type  FuncEx2haste, @function
-FuncEx2haste:
+.global FuncExhaste
+    .type  FuncExhaste, @function
+FuncExhaste:
+    # save off callee-saved registers being used in this func
     push   r29
     push   r28
+    push   r10
+    push   r12
+    push   r14
+    push   r15
+    push   r16
+    push   r2
+    push   r4
+    push   r5
+    push   r6
+    push   r8
     # make space for locals and params
     ldi    r30, 0
-    push   r30
-    push   r30
     push   r30
     push   r30
     push   r30
@@ -170,48 +91,42 @@ FuncEx2haste:
     in     r28,__SP_L__
     in     r29,__SP_H__
 
-    # save off parameters
-    std    Y+1, r24
-    std    Y+2, r25
-    std    Y+3, r22
-    std    Y+4, r20
-    std    Y+5, r21
-    std    Y+6, r18
-    std    Y+7, r16
-    std    Y+8, r14
-    std    Y+9, r12
-    std    Y+10, r13
-    std    Y+11, r10
-    std    Y+12, r8
-/* done with function FuncEx2haste prologue */
+    ## save off parameters, taken out due to register allocation
+    #std    Y+1, r24     ; p1
+    #std    Y+2, r22     ; p2 lo
+    #std    Y+3, r23     ; p2 hi
+    #std    Y+4, r20     ; p3
+    #std    Y+5, r18     ; p4
+    #std    Y+6, r16     ; p5
+    #std    Y+7, r14     ; p6 lo
+    #std    Y+8, r15     ; p6 hi
+    #std    Y+9, r12     ; p7
+    #std    Y+10, r10    ; p8
+    
+    # save off parameters into registers
+    mov     r2, r24      ; p1
+    mov     r4, r22      ; p2 lo
+    mov     r5, r23      ; p2 hi
+    mov     r6, r20      ; p3
+    mov     r8, r18      ; p4
+    
+/* done with function FuncExhaste prologue */
 
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
     # IdExp
     # load value for p8 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 12
+    ldd    r24, Y + 10
     push   r24
 
     # less than expression
-    # pop right and left operands
-    pop    r25
+    # pop right since not constant
+    # load constant for left
     pop    r24
-    cp     r24, r25
+    ldi    r25, 0
+    cp     r25, r24
     brlt MJ_L4
 
     # load false
@@ -241,109 +156,67 @@ MJ_L5:
     # then label for if
 MJ_L1:
 
-
-    # loading the implicit "this"
-    ldd    r31, Y + 2
-    ldd    r30, Y + 1
-    push   r31
-    push   r30
-
     # IdExp
     # load value for p1 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 3
+    ldd    r24, Y + 1
     push   r24
 
     # IdExp
     # load value for p2 and push onto stack
     # load local or param variable
-    ldd    r25, Y + 5
+    ldd    r25, Y + 3
     push   r25
-    ldd    r24, Y + 4
+    ldd    r24, Y + 2
     push   r24
 
     # IdExp
     # load value for p3 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 6
+    ldd    r24, Y + 4
     push   r24
 
     # IdExp
     # load value for p4 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 7
+    ldd    r24, Y + 5
     push   r24
 
     # IdExp
     # load value for p5 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 8
+    ldd    r24, Y + 6
     push   r24
 
     # IdExp
     # load value for p6 and push onto stack
     # load local or param variable
-    ldd    r25, Y + 10
+    ldd    r25, Y + 8 
     push   r25
-    ldd    r24, Y + 9
+    ldd    r24, Y + 7
     push   r24
 
     # IdExp
     # load value for p7 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 11
+    ldd    r24, Y + 9 
     push   r24
 
     # IdExp
     # load value for p8 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 12
+    ldd    r24, Y + 10
     push   r24
 
-    # Push constant int 5 onto stack
-    ldi    r24,lo8(5)
-    ldi    r25,hi8(5)
-    push   r25
-    push   r24
-
-    # Push constant int 2 onto stack
-    ldi    r24,lo8(2)
-    ldi    r25,hi8(2)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # Do sub operation on top 2 bytes on stack
-    # push a sign extended two byte result
-    pop    r24
+    # Do sub operation
+    # load right operand as constant
+    # pop left operand
+    ldi    r24,3
     pop    r22
     sub    r22,r24
-    # sign extend into hi bits
-    brmi   MJ_L6  ; if neg
-    ldi    r23,0
-    jmp    MJ_L7
-MJ_L6:
-    ldi    r23,lo8(-1)    ; set all bits
-MJ_L7:
+    ldi    r23,0    ; hi bits for result
     push   r23
-    push   r22
+    push   r22      ; lo bits for result
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -354,28 +227,25 @@ MJ_L7:
 
     #### function call
     # pop parameter values into appropriate registers
-    pop    r8
     pop    r10
     pop    r12
-    pop    r13
     pop    r14
+    pop    r15
     pop    r16
     pop    r18
     pop    r20
-    pop    r21
     pop    r22
-    # receiver will be passed as first param
+    pop    r23
     pop    r24
-    pop    r25
 
-    call    FuncEx2haste
+    call    FuncExhaste
 
     # IdExp
     # load value for p2 and push onto stack
     # load local or param variable
-    ldd    r25, Y + 5
+    ldd    r25, Y + 3
     push   r25
-    ldd    r24, Y + 4
+    ldd    r24, Y + 2
     push   r24
 
     # Casting int to byte by popping
@@ -385,39 +255,27 @@ MJ_L7:
     pop    r25
     push   r24
 
+    ## IdExp
+    ## load value for p5 and push onto stack
+    ## load local or param variable
+    #ldd    r24, Y + 6
+    #push   r24
+    
     # IdExp
     # load value for p8 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 12
+    ldd    r24, Y + 10
     push   r24
-
-    # Push constant int 1 onto stack
-    ldi    r24,lo8(1)
-    ldi    r25,hi8(1)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # Do sub operation on top 2 bytes on stack
-    # push a sign extended two byte result
-    pop    r24
+    
+    # subtraction
+    # load constant for right operand
+    # pop left operand
+    ldi    r24, 1
     pop    r22
-    sub    r22,r24
-    # sign extend into hi bits
-    brmi   MJ_L8  ; if neg
-    ldi    r23,0
-    jmp    MJ_L9
-MJ_L8:
-    ldi    r23,lo8(-1)    ; set all bits
-MJ_L9:
+    sub    r22, r24
+    ldi    r23,0    ; hi bits for result
     push   r23
-    push   r22
+    push   r22      ; lo bits for result
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -425,13 +283,9 @@ MJ_L9:
     pop    r24
     pop    r25
     push   r24
-
-    # Push Meggy.Color.ORANGE onto the stack.
-    ldi    r22,2
-    push   r22
 
     ### Meggy.setPixel(x,y,color) call
-    pop    r20
+    ldi    r20, 2   ; Meggy.Color.ORANGE
     pop    r22
     pop    r24
     call   _Z6DrawPxhhh
@@ -444,43 +298,26 @@ MJ_L0:
     # done label for if
 MJ_L2:
 
-    # Push constant int 42 onto stack
-    ldi    r24,lo8(42)
-    ldi    r25,hi8(42)
-    push   r25
-    push   r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
     # IdExp
     # load value for p1 and push onto stack
     # load local or param variable
-    ldd    r24, Y + 3
+    ldd    r24, Y + 1
     push   r24
 
-    # Do add operation on top 2 bytes on stack,
-    # Push a sign extended two-byte result
-    pop    r24
+    # Do add operation 
+    # Pop right operand off stack.
+    # Load constant left operand.
+    # Push a two-byte result
     pop    r22
+    ldi    r24,42
     add    r22,r24
-    # sign extend into hi bits
-    brmi   MJ_L10  ; if neg
     ldi    r23,0
-    jmp    MJ_L11
-MJ_L10:
-    ldi    r23,lo8(-1)    ; set all bits
-MJ_L11:
     push   r23
     push   r22
 
-/* epilogue start for FuncEx2haste */
+/* epilogue start for FuncExhaste */
     # popping off return value and putting it in r24
-    pop    r25
+    pop    r24
     # and into r25 because 2 byte type
     pop    r25
     # pop space off stack for parameters and locals
@@ -494,11 +331,19 @@ MJ_L11:
     pop    r30
     pop    r30
     pop    r30
-    pop    r30
-    pop    r30
-    # restoring the frame pointer
-    pop   r28
-    pop   r29
+    # restoring the callee-saved registers
+    pop    r8
+    pop    r6
+    pop    r5
+    pop    r4
+    pop    r2
+    pop    r16
+    pop    r15
+    pop    r14
+    pop    r12
+    pop    r10
+    pop    r28
+    pop    r29
     ret
-    .size FuncEx2haste, .-FuncEx2haste
+    .size FuncExhaste, .-FuncExhaste
 
