@@ -1,49 +1,49 @@
 /*
-    PA5NegCompares.java
+    PA5NegAddSub.java
     
-    Testing int and byte comparisons with negative numbers.
+    Testing int and byte add and sub with negative numbers.
 */
 
 import meggy.Meggy;
 
-class PA5NegCompares {
+class PA5NegAddSub {
 
 	public static void main(String[] whatever){
 		{
 		    // bytes
-			if ((byte)(0-555) < (byte)(0-666)) {
+			if ((byte)(0-555) < (byte)(0)) {
 				Meggy.setPixel((byte)0, (byte)0, Meggy.Color.GREEN);
 			}
 			else {
 				Meggy.setPixel((byte)7, (byte)7, Meggy.Color.RED);
 			}
-			if ((byte)(0-555) < (byte)(0-555)) {
+			if ((byte)(0-555+256+20) < (byte)(0)) {
 				Meggy.setPixel((byte)6, (byte)6, Meggy.Color.RED);
 			}
 			else {
 				Meggy.setPixel((byte)1, (byte)1, Meggy.Color.GREEN);
 			}
 			if ((byte)(0-777) < (byte)(0-666)) {
-				Meggy.setPixel((byte)5, (byte)5, Meggy.Color.RED);
+				Meggy.setPixel((byte)(555-550), (byte)5, Meggy.Color.RED);
 			}
 			else {
-				Meggy.setPixel((byte)2, (byte)2, Meggy.Color.GREEN);
+				Meggy.setPixel((byte)(257-255), (byte)2, Meggy.Color.GREEN);
 			}
 			
 			// ints
-			if ( (0-555) < (0-666)) {
-				Meggy.setPixel((byte)0, (byte)1, Meggy.Color.GREEN);
+			if ( 555 < 666 ) {
+				Meggy.setPixel((byte)(400+(200-600)), (byte)1, Meggy.Color.GREEN);
 			}
 			else {
-				Meggy.setPixel((byte)7, (byte)0, Meggy.Color.RED);
+				Meggy.setPixel((byte)(257-7), (byte)(500-(750-250)), Meggy.Color.RED);
 			}
-			if ((0-555) < (0-555)) {
+			if (555 < 555) {
 				Meggy.setPixel((byte)6, (byte)5, Meggy.Color.RED);
 			}
 			else {
 				Meggy.setPixel((byte)1, (byte)3, Meggy.Color.GREEN);
 			}
-			if ((0-755) < (0-256)) {
+			if (755 < 256) {
 				Meggy.setPixel((byte)5, (byte)4, Meggy.Color.RED);
 			}
 			else {
@@ -51,19 +51,19 @@ class PA5NegCompares {
 			}
 			
 		    // bytes
-			if ((byte)(0-555) == (byte)(0-656)) {
+			if ((byte)555 == (byte)656) {
 				Meggy.setPixel((byte)4, (byte)0, Meggy.Color.GREEN);
 			}
 			else {
 				Meggy.setPixel((byte)3, (byte)7, Meggy.Color.RED);
 			}
-			if ((byte)(0-256) == (byte)(0-256)) {
+			if ((byte)256 == (byte)256) {
 				Meggy.setPixel((byte)2, (byte)6, Meggy.Color.RED);
 			}
 			else {
 				Meggy.setPixel((byte)0, (byte)1, Meggy.Color.GREEN);
 			}
-			if ((byte)(0-756) == (byte)(0-623)) {
+			if ((byte)756 == (byte)623) {
 				Meggy.setPixel((byte)3, (byte)5, Meggy.Color.RED);
 			}
 			else {
@@ -71,19 +71,19 @@ class PA5NegCompares {
 			}
 			
 			// ints
-			if ( (0-523) == (0-656)) {
+			if ( 523 == 656) {
 				Meggy.setPixel((byte)0, (byte)5, Meggy.Color.GREEN);
 			}
 			else {
 				Meggy.setPixel((byte)6, (byte)7, Meggy.Color.RED);
 			}
-			if ((0-25) == (0-25)) {
+			if (256 == 256) {
 				Meggy.setPixel((byte)5, (byte)6, Meggy.Color.RED);
 			}
 			else {
 				Meggy.setPixel((byte)1, (byte)3, Meggy.Color.GREEN);
 			}
-			if ((0-721) == (0-25)) {
+			if (721 == 256) {
 				Meggy.setPixel((byte)5, (byte)2, Meggy.Color.RED);
 			}
 			else {

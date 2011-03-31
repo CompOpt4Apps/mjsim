@@ -577,7 +577,8 @@ public class MachineState {
 			for(Integer key:rds.keySet())
 			{
 				logger.info("Updating register r(" + key
-						+ ") with the value (" + rds.get(key) + ")");	
+					+ ") with the value (" + rds.get(key) + ")"
+					+ " and hex ( 0x" + Integer.toHexString(rds.get(key))+")" );	
 				registers.put(key, rds.get(key));				
 				updatedData.putReg(key, rds.get(key));
 			}

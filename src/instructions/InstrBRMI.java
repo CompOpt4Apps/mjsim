@@ -4,28 +4,28 @@ import machine.MachineState;
 
 import org.apache.log4j.Logger;
 
-public class InstrBRNE extends Instr {
+public class InstrBRMI extends Instr {
 
-	static final private Logger logger = Logger.getLogger(InstrBRNE.class);
+	static final private Logger logger = Logger.getLogger(InstrBRMI.class);
 	private final String label;
 	
-	public InstrBRNE(MachineState machine, String label) {
+	public InstrBRMI(MachineState machine, String label) {
 		super(machine);
 		this.label = label;
 	}
 
 	@Override
 	public String toString() {
-		return "BRNE " + label;
+		return "BRMI " + label;
 	}
 
 	@Override
 	public void execute() throws RuntimeError {
-		logger.debug("Executing BRNE instruction...");
+		logger.debug("Executing BRMI instruction...");
 		if (this.machine.getLabel(label) == null) {
 			throw new RuntimeError("Could not find label: " + label);
 		}
-		if (!this.machine.getSREG().isZ()) {
+		if (this.machine.getSREG().isN()) {
 			logger.trace("Branching to label: " + label);
 			this.event.setPC(this.machine.getLabel(label));
 		    logger.debug("Setting PC value to (0x"

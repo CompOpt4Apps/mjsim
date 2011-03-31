@@ -63,7 +63,7 @@ non terminal header, eol;
 /* AVR Functions */
 terminal AVR_PUSH, AVR_POP, AVR_MOV, AVR_IN, AVR_LD, AVR_LDI, AVR_ADD, AVR_ADC, AVR_CALL, AVR_RET, AVR_AND, AVR_EOR, AVR_JMP, AVR_NEG, AVR_OR, AVR_CP, AVR_SUB, AVR_BREQ, AVR_BRLO, AVR_BRLT, AVR_TST, AVR_MULS, AVR_LDS, AVR_SBC, AVR_BRNE;
 terminal AVR_LDD, AVR_STD, PLUS, MINUS;
-terminal AVR_CPC;
+terminal AVR_CPC, AVR_BRMI;
 
 /* Grammar */
 start with pgrm;
@@ -222,6 +222,11 @@ instr	::=
 		{:
 			RESULT= new InstrNeg(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
 		:}
+    |
+        AVR_BRMI ID:l eol
+        {:
+            RESULT= new InstrBRMI(sim_inst.machine,l.toString()); 
+        :}
     |
         AVR_BREQ ID:l eol
         {:

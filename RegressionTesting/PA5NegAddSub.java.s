@@ -57,23 +57,6 @@ main:
     push   r25
     push   r24
 
-    # Push constant int 666 onto stack
-    ldi    r24,lo8(666)
-    ldi    r25,hi8(666)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
-
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
     # back on.  Low order bits are on top of stack.
@@ -221,6 +204,40 @@ MJ_L2:
     push   r27
     push   r26
 
+    # Push constant int 256 onto stack
+    ldi    r24,lo8(256)
+    ldi    r25,hi8(256)
+    push   r25
+    push   r24
+
+    # Do plus operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    add    r26,r24  
+    adc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
+
+    # Push constant int 20 onto stack
+    ldi    r24,lo8(20)
+    ldi    r25,hi8(20)
+    push   r25
+    push   r24
+
+    # Do plus operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    add    r26,r24  
+    adc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
+
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
     # back on.  Low order bits are on top of stack.
@@ -233,23 +250,6 @@ MJ_L2:
     ldi    r25,hi8(0)
     push   r25
     push   r24
-
-    # Push constant int 555 onto stack
-    ldi    r24,lo8(555)
-    ldi    r25,hi8(555)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -469,11 +469,28 @@ MJ_L17:
     # then label for if
 MJ_L13:
 
-    # Push constant int 5 onto stack
-    ldi    r24,lo8(5)
-    ldi    r25,hi8(5)
+    # Push constant int 555 onto stack
+    ldi    r24,lo8(555)
+    ldi    r25,hi8(555)
     push   r25
     push   r24
+
+    # Push constant int 550 onto stack
+    ldi    r24,lo8(550)
+    ldi    r25,hi8(550)
+    push   r25
+    push   r24
+
+    # Do sub operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    sub    r26,r24  
+    sbc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -510,11 +527,28 @@ MJ_L13:
     # else label for if
 MJ_L12:
 
-    # Push constant int 2 onto stack
-    ldi    r24,lo8(2)
-    ldi    r25,hi8(2)
+    # Push constant int 257 onto stack
+    ldi    r24,lo8(257)
+    ldi    r25,hi8(257)
     push   r25
     push   r24
+
+    # Push constant int 255 onto stack
+    ldi    r24,lo8(255)
+    ldi    r25,hi8(255)
+    push   r25
+    push   r24
+
+    # Do sub operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    sub    r26,r24  
+    sbc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -552,32 +586,9 @@ MJ_L14:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 555 onto stack
     ldi    r24,lo8(555)
     ldi    r25,hi8(555)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
-
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
     push   r25
     push   r24
 
@@ -586,17 +597,6 @@ MJ_L14:
     ldi    r25,hi8(666)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # less than expression
     # pop right and left operands, lo bits then hi bits
@@ -635,11 +635,45 @@ MJ_L23:
     # then label for if
 MJ_L19:
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
+    # Push constant int 400 onto stack
+    ldi    r24,lo8(400)
+    ldi    r25,hi8(400)
     push   r25
     push   r24
+
+    # Push constant int 200 onto stack
+    ldi    r24,lo8(200)
+    ldi    r25,hi8(200)
+    push   r25
+    push   r24
+
+    # Push constant int 600 onto stack
+    ldi    r24,lo8(600)
+    ldi    r25,hi8(600)
+    push   r25
+    push   r24
+
+    # Do sub operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    sub    r26,r24  
+    sbc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
+
+    # Do plus operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    add    r26,r24  
+    adc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -676,11 +710,28 @@ MJ_L19:
     # else label for if
 MJ_L18:
 
+    # Push constant int 257 onto stack
+    ldi    r24,lo8(257)
+    ldi    r25,hi8(257)
+    push   r25
+    push   r24
+
     # Push constant int 7 onto stack
     ldi    r24,lo8(7)
     ldi    r25,hi8(7)
     push   r25
     push   r24
+
+    # Do sub operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    sub    r26,r24  
+    sbc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -689,11 +740,45 @@ MJ_L18:
     pop    r25
     push   r24
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
+    # Push constant int 500 onto stack
+    ldi    r24,lo8(500)
+    ldi    r25,hi8(500)
     push   r25
     push   r24
+
+    # Push constant int 750 onto stack
+    ldi    r24,lo8(750)
+    ldi    r25,hi8(750)
+    push   r25
+    push   r24
+
+    # Push constant int 250 onto stack
+    ldi    r24,lo8(250)
+    ldi    r25,hi8(250)
+    push   r25
+    push   r24
+
+    # Do sub operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    sub    r26,r24  
+    sbc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
+
+    # Do sub operation on top 2 ints on stack
+    pop    r24
+    pop    r25
+    pop    r26
+    pop    r27
+    sub    r26,r24  
+    sbc    r27,r25  
+    # push hi order byte first
+    push   r27
+    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -718,9 +803,9 @@ MJ_L20:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
+    # Push constant int 555 onto stack
+    ldi    r24,lo8(555)
+    ldi    r25,hi8(555)
     push   r25
     push   r24
 
@@ -729,40 +814,6 @@ MJ_L20:
     ldi    r25,hi8(555)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
-
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
-    # Push constant int 555 onto stack
-    ldi    r24,lo8(555)
-    ldi    r25,hi8(555)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # less than expression
     # pop right and left operands, lo bits then hi bits
@@ -884,32 +935,9 @@ MJ_L26:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 755 onto stack
     ldi    r24,lo8(755)
     ldi    r25,hi8(755)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
-
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
     push   r25
     push   r24
 
@@ -918,17 +946,6 @@ MJ_L26:
     ldi    r25,hi8(256)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # less than expression
     # pop right and left operands, lo bits then hi bits
@@ -1050,28 +1067,11 @@ MJ_L32:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 555 onto stack
     ldi    r24,lo8(555)
     ldi    r25,hi8(555)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -1080,28 +1080,11 @@ MJ_L32:
     pop    r25
     push   r24
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 656 onto stack
     ldi    r24,lo8(656)
     ldi    r25,hi8(656)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -1227,28 +1210,11 @@ MJ_L38:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 256 onto stack
     ldi    r24,lo8(256)
     ldi    r25,hi8(256)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -1257,28 +1223,11 @@ MJ_L38:
     pop    r25
     push   r24
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 256 onto stack
     ldi    r24,lo8(256)
     ldi    r25,hi8(256)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -1404,28 +1353,11 @@ MJ_L44:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 756 onto stack
     ldi    r24,lo8(756)
     ldi    r25,hi8(756)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -1434,28 +1366,11 @@ MJ_L44:
     pop    r25
     push   r24
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 623 onto stack
     ldi    r24,lo8(623)
     ldi    r25,hi8(623)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -1581,32 +1496,9 @@ MJ_L50:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 523 onto stack
     ldi    r24,lo8(523)
     ldi    r25,hi8(523)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
-
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
     push   r25
     push   r24
 
@@ -1615,17 +1507,6 @@ MJ_L50:
     ldi    r25,hi8(656)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # equality check expression
     # pop right operand lo bits then high
@@ -1748,51 +1629,17 @@ MJ_L56:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
+    # Push constant int 256 onto stack
+    ldi    r24,lo8(256)
+    ldi    r25,hi8(256)
     push   r25
     push   r24
 
-    # Push constant int 25 onto stack
-    ldi    r24,lo8(25)
-    ldi    r25,hi8(25)
+    # Push constant int 256 onto stack
+    ldi    r24,lo8(256)
+    ldi    r25,hi8(256)
     push   r25
     push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
-
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
-    # Push constant int 25 onto stack
-    ldi    r24,lo8(25)
-    ldi    r25,hi8(25)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # equality check expression
     # pop right operand lo bits then high
@@ -1915,51 +1762,17 @@ MJ_L62:
 
     #### if statement
 
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
-    push   r25
-    push   r24
-
     # Push constant int 721 onto stack
     ldi    r24,lo8(721)
     ldi    r25,hi8(721)
     push   r25
     push   r24
 
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
-
-    # Push constant int 0 onto stack
-    ldi    r24,lo8(0)
-    ldi    r25,hi8(0)
+    # Push constant int 256 onto stack
+    ldi    r24,lo8(256)
+    ldi    r25,hi8(256)
     push   r25
     push   r24
-
-    # Push constant int 25 onto stack
-    ldi    r24,lo8(25)
-    ldi    r25,hi8(25)
-    push   r25
-    push   r24
-
-    # Do sub operation on top 2 ints on stack
-    pop    r24
-    pop    r25
-    pop    r26
-    pop    r27
-    sub    r26,r24  
-    sbc    r27,r25  
-    # push hi order byte first
-    push   r27
-    push   r26
 
     # equality check expression
     # pop right operand lo bits then high
