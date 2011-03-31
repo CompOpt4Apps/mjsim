@@ -11,6 +11,8 @@ class PA5NegCompares {
 	public static void main(String[] whatever){
 		{
 		    // bytes
+		    System.out.println("(byte)(0-555) = "+ (byte)(0-555));
+		    System.out.println("(byte)(0-666) = "+ (byte)(0-666));
 			if ((byte)(0-555) < (byte)(0-666)) {
 				Meggy.setPixel((byte)0, (byte)0, Meggy.Color.GREEN);
 			}

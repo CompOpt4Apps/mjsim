@@ -52,23 +52,29 @@ public class InstrSBC extends Instr {
 		if(Math.abs(src) > Math.abs(dst))
 		{
 			newStatus.setC(true);
+			logger.trace("Setting C to true");
 		}
 		else
 		{
 			newStatus.setC(false);
+			logger.trace("Setting C to false");
 		}
 		this.event.setRd(rd, result);
 		this.event.setPC(machine.getPC()+1);
 		
 		//update the SREG
-		//check zero.
+		// DIFFERENT than many other instructions
+		// Previous value remains unchanged when the result is zero; 
+		// cleared otherwise.
 		if(result == 0)
 		{
-			newStatus.setZ(true);
+			newStatus.setZ(this.machine.getSREG().isZ());
+			logger.trace("Keeping Z the same");
 		}
 		else
 		{
 			newStatus.setZ(false);
+			logger.trace("Setting Z to false");
 		}
 
 		//check for the V bit.
@@ -92,10 +98,12 @@ public class InstrSBC extends Instr {
 		if((result & msbMask) == msbMask)
 		{
 			newStatus.setN(true);
+			logger.trace("Setting N to true");
 		}
 		else
 		{
 			newStatus.setN(false);
+			logger.trace("Setting N to false");
 		}
 		
 		newStatus.setS(newStatus.isN() ^ newStatus.isV());

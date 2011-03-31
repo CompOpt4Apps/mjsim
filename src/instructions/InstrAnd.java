@@ -64,5 +64,6 @@ public class InstrAnd extends Instr {
 		newSreg.setS(newSreg.isN() ^ newSreg.isV());
 		this.event.setSREG(newSreg);
 		this.event.setPC(this.machine.getPC()+1);
+		logger.debug("The updated SREG is: " + newSreg.toString());
 	}
 }

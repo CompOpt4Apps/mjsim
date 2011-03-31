@@ -38,18 +38,23 @@ public class InstrSub extends Instr {
 		SREG newStatus = machine.getSREG();
 		int dst = machine.getRegister(rd);
 		int src = machine.getRegister(rr);
-		//int nMsb = (dst & msbMask) & (src & msbMask);
 		int result = dst-src;
+		
+		logger.debug("dst = "+dst+", src="+src+", result="+result);
+		
         if ( ( (bit7Mask & dst)==0 && (bit7Mask & src)>0)
              || ( (bit7Mask & src)>0 && (bit7Mask&result)>0 ) 
 		     || ( (bit7Mask&result)>0 && (bit7Mask & dst)==0 ) 
 		   )
+		// FIXME: is above equivalent to checking absolute values?
 		{
 			newStatus.setC(true);
+			logger.trace("Setting C to true");
 		}
 		else
 		{
 			newStatus.setC(false);
+			logger.trace("Setting C to false");
 		}
 		this.event.setRd(rd, result);
 		this.event.setPC(machine.getPC()+1);
@@ -59,10 +64,12 @@ public class InstrSub extends Instr {
 		if(result == 0)
 		{
 			newStatus.setZ(true);
+			logger.trace("Setting Z to true");
 		}
 		else
 		{
 			newStatus.setZ(false);
+			logger.trace("Setting Z to false");
 		}
 		
 		//determine the v bit.
@@ -75,20 +82,24 @@ public class InstrSub extends Instr {
 		   )
 		{
 			newStatus.setV(true);
+			logger.trace("Setting V to true");
 		}
 		else
 		{
 			newStatus.setV(false);
+			logger.trace("Setting V to false");
 		}
 		
 		//check the msb, if it is set, set the N bit in the SREG. 
 		if((result & msbMask) == msbMask)
 		{
 			newStatus.setN(true);
+			logger.trace("Setting N to true");
 		}
 		else
 		{
 			newStatus.setN(false);
+			logger.trace("Setting N to false");
 		}
 		
 		newStatus.setS(newStatus.isN() ^ newStatus.isV());

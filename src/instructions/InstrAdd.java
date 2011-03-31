@@ -16,6 +16,7 @@ public class InstrAdd extends Instr {
 	private final int rr;
 	private final static int bitMask = 0xFF;
 	private final static int msbMask = 0x80;
+	private final static int bit7Mask = 0x40;
 	
 	public InstrAdd(MachineState machine, int rd, int rr) throws MalformedInstruction {
 		super(machine);
@@ -43,18 +44,21 @@ public class InstrAdd extends Instr {
 		SREG newStatus = machine.getSREG();
 		int dst = machine.getRegister(rd);
 		int src = machine.getRegister(rr);
-		int nMsb = (dst & msbMask) & (src & msbMask);
-		dst = dst+src;
-		if(dst > 255)
+		int result = dst+src;
+		
+		// Set if there was carry from the MSB of the result; cleared otherwise
+        if ( ( (bit7Mask & dst)>0 && (bit7Mask & src)>0)
+             || ( (bit7Mask & src)>0 && (bit7Mask&result)==0 ) 
+		     || ( (bit7Mask&result)==0 && (bit7Mask & dst)>0 ) 
+		   )
 		{
-			dst&=bitMask;//set only the data less than 255 in dst.
 			newStatus.setC(true);
 		}
 		else
 		{
 			newStatus.setC(false);
 		}
-		this.event.setRd(rd, dst);
+		this.event.setRd(rd, result);
 		this.event.setPC(machine.getPC()+1);
 		
 		//update the SREG
@@ -69,7 +73,12 @@ public class InstrAdd extends Instr {
 		}
 		
 		//determine the v bit.
-		if(nMsb != (dst & msbMask))//check to see if the msb changed to show 2's complement overflow
+		// Rd7 and Rr7 and !R7 + !Rd7 and !Rr7 and R7
+        // Set if two’s complement overflow resulted 
+        // from the operation; cleared otherwise.
+        if ( ((bit7Mask & dst)>0 && (bit7Mask & src)>0 && (bit7Mask&result)==0) 
+		  || ((bit7Mask & dst)==0 && (bit7Mask & src)==0 && (bit7Mask&result)>0) 
+		   )
 		{
 			newStatus.setV(true);
 		}
