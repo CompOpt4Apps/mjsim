@@ -51,8 +51,8 @@ public class InstrCP extends Instr {
 		//}
         logger.debug("dst = "+dst+", src = "+src);
 
-		int result = (dst - src); // & bitMask;
-        logger.debug("result = "+result);
+		int result = dst - src; // & bitMask;
+        logger.debug("dst-src = "+ (dst-src)+", result = "+result);
 		this.event.setPC(this.machine.getPC()+1);//update pc value.
 		
 		//check for the C bit.

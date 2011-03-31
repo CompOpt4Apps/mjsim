@@ -24,8 +24,8 @@ main:
     # allocating object of size 0 on heap
     call    malloc
     # push object address
-    push    r25
-    push    r24
+    mov r29,    r25
+    mov r28,    r24
 
     # Push constant int 1 onto stack
     ldi     r24, hi8(1)
@@ -44,8 +44,8 @@ main:
     # pop parameter values into appropriate registers
     pop    r22
     # receiver will be passed as first param
-    pop    r24
-    pop    r25
+    mov r25,    r29
+    mov r24,    r28
 
     call    Recurserrecurse
 
@@ -95,11 +95,13 @@ Recurserrecurse:
     # save off parameters
     std    Y+1, r24
     std    Y+2, r25
+    # put Recurserrecursex into slot 3
     std    Y+3, r22
 # done with function Recurserrecurse prologue
 
     # IfStatement expression
     # IdExp
+    # got Recurserrecursex from slot 3
     ldd    r24, Y + 3
     push   r24
 
@@ -173,6 +175,7 @@ L3true:
     call   _Z12DisplaySlatev
 
     # IdExp
+    # got Recurserrecursex from slot 3
     ldd    r24, Y + 3
     push   r24
 
@@ -223,8 +226,8 @@ L9done:
     # pop parameter values into appropriate registers
     pop    r22
     # receiver will be passed as first param
-    pop    r24
-    pop    r25
+    mov r25,    r29
+    mov r24,    r28
 
     call    Recurserrecurse2
 
@@ -298,11 +301,13 @@ Recurserrecurse2:
     # save off parameters
     std    Y+1, r24
     std    Y+2, r25
+    # put Recurserrecurse2x into slot 3
     std    Y+3, r22
 # done with function Recurserrecurse2 prologue
 
     # IfStatement expression
     # IdExp
+    # got Recurserrecurse2x from slot 3
     ldd    r24, Y + 3
     push   r24
 
@@ -376,6 +381,7 @@ L12true:
     call   _Z12DisplaySlatev
 
     # IdExp
+    # got Recurserrecurse2x from slot 3
     ldd    r24, Y + 3
     push   r24
 
@@ -426,8 +432,8 @@ L18done:
     # pop parameter values into appropriate registers
     pop    r22
     # receiver will be passed as first param
-    pop    r24
-    pop    r25
+    mov r25,    r29
+    mov r24,    r28
 
     call    Recurserrecurse3
 
@@ -501,11 +507,13 @@ Recurserrecurse3:
     # save off parameters
     std    Y+1, r24
     std    Y+2, r25
+    # put Recurserrecurse3x into slot 3
     std    Y+3, r22
 # done with function Recurserrecurse3 prologue
 
     # IfStatement expression
     # IdExp
+    # got Recurserrecurse3x from slot 3
     ldd    r24, Y + 3
     push   r24
 
