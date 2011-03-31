@@ -10,9 +10,9 @@ public class InstrCP extends Instr {
 	private final static Logger logger = Logger.getLogger(InstrCP.class);
 	private final int rd;
 	private final int rr;
-	private final static int bitMask = 0xFF;
+//	private final static int bitMask = 0xFF;
 	private final static int msbMask = 0x80;
-	private final static int bit7Mask = 0x40;
+	private final static int bit7Mask = 0x80;
 	public InstrCP(MachineState machine, int rd, int rr) throws MalformedInstruction {
 		super(machine);
 		if(rd < 0 || rd > 31)
