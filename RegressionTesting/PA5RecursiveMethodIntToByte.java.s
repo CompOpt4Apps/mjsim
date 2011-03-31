@@ -1,4 +1,4 @@
-	.file "PA5RecursiveMethodIntToByte.java"
+    .file  "main.java"
 __SREG__ = 0x3f
 __SP_H__ = 0x3e
 __SP_L__ = 0x3d
@@ -18,6 +18,7 @@ main:
     call _Z18MeggyJrSimpleSetupv 
     /* Need to call this so that the meggy library gets set up */
 
+
     # NewExp
     ldi    r24, lo8(0)
     ldi    r25, hi8(0)
@@ -28,10 +29,10 @@ main:
     mov r28,    r24
 
     # Push constant int 1 onto stack
-    ldi     r24, hi8(1)
-    push    r24
-    ldi     r24, lo8(1)
-    push    r24
+    ldi    r24,lo8(1)
+    ldi    r25,hi8(1)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -40,7 +41,7 @@ main:
     pop    r25
     push   r24
 
-    #### function call statement
+    #### function call
     # pop parameter values into appropriate registers
     pop    r22
     # receiver will be passed as first param
@@ -50,7 +51,6 @@ main:
     call    Recurserrecurse
 
 
-
 /* epilogue start */
     endLabel:
     jmp endLabel
@@ -58,31 +58,14 @@ main:
     .size   main, .-main
 
 
-.text
+
+    .text
 .global Recurserrecurse
-.type  Recurserrecurse, @function
+    .type  Recurserrecurse, @function
 Recurserrecurse:
-    # saving the frame pointer
     push   r29
     push   r28
-
-    # saving callee registers
-    push     r31
-    push     r30
-    push     r27
-    push     r26
-    push     r25
-    push     r24
-    push     r23
-    push     r22
-    push     r21
-    push     r20
-    push     r19
-    push     r18
-    push     r1
-    push     r0
-
-    # allocate space on the stack for the local parameters
+    # make space for locals and params
     ldi    r30, 0
     push   r30
     push   r30
@@ -97,19 +80,21 @@ Recurserrecurse:
     std    Y+2, r25
     # put Recurserrecursex into slot 3
     std    Y+3, r22
-# done with function Recurserrecurse prologue
+/* done with function Recurserrecurse prologue */
 
-    # IfStatement expression
+
+    #### if statement
+
     # IdExp
     # got Recurserrecursex from slot 3
     ldd    r24, Y + 3
     push   r24
 
     # Push constant int 3 onto stack
-    ldi     r24, hi8(3)
-    push    r24
-    ldi     r24, lo8(3)
-    push    r24
+    ldi    r24,lo8(3)
+    ldi    r25,hi8(3)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -118,30 +103,45 @@ Recurserrecurse:
     pop    r25
     push   r24
 
-    # LtExp for one byte
-    pop     r24
-    pop     r22
-    cp      r22, r24
-    brlt    L1true
-    ldi     r22, 0
-    jmp     L2done
-L1true:
-    ldi     r22, 1
-L2done:
-    push    r22
+    # less than expression
+    # pop right and left operands
+    pop    r25
+    pop    r24
+    cp     r24, r25
+    brlt MJ_L4
 
-    pop     r24
-    ldi     r25, 0
-    cp      r24, r25
-    brne    L3true
-    jmp     L4false
-L3true:
-    # IfStatement then
+    # load false
+MJ_L3:
+    ldi     r24, 0
+    jmp      MJ_L5
+
+    # load true
+MJ_L4:
+    ldi    r24, 1
+
+    # push result of less than
+MJ_L5:
+    push   r24
+
+    # pop condition off stack and branch if false
+    pop    r24
+    #load zero into reg
+    ldi    r25, 0
+
+    #use cp to set SREG
+    cp     r24, r25
+    #WANT breq MJ_L0
+    brne   MJ_L1
+    jmp    MJ_L0
+
+    # then label for if
+MJ_L1:
+
     # Push constant int 5 onto stack
-    ldi     r24, hi8(5)
-    push    r24
-    ldi     r24, lo8(5)
-    push    r24
+    ldi    r24,lo8(5)
+    ldi    r25,hi8(5)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -151,10 +151,10 @@ L3true:
     push   r24
 
     # Push constant int 2 onto stack
-    ldi     r24, hi8(2)
-    push    r24
-    ldi     r24, lo8(2)
-    push    r24
+    ldi    r24,lo8(2)
+    ldi    r25,hi8(2)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -163,8 +163,8 @@ L3true:
     pop    r25
     push   r24
 
-    # Push Meggy.Color literal onto the stack
-    ldi    r22, 4
+    # Push Meggy.Color.GREEN onto the stack.
+    ldi    r22,4
     push   r22
 
     ### Meggy.setPixel(x,y,color) call
@@ -174,47 +174,24 @@ L3true:
     call   _Z6DrawPxhhh
     call   _Z12DisplaySlatev
 
+
+    # loading the implicit "this"
+    ldd    r31, Y + 2
+    ldd    r30, Y + 1
+    push   r31
+    push   r30
+
     # IdExp
     # got Recurserrecursex from slot 3
     ldd    r24, Y + 3
     push   r24
 
     # Push constant int 1 onto stack
-    ldi     r24, hi8(1)
-    push    r24
-    ldi     r24, lo8(1)
-    push    r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # add int x int -> int, byte x byte -> int
-    pop    r22
-    # Sign extend r22 into r23
-    tst     r22
-    brlt    L6negative
-    ldi     r23, 0
-    jmp     L7done
-L6negative:
-    ldi     r23, 255
-L7done:
-    pop    r24
-    # Sign extend r24 into r25
-    tst     r24
-    brlt    L8negative
-    ldi     r25, 0
-    jmp     L9done
-L8negative:
-    ldi     r25, 255
-L9done:
-    add    r24, r22
-    adc	r25, r23
+    ldi    r24,lo8(1)
+    ldi    r25,hi8(1)
     push   r25
     push   r24
+
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
     # back on.  Low order bits are on top of stack.
@@ -222,7 +199,29 @@ L9done:
     pop    r25
     push   r24
 
-    #### function call statement
+    # Do add operation on top 2 bytes on stack,
+    # Push a sign extended two-byte result
+    pop    r24
+    pop    r22
+    add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L6  ; if neg
+    ldi    r23,0
+    jmp    MJ_L7
+MJ_L6:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L7:
+    push   r23
+    push   r22
+
+    # Casting int to byte by popping
+    # 2 bytes off stack and only pushing low order bits
+    # back on.  Low order bits are on top of stack.
+    pop    r24
+    pop    r25
+    push   r24
+
+    #### function call
     # pop parameter values into appropriate registers
     pop    r22
     # receiver will be passed as first param
@@ -230,65 +229,34 @@ L9done:
     mov r24,    r28
 
     call    Recurserrecurse2
+    jmp    MJ_L2
 
-    jmp     L5done
-L4false:
-    # IfStatement else
-    jmp     L5done
-L5done:
-    # epilogue start for Recurserrecurse
-    # deallocate space on the stack for the local parameters
+    # else label for if
+MJ_L0:
+
+    # done label for if
+MJ_L2:
+
+/* epilogue start for Recurserrecurse */
+    # no return value
+    # pop space off stack for parameters and locals
     pop    r30
     pop    r30
     pop    r30
-
-    # restoring callee registers
-    pop     r0
-    pop     r1
-    pop     r18
-    pop     r19
-    pop     r20
-    pop     r21
-    pop     r22
-    pop     r23
-    pop     r24
-    pop     r25
-    pop     r26
-    pop     r27
-    pop     r30
-    pop     r31
-
     # restoring the frame pointer
     pop   r28
     pop   r29
     ret
     .size Recurserrecurse, .-Recurserrecurse
 
-.text
+
+    .text
 .global Recurserrecurse2
-.type  Recurserrecurse2, @function
+    .type  Recurserrecurse2, @function
 Recurserrecurse2:
-    # saving the frame pointer
     push   r29
     push   r28
-
-    # saving callee registers
-    push     r31
-    push     r30
-    push     r27
-    push     r26
-    push     r25
-    push     r24
-    push     r23
-    push     r22
-    push     r21
-    push     r20
-    push     r19
-    push     r18
-    push     r1
-    push     r0
-
-    # allocate space on the stack for the local parameters
+    # make space for locals and params
     ldi    r30, 0
     push   r30
     push   r30
@@ -303,19 +271,21 @@ Recurserrecurse2:
     std    Y+2, r25
     # put Recurserrecurse2x into slot 3
     std    Y+3, r22
-# done with function Recurserrecurse2 prologue
+/* done with function Recurserrecurse2 prologue */
 
-    # IfStatement expression
+
+    #### if statement
+
     # IdExp
     # got Recurserrecurse2x from slot 3
     ldd    r24, Y + 3
     push   r24
 
     # Push constant int 3 onto stack
-    ldi     r24, hi8(3)
-    push    r24
-    ldi     r24, lo8(3)
-    push    r24
+    ldi    r24,lo8(3)
+    ldi    r25,hi8(3)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -324,30 +294,45 @@ Recurserrecurse2:
     pop    r25
     push   r24
 
-    # LtExp for one byte
-    pop     r24
-    pop     r22
-    cp      r22, r24
-    brlt    L10true
-    ldi     r22, 0
-    jmp     L11done
-L10true:
-    ldi     r22, 1
-L11done:
-    push    r22
+    # less than expression
+    # pop right and left operands
+    pop    r25
+    pop    r24
+    cp     r24, r25
+    brlt MJ_L12
 
-    pop     r24
-    ldi     r25, 0
-    cp      r24, r25
-    brne    L12true
-    jmp     L13false
-L12true:
-    # IfStatement then
+    # load false
+MJ_L11:
+    ldi     r24, 0
+    jmp      MJ_L13
+
+    # load true
+MJ_L12:
+    ldi    r24, 1
+
+    # push result of less than
+MJ_L13:
+    push   r24
+
+    # pop condition off stack and branch if false
+    pop    r24
+    #load zero into reg
+    ldi    r25, 0
+
+    #use cp to set SREG
+    cp     r24, r25
+    #WANT breq MJ_L8
+    brne   MJ_L9
+    jmp    MJ_L8
+
+    # then label for if
+MJ_L9:
+
     # Push constant int 5 onto stack
-    ldi     r24, hi8(5)
-    push    r24
-    ldi     r24, lo8(5)
-    push    r24
+    ldi    r24,lo8(5)
+    ldi    r25,hi8(5)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -357,10 +342,10 @@ L12true:
     push   r24
 
     # Push constant int 2 onto stack
-    ldi     r24, hi8(2)
-    push    r24
-    ldi     r24, lo8(2)
-    push    r24
+    ldi    r24,lo8(2)
+    ldi    r25,hi8(2)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -369,8 +354,8 @@ L12true:
     pop    r25
     push   r24
 
-    # Push Meggy.Color literal onto the stack
-    ldi    r22, 4
+    # Push Meggy.Color.GREEN onto the stack.
+    ldi    r22,4
     push   r22
 
     ### Meggy.setPixel(x,y,color) call
@@ -380,47 +365,24 @@ L12true:
     call   _Z6DrawPxhhh
     call   _Z12DisplaySlatev
 
+
+    # loading the implicit "this"
+    ldd    r31, Y + 2
+    ldd    r30, Y + 1
+    push   r31
+    push   r30
+
     # IdExp
     # got Recurserrecurse2x from slot 3
     ldd    r24, Y + 3
     push   r24
 
     # Push constant int 1 onto stack
-    ldi     r24, hi8(1)
-    push    r24
-    ldi     r24, lo8(1)
-    push    r24
-
-    # Casting int to byte by popping
-    # 2 bytes off stack and only pushing low order bits
-    # back on.  Low order bits are on top of stack.
-    pop    r24
-    pop    r25
-    push   r24
-
-    # add int x int -> int, byte x byte -> int
-    pop    r22
-    # Sign extend r22 into r23
-    tst     r22
-    brlt    L15negative
-    ldi     r23, 0
-    jmp     L16done
-L15negative:
-    ldi     r23, 255
-L16done:
-    pop    r24
-    # Sign extend r24 into r25
-    tst     r24
-    brlt    L17negative
-    ldi     r25, 0
-    jmp     L18done
-L17negative:
-    ldi     r25, 255
-L18done:
-    add    r24, r22
-    adc	r25, r23
+    ldi    r24,lo8(1)
+    ldi    r25,hi8(1)
     push   r25
     push   r24
+
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
     # back on.  Low order bits are on top of stack.
@@ -428,7 +390,29 @@ L18done:
     pop    r25
     push   r24
 
-    #### function call statement
+    # Do add operation on top 2 bytes on stack,
+    # Push a sign extended two-byte result
+    pop    r24
+    pop    r22
+    add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L14  ; if neg
+    ldi    r23,0
+    jmp    MJ_L15
+MJ_L14:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L15:
+    push   r23
+    push   r22
+
+    # Casting int to byte by popping
+    # 2 bytes off stack and only pushing low order bits
+    # back on.  Low order bits are on top of stack.
+    pop    r24
+    pop    r25
+    push   r24
+
+    #### function call
     # pop parameter values into appropriate registers
     pop    r22
     # receiver will be passed as first param
@@ -436,65 +420,34 @@ L18done:
     mov r24,    r28
 
     call    Recurserrecurse3
+    jmp    MJ_L10
 
-    jmp     L14done
-L13false:
-    # IfStatement else
-    jmp     L14done
-L14done:
-    # epilogue start for Recurserrecurse2
-    # deallocate space on the stack for the local parameters
+    # else label for if
+MJ_L8:
+
+    # done label for if
+MJ_L10:
+
+/* epilogue start for Recurserrecurse2 */
+    # no return value
+    # pop space off stack for parameters and locals
     pop    r30
     pop    r30
     pop    r30
-
-    # restoring callee registers
-    pop     r0
-    pop     r1
-    pop     r18
-    pop     r19
-    pop     r20
-    pop     r21
-    pop     r22
-    pop     r23
-    pop     r24
-    pop     r25
-    pop     r26
-    pop     r27
-    pop     r30
-    pop     r31
-
     # restoring the frame pointer
     pop   r28
     pop   r29
     ret
     .size Recurserrecurse2, .-Recurserrecurse2
 
-.text
+
+    .text
 .global Recurserrecurse3
-.type  Recurserrecurse3, @function
+    .type  Recurserrecurse3, @function
 Recurserrecurse3:
-    # saving the frame pointer
     push   r29
     push   r28
-
-    # saving callee registers
-    push     r31
-    push     r30
-    push     r27
-    push     r26
-    push     r25
-    push     r24
-    push     r23
-    push     r22
-    push     r21
-    push     r20
-    push     r19
-    push     r18
-    push     r1
-    push     r0
-
-    # allocate space on the stack for the local parameters
+    # make space for locals and params
     ldi    r30, 0
     push   r30
     push   r30
@@ -509,19 +462,21 @@ Recurserrecurse3:
     std    Y+2, r25
     # put Recurserrecurse3x into slot 3
     std    Y+3, r22
-# done with function Recurserrecurse3 prologue
+/* done with function Recurserrecurse3 prologue */
 
-    # IfStatement expression
+
+    #### if statement
+
     # IdExp
     # got Recurserrecurse3x from slot 3
     ldd    r24, Y + 3
     push   r24
 
     # Push constant int 3 onto stack
-    ldi     r24, hi8(3)
-    push    r24
-    ldi     r24, lo8(3)
-    push    r24
+    ldi    r24,lo8(3)
+    ldi    r25,hi8(3)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -530,30 +485,45 @@ Recurserrecurse3:
     pop    r25
     push   r24
 
-    # LtExp for one byte
-    pop     r24
-    pop     r22
-    cp      r22, r24
-    brlt    L19true
-    ldi     r22, 0
-    jmp     L20done
-L19true:
-    ldi     r22, 1
-L20done:
-    push    r22
+    # less than expression
+    # pop right and left operands
+    pop    r25
+    pop    r24
+    cp     r24, r25
+    brlt MJ_L20
 
-    pop     r24
-    ldi     r25, 0
-    cp      r24, r25
-    brne    L21true
-    jmp     L22false
-L21true:
-    # IfStatement then
+    # load false
+MJ_L19:
+    ldi     r24, 0
+    jmp      MJ_L21
+
+    # load true
+MJ_L20:
+    ldi    r24, 1
+
+    # push result of less than
+MJ_L21:
+    push   r24
+
+    # pop condition off stack and branch if false
+    pop    r24
+    #load zero into reg
+    ldi    r25, 0
+
+    #use cp to set SREG
+    cp     r24, r25
+    #WANT breq MJ_L16
+    brne   MJ_L17
+    jmp    MJ_L16
+
+    # then label for if
+MJ_L17:
+
     # Push constant int 5 onto stack
-    ldi     r24, hi8(5)
-    push    r24
-    ldi     r24, lo8(5)
-    push    r24
+    ldi    r24,lo8(5)
+    ldi    r25,hi8(5)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -563,10 +533,10 @@ L21true:
     push   r24
 
     # Push constant int 2 onto stack
-    ldi     r24, hi8(2)
-    push    r24
-    ldi     r24, lo8(2)
-    push    r24
+    ldi    r24,lo8(2)
+    ldi    r25,hi8(2)
+    push   r25
+    push   r24
 
     # Casting int to byte by popping
     # 2 bytes off stack and only pushing low order bits
@@ -575,8 +545,8 @@ L21true:
     pop    r25
     push   r24
 
-    # Push Meggy.Color literal onto the stack
-    ldi    r22, 4
+    # Push Meggy.Color.GREEN onto the stack.
+    ldi    r22,4
     push   r22
 
     ### Meggy.setPixel(x,y,color) call
@@ -585,34 +555,20 @@ L21true:
     pop    r24
     call   _Z6DrawPxhhh
     call   _Z12DisplaySlatev
+    jmp    MJ_L18
 
-    jmp     L23done
-L22false:
-    # IfStatement else
-    jmp     L23done
-L23done:
-    # epilogue start for Recurserrecurse3
-    # deallocate space on the stack for the local parameters
+    # else label for if
+MJ_L16:
+
+    # done label for if
+MJ_L18:
+
+/* epilogue start for Recurserrecurse3 */
+    # no return value
+    # pop space off stack for parameters and locals
     pop    r30
     pop    r30
     pop    r30
-
-    # restoring callee registers
-    pop     r0
-    pop     r1
-    pop     r18
-    pop     r19
-    pop     r20
-    pop     r21
-    pop     r22
-    pop     r23
-    pop     r24
-    pop     r25
-    pop     r26
-    pop     r27
-    pop     r30
-    pop     r31
-
     # restoring the frame pointer
     pop   r28
     pop   r29

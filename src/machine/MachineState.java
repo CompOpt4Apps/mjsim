@@ -613,6 +613,7 @@ public class MachineState {
 
 		if (event.getSREG() != null) {
 			updateSREG(event.getSREG());
+			updatedData.setSREG(event.getSREG());
 		}
 
 		if(event.getPc() >=0)

@@ -5,6 +5,7 @@
 	xmlns:instrView="ui.components.instructionViewer">
 	<bxml:define>
 		<FileBrowserSheet bxml:id="fileBrowserSheet" />
+		<collections:ArrayList bxml:id="sregTableData" />
 		<collections:ArrayList bxml:id="registerTableData"/>
 		<collections:ArrayList bxml:id="stackTableData"/>
 		<collections:ArrayList bxml:id="heapTableData"/>
@@ -205,20 +206,53 @@
 			</Border>
 			
 			<Border>
+				<TablePane>
+				<columns>
+					<TablePane.Column width="1*"/>
+				</columns>
+				<TablePane.Row height="20">
+					<Label text="SREG" />
+				</TablePane.Row>
+				
+				<TablePane.Row height="40">
+					<ScrollPane horizontalScrollBarPolicy="fill">
+						<view>
+							<Border>
+							<TableView bxml:id="sregTable" tableData="$sregTableData">
+							<columns>
+								<TableView.Column width="1*" name="i" headerData="I" />
+								<TableView.Column width="1*" name="t" headerData="T" />
+								<TableView.Column width="1*" name="h" headerData="H" />
+								<TableView.Column width="1*" name="s" headerData="S" />
+								<TableView.Column width="1*" name="v" headerData="V" />
+								<TableView.Column width="1*" name="n" headerData="N" />
+								<TableView.Column width="1*" name="z" headerData="Z" />
+								<TableView.Column width="1*" name="c" headerData="C" />
+							</columns>
+							
+							</TableView>
+						</Border>
+						</view>
+						<columnHeader>
+							<TableViewHeader tableView="$sregTable" />
+						</columnHeader>
+					</ScrollPane>
+				</TablePane.Row>
+				
+				<TablePane.Row height="1*">
 				<ScrollPane minimumHeight="300"
-					horizontalScrollBarPolicy="fill" preferredWidth="150"
+					horizontalScrollBarPolicy="fill"
 					preferredHeight="300">
 					<view>
 						<Border>
 							<TableView bxml:id="registersTable"
-								tableData="$registerTableData" width="300">
+								tableData="$registerTableData">
 								<columns>
 									<TableView.Column name="register"
-										width="3*" headerData="Register" />
+										 headerData="Register" />
 									<TableView.Column name="value"
-										width="3*" headerData="Value" />
+										headerData="Value" />
 								</columns>
-
 							</TableView>
 						</Border>
 					</view>
@@ -226,6 +260,8 @@
 						<TableViewHeader tableView="$registersTable" />
 					</columnHeader>
 				</ScrollPane>
+				</TablePane.Row>
+				</TablePane>
 			</Border>
 			</TablePane.Row>
 		</TablePane>

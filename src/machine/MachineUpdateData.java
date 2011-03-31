@@ -9,6 +9,7 @@ public class MachineUpdateData {
 	private final Map<Integer, Integer> stackUpdates;
 	private final Map<Integer, Integer> heapUpdates;
 	private Integer stackPointer = null;
+	private SREG sreg = null;
 	
 	public MachineUpdateData()
 	{
@@ -20,6 +21,11 @@ public class MachineUpdateData {
 	public void putReg(int reg, int value)
 	{
 		registerUpdates.put(reg, value);
+	}
+	
+	public void setSREG(SREG newSREG)
+	{
+		this.sreg = newSREG;
 	}
 	
 	public void putStack(int address,int value)
@@ -55,5 +61,10 @@ public class MachineUpdateData {
 	public Integer getStackPointer()
 	{
 		return stackPointer;
+	}
+	
+	public SREG getSREG()
+	{
+		return sreg;
 	}
 }

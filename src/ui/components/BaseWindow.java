@@ -10,6 +10,7 @@ import java.util.Comparator;
 import machine.MachineState;
 import machine.MachineUpdate;
 import machine.MachineUpdateData;
+import machine.SREG;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.chainsaw.Main;
@@ -50,6 +51,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	@BXML private List<Address> stackTableData;
 	@BXML private List<Address> heapTableData;
 	@BXML private List<PCInstruction> programSpaceData;
+	@BXML private List<SREGData> sregTableData;
 	private int stackPointer;
 	private int pcValue;
 	private MachineState machine;
@@ -81,7 +83,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		stepButton = (PushButton) arg0.get("stepButton");
 		stopButton = (PushButton) arg0.get("stopButton");
 		pcTableView = (TableView) arg0.get("programSpace");
-
+		sregTableData.add(new SREGData());
 		pcTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
 			  
 			@Override
@@ -192,7 +194,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 
 		//read in the program into the program space.
 		readInProgram();
-
+		
 		machine.addUpdate(this);
 	}
 
@@ -457,6 +459,76 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 			}
 		}
 
+		if(data.getSREG() != null)
+		{
+			SREG tempSreg = data.getSREG();
+				SREGData onlySreg = sregTableData.get(0);
+				if(tempSreg.isC())
+				{
+					onlySreg.setC(1);
+				}
+				else
+				{
+					onlySreg.setC(0);
+				}
+				if(tempSreg.isT())
+				{
+					onlySreg.setT(1);
+				}
+				else
+				{
+					onlySreg.setT(0);
+				}
+				if(tempSreg.isI())
+				{
+					onlySreg.setI(1);
+				}
+				else
+				{
+					onlySreg.setI(0);
+				}
+				if(tempSreg.isH())
+				{
+					onlySreg.setH(1);
+				}
+				else
+				{
+					onlySreg.setH(0);
+				}
+				if(tempSreg.isS())
+				{
+					onlySreg.setS(1);
+				}
+				else
+				{
+					onlySreg.setS(0);
+				}
+				if(tempSreg.isV())
+				{
+					onlySreg.setV(1);
+				}
+				else
+				{
+					onlySreg.setV(0);
+				}
+				if(tempSreg.isN())
+				{
+					onlySreg.setN(1);
+				}
+				else
+				{
+					onlySreg.setN(0);
+				}
+				if(tempSreg.isZ())
+				{
+					onlySreg.setZ(1);
+				}
+				else
+				{
+					onlySreg.setZ(0);
+				}
+			
+		}
 	}
 
 	private Address getStackAddress(int address)

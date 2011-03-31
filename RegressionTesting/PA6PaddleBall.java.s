@@ -449,10 +449,17 @@ PaddledrawPaddle:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L15  ; if neg
     ldi    r23,0
+    jmp    MJ_L16
+MJ_L15:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L16:
     push   r23
     push   r22
 
@@ -549,11 +556,17 @@ PaddledrawPaddle:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L17  ; if neg
     ldi    r23,0
+    jmp    MJ_L18
+MJ_L17:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L18:
     push   r23
     push   r22
 
@@ -661,10 +674,17 @@ PaddlemoveLeft:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L22  ; if neg
     ldi    r23,0
+    jmp    MJ_L23
+MJ_L22:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L23:
     push   r23
     push   r22
 
@@ -708,12 +728,12 @@ PaddlemoveLeft:
 
     #use cp to set SREG
     cp     r24, r25
-    #WANT breq MJ_L15
-    brne   MJ_L16
-    jmp    MJ_L15
+    #WANT breq MJ_L19
+    brne   MJ_L20
+    jmp    MJ_L19
 
     # then label for if
-MJ_L16:
+MJ_L20:
 
     # IdExp
     # load value for centerX and push onto stack
@@ -739,11 +759,17 @@ MJ_L16:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L24  ; if neg
     ldi    r23,0
+    jmp    MJ_L25
+MJ_L24:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L25:
     push   r23
     push   r22
 
@@ -802,10 +828,17 @@ MJ_L16:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L26  ; if neg
     ldi    r23,0
+    jmp    MJ_L27
+MJ_L26:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L27:
     push   r23
     push   r22
 
@@ -851,13 +884,13 @@ MJ_L16:
     pop    r25
 
     call    PaddledrawPaddle
-    jmp    MJ_L17
+    jmp    MJ_L21
 
     # else label for if
-MJ_L15:
+MJ_L19:
 
     # done label for if
-MJ_L17:
+MJ_L21:
 
 /* epilogue start for PaddlemoveLeft */
     # no return value
@@ -925,11 +958,17 @@ PaddlemoveRight:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L31  ; if neg
     ldi    r23,0
+    jmp    MJ_L32
+MJ_L31:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L32:
     push   r23
     push   r22
 
@@ -973,12 +1012,12 @@ PaddlemoveRight:
 
     #use cp to set SREG
     cp     r24, r25
-    #WANT breq MJ_L18
-    brne   MJ_L19
-    jmp    MJ_L18
+    #WANT breq MJ_L28
+    brne   MJ_L29
+    jmp    MJ_L28
 
     # then label for if
-MJ_L19:
+MJ_L29:
 
     # IdExp
     # load value for centerX and push onto stack
@@ -1004,10 +1043,17 @@ MJ_L19:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L33  ; if neg
     ldi    r23,0
+    jmp    MJ_L34
+MJ_L33:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L34:
     push   r23
     push   r22
 
@@ -1066,11 +1112,17 @@ MJ_L19:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L35  ; if neg
     ldi    r23,0
+    jmp    MJ_L36
+MJ_L35:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L36:
     push   r23
     push   r22
 
@@ -1116,13 +1168,13 @@ MJ_L19:
     pop    r25
 
     call    PaddledrawPaddle
-    jmp    MJ_L20
+    jmp    MJ_L30
 
     # else label for if
-MJ_L18:
+MJ_L28:
 
     # done label for if
-MJ_L20:
+MJ_L30:
 
 /* epilogue start for PaddlemoveRight */
     # no return value
@@ -1211,19 +1263,19 @@ PaddleinBounds:
     pop    r25
     pop    r24
     cp     r24, r25
-    brlt MJ_L22
+    brlt MJ_L38
 
     # load false
-MJ_L21:
+MJ_L37:
     ldi     r24, 0
-    jmp      MJ_L23
+    jmp      MJ_L39
 
     # load true
-MJ_L22:
+MJ_L38:
     ldi    r24, 1
 
     # push result of less than
-MJ_L23:
+MJ_L39:
     push   r24
 
     # &&: if left operand is false do not eval right
@@ -1232,11 +1284,11 @@ MJ_L23:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L24
-    brne MJ_L25
-    jmp MJ_L24
+    # Want this, breq MJ_L40
+    brne MJ_L41
+    jmp MJ_L40
 
-MJ_L25:
+MJ_L41:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -1265,22 +1317,22 @@ MJ_L25:
     pop    r25
     pop    r24
     cp     r24, r25
-    brlt MJ_L27
+    brlt MJ_L43
 
     # load false
-MJ_L26:
+MJ_L42:
     ldi     r24, 0
-    jmp      MJ_L28
+    jmp      MJ_L44
 
     # load true
-MJ_L27:
+MJ_L43:
     ldi    r24, 1
 
     # push result of less than
-MJ_L28:
+MJ_L44:
     push   r24
 
-MJ_L24:
+MJ_L40:
 
     # &&: if left operand is false do not eval right
     pop r24
@@ -1288,11 +1340,11 @@ MJ_L24:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L29
-    brne MJ_L30
-    jmp MJ_L29
+    # Want this, breq MJ_L45
+    brne MJ_L46
+    jmp MJ_L45
 
-MJ_L30:
+MJ_L46:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -1338,22 +1390,22 @@ MJ_L30:
     pop    r25
     pop    r24
     cp     r24, r25
-    brlt MJ_L32
+    brlt MJ_L48
 
     # load false
-MJ_L31:
+MJ_L47:
     ldi     r24, 0
-    jmp      MJ_L33
+    jmp      MJ_L49
 
     # load true
-MJ_L32:
+MJ_L48:
     ldi    r24, 1
 
     # push result of less than
-MJ_L33:
+MJ_L49:
     push   r24
 
-MJ_L29:
+MJ_L45:
 
     # &&: if left operand is false do not eval right
     pop r24
@@ -1361,11 +1413,11 @@ MJ_L29:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L34
-    brne MJ_L35
-    jmp MJ_L34
+    # Want this, breq MJ_L50
+    brne MJ_L51
+    jmp MJ_L50
 
-MJ_L35:
+MJ_L51:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -1394,22 +1446,22 @@ MJ_L35:
     pop    r25
     pop    r24
     cp     r24, r25
-    brlt MJ_L37
+    brlt MJ_L53
 
     # load false
-MJ_L36:
+MJ_L52:
     ldi     r24, 0
-    jmp      MJ_L38
+    jmp      MJ_L54
 
     # load true
-MJ_L37:
+MJ_L53:
     ldi    r24, 1
 
     # push result of less than
-MJ_L38:
+MJ_L54:
     push   r24
 
-MJ_L34:
+MJ_L50:
 
 /* epilogue start for PaddleinBounds */
     # popping off return value and putting it in r24
@@ -1677,19 +1729,19 @@ BallinBounds:
     pop    r25
     pop    r24
     cp     r24, r25
-    brlt MJ_L40
+    brlt MJ_L56
 
     # load false
-MJ_L39:
+MJ_L55:
     ldi     r24, 0
-    jmp      MJ_L41
+    jmp      MJ_L57
 
     # load true
-MJ_L40:
+MJ_L56:
     ldi    r24, 1
 
     # push result of less than
-MJ_L41:
+MJ_L57:
     push   r24
 
     # &&: if left operand is false do not eval right
@@ -1698,11 +1750,11 @@ MJ_L41:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L42
-    brne MJ_L43
-    jmp MJ_L42
+    # Want this, breq MJ_L58
+    brne MJ_L59
+    jmp MJ_L58
 
-MJ_L43:
+MJ_L59:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -1731,22 +1783,22 @@ MJ_L43:
     pop    r25
     pop    r24
     cp     r24, r25
-    brlt MJ_L45
+    brlt MJ_L61
 
     # load false
-MJ_L44:
+MJ_L60:
     ldi     r24, 0
-    jmp      MJ_L46
+    jmp      MJ_L62
 
     # load true
-MJ_L45:
+MJ_L61:
     ldi    r24, 1
 
     # push result of less than
-MJ_L46:
+MJ_L62:
     push   r24
 
-MJ_L42:
+MJ_L58:
 
     # &&: if left operand is false do not eval right
     pop r24
@@ -1754,11 +1806,11 @@ MJ_L42:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L47
-    brne MJ_L48
-    jmp MJ_L47
+    # Want this, breq MJ_L63
+    brne MJ_L64
+    jmp MJ_L63
 
-MJ_L48:
+MJ_L64:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -1804,22 +1856,22 @@ MJ_L48:
     pop    r25
     pop    r24
     cp     r24, r25
-    brlt MJ_L50
+    brlt MJ_L66
 
     # load false
-MJ_L49:
+MJ_L65:
     ldi     r24, 0
-    jmp      MJ_L51
+    jmp      MJ_L67
 
     # load true
-MJ_L50:
+MJ_L66:
     ldi    r24, 1
 
     # push result of less than
-MJ_L51:
+MJ_L67:
     push   r24
 
-MJ_L47:
+MJ_L63:
 
     # &&: if left operand is false do not eval right
     pop r24
@@ -1827,11 +1879,11 @@ MJ_L47:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L52
-    brne MJ_L53
-    jmp MJ_L52
+    # Want this, breq MJ_L68
+    brne MJ_L69
+    jmp MJ_L68
 
-MJ_L53:
+MJ_L69:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -1860,22 +1912,22 @@ MJ_L53:
     pop    r25
     pop    r24
     cp     r24, r25
-    brlt MJ_L55
+    brlt MJ_L71
 
     # load false
-MJ_L54:
+MJ_L70:
     ldi     r24, 0
-    jmp      MJ_L56
+    jmp      MJ_L72
 
     # load true
-MJ_L55:
+MJ_L71:
     ldi    r24, 1
 
     # push result of less than
-MJ_L56:
+MJ_L72:
     push   r24
 
-MJ_L52:
+MJ_L68:
 
 /* epilogue start for BallinBounds */
     # popping off return value and putting it in r24
@@ -1944,19 +1996,19 @@ Ballcollision:
     pop r25
     pop r24
     cp r24, r25
-    breq MJ_L58
+    breq MJ_L74
 
     # result is false
-MJ_L57:
+MJ_L73:
     ldi     r24, 0
-    jmp      MJ_L59
+    jmp      MJ_L75
 
     # result is true
-MJ_L58:
+MJ_L74:
     ldi     r24, 1
 
     # push result of equal expression
-MJ_L59:
+MJ_L75:
     push r24
 
     # not operation
@@ -2026,10 +2078,17 @@ Ballmove:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L76  ; if neg
     ldi    r23,0
+    jmp    MJ_L77
+MJ_L76:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L77:
     push   r23
     push   r22
 
@@ -2051,11 +2110,17 @@ Ballmove:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L78  ; if neg
     ldi    r23,0
+    jmp    MJ_L79
+MJ_L78:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L79:
     push   r23
     push   r22
 
@@ -2093,10 +2158,17 @@ Ballmove:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L80  ; if neg
     ldi    r23,0
+    jmp    MJ_L81
+MJ_L80:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L81:
     push   r23
     push   r22
 
@@ -2118,11 +2190,17 @@ Ballmove:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L82  ; if neg
     ldi    r23,0
+    jmp    MJ_L83
+MJ_L82:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L83:
     push   r23
     push   r22
 
@@ -2182,11 +2260,11 @@ Ballmove:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L63
-    brne MJ_L64
-    jmp MJ_L63
+    # Want this, breq MJ_L87
+    brne MJ_L88
+    jmp MJ_L87
 
-MJ_L64:
+MJ_L88:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -2229,7 +2307,7 @@ MJ_L64:
     eor     r24,r22
     push    r24
 
-MJ_L63:
+MJ_L87:
 
     # pop condition off stack and branch if false
     pop    r24
@@ -2238,16 +2316,16 @@ MJ_L63:
 
     #use cp to set SREG
     cp     r24, r25
-    #WANT breq MJ_L60
-    brne   MJ_L61
-    jmp    MJ_L60
+    #WANT breq MJ_L84
+    brne   MJ_L85
+    jmp    MJ_L84
 
     # then label for if
-MJ_L61:
-    jmp    MJ_L62
+MJ_L85:
+    jmp    MJ_L86
 
     # else label for if
-MJ_L60:
+MJ_L84:
 
     # IdExp
     # load value for currentX and push onto stack
@@ -2270,10 +2348,17 @@ MJ_L60:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L89  ; if neg
     ldi    r23,0
+    jmp    MJ_L90
+MJ_L89:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L90:
     push   r23
     push   r22
 
@@ -2311,10 +2396,17 @@ MJ_L60:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L91  ; if neg
     ldi    r23,0
+    jmp    MJ_L92
+MJ_L91:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L92:
     push   r23
     push   r22
 
@@ -2348,11 +2440,17 @@ MJ_L60:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L93  ; if neg
     ldi    r23,0
+    jmp    MJ_L94
+MJ_L93:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L94:
     push   r23
     push   r22
 
@@ -2386,10 +2484,17 @@ MJ_L60:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L95  ; if neg
     ldi    r23,0
+    jmp    MJ_L96
+MJ_L95:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L96:
     push   r23
     push   r22
 
@@ -2449,11 +2554,11 @@ MJ_L60:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L68
-    brne MJ_L69
-    jmp MJ_L68
+    # Want this, breq MJ_L100
+    brne MJ_L101
+    jmp MJ_L100
 
-MJ_L69:
+MJ_L101:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -2496,7 +2601,7 @@ MJ_L69:
     eor     r24,r22
     push    r24
 
-MJ_L68:
+MJ_L100:
 
     # pop condition off stack and branch if false
     pop    r24
@@ -2505,16 +2610,16 @@ MJ_L68:
 
     #use cp to set SREG
     cp     r24, r25
-    #WANT breq MJ_L65
-    brne   MJ_L66
-    jmp    MJ_L65
+    #WANT breq MJ_L97
+    brne   MJ_L98
+    jmp    MJ_L97
 
     # then label for if
-MJ_L66:
-    jmp    MJ_L67
+MJ_L98:
+    jmp    MJ_L99
 
     # else label for if
-MJ_L65:
+MJ_L97:
 
     # IdExp
     # load value for currentX and push onto stack
@@ -2533,10 +2638,17 @@ MJ_L65:
     push   r24
 
     # Do sub operation on top 2 bytes on stack
+    # push a sign extended two byte result
     pop    r24
     pop    r22
     sub    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L102  ; if neg
     ldi    r23,0
+    jmp    MJ_L103
+MJ_L102:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L103:
     push   r23
     push   r22
 
@@ -2570,11 +2682,17 @@ MJ_L65:
     push   r24
 
     # Do add operation on top 2 bytes on stack,
-    # Push a two-byte result
+    # Push a sign extended two-byte result
     pop    r24
     pop    r22
     add    r22,r24
+    # sign extend into hi bits
+    brmi   MJ_L104  ; if neg
     ldi    r23,0
+    jmp    MJ_L105
+MJ_L104:
+    ldi    r23,lo8(-1)    ; set all bits
+MJ_L105:
     push   r23
     push   r22
 
@@ -2634,11 +2752,11 @@ MJ_L65:
     push r24 
     ldi r25, 0
     cp r24, r25
-    # Want this, breq MJ_L73
-    brne MJ_L74
-    jmp MJ_L73
+    # Want this, breq MJ_L109
+    brne MJ_L110
+    jmp MJ_L109
 
-MJ_L74:
+MJ_L110:
     # right operand
     # pop result from left operand off stack
     pop r24
@@ -2681,7 +2799,7 @@ MJ_L74:
     eor     r24,r22
     push    r24
 
-MJ_L73:
+MJ_L109:
 
     # pop condition off stack and branch if false
     pop    r24
@@ -2690,16 +2808,16 @@ MJ_L73:
 
     #use cp to set SREG
     cp     r24, r25
-    #WANT breq MJ_L70
-    brne   MJ_L71
-    jmp    MJ_L70
+    #WANT breq MJ_L106
+    brne   MJ_L107
+    jmp    MJ_L106
 
     # then label for if
-MJ_L71:
-    jmp    MJ_L72
+MJ_L107:
+    jmp    MJ_L108
 
     # else label for if
-MJ_L70:
+MJ_L106:
 
     # IdExp
     # load value for prevX and push onto stack
@@ -2734,13 +2852,13 @@ MJ_L70:
     std    Y + 4, r24
 
     # done label for if
-MJ_L72:
+MJ_L108:
 
     # done label for if
-MJ_L67:
+MJ_L99:
 
     # done label for if
-MJ_L62:
+MJ_L86:
 
     # IdExp
     # load value for currentX and push onto stack
