@@ -47,10 +47,15 @@ public class InstrAdd extends Instr {
 		int result = dst+src;
 		
 		// Set if there was carry from the MSB of the result; cleared otherwise
-        if ( ( (bit7Mask & dst)>0 && (bit7Mask & src)>0)
-             || ( (bit7Mask & src)>0 && (bit7Mask&result)==0 ) 
-		     || ( (bit7Mask&result)==0 && (bit7Mask & dst)>0 ) 
-		   )
+        //if ( ( (bit7Mask & dst)>0 && (bit7Mask & src)>0)
+        //     || ( (bit7Mask & src)>0 && (bit7Mask&result)==0 ) 
+		//    || ( (bit7Mask&result)==0 && (bit7Mask & dst)>0 ) 
+		//   )
+		// FIXME: is above equivalent to checking absolute values?
+		// Something like the above breaks sub for PA5simplemath2.java.s 
+		// example.  odd
+		// The below works.
+		if(Math.abs(src) > Math.abs(dst))
 		{
 			newStatus.setC(true);
 		}

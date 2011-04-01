@@ -71,7 +71,7 @@ jmp MJ_L1
 MJ_L0:
 ldi r23, hi8(-1)
 MJ_L1:
-tst r25
+tst r24
 brmi MJ_L2
 ldi r25, 0
 jmp MJ_L3

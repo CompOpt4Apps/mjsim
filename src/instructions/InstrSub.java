@@ -42,11 +42,14 @@ public class InstrSub extends Instr {
 		
 		logger.debug("dst = "+dst+", src="+src+", result="+result);
 		
-        if ( ( (bit7Mask & dst)==0 && (bit7Mask & src)>0)
-             || ( (bit7Mask & src)>0 && (bit7Mask&result)>0 ) 
-		     || ( (bit7Mask&result)>0 && (bit7Mask & dst)==0 ) 
-		   )
+        //if ( ( (bit7Mask & dst)==0 && (bit7Mask & src)>0)
+        //     || ( (bit7Mask & src)>0 && (bit7Mask&result)>0 ) 
+		//     || ( (bit7Mask&result)>0 && (bit7Mask & dst)==0 ) 
+		//   )
 		// FIXME: is above equivalent to checking absolute values?
+		// This above breaks for PA5simplemath2.java.s example.  odd
+		// The below works.
+		if(Math.abs(src) > Math.abs(dst))
 		{
 			newStatus.setC(true);
 			logger.trace("Setting C to true");
