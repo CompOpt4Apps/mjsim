@@ -22,7 +22,7 @@ public class InstrTST extends Instr {
 		final SREG newSreg = new SREG();
 		newSreg.setV(false);
 		final int regValue = this.machine.getRegister(rd);
-		final int msbMask = 0x8000;
+		final int msbMask = 0x80;
 		if (regValue == 0) {
 			newSreg.setZ(true);
 		} else {
