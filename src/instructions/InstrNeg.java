@@ -13,7 +13,7 @@ import machine.SREG;
  */
 public class InstrNeg extends Instr {
 	private static final Logger logger = Logger.getLogger(InstrNeg.class);
-	private int msb = 0x80;
+	private int msb = 0x0080;
 	private int rd;
 	public InstrNeg(MachineState machine,int rd) throws MalformedInstruction {
 		super(machine);

@@ -16,8 +16,8 @@ public class InstrAdc extends Instr {
 	private final int rd;
 	private final int rr;
 	private final static int bitMask = 0xFF;
-	private final static int msbMask = 0x80;
-	private final static int bit7Mask = 0x40;
+	private final static int msbMask = 0x0080;
+	private final static int bit7Mask = 0x0040;
 	
 	public InstrAdc(MachineState machine, int rd, int rr) throws MalformedInstruction {
 		super(machine);
@@ -46,21 +46,25 @@ public class InstrAdc extends Instr {
 		int dst = machine.getRegister(rd);
 		int src = machine.getRegister(rr);
 		int result;
+		logger.debug("dst = "+dst);
+		logger.debug("src = "+src);
 		
 		if(newStatus.isC())
 		{
+		    logger.debug("C is set");
 			result = dst+src+1;//if C is set add 1		
 		}
 		else
 		{
 			result = dst+src;
 		}
+		logger.debug("result = "+result);
 		
 		// C bit, 
 		// Set if there was carry from the MSB of the result; cleared otherwise
-        if ( ( (bit7Mask & dst)>0 && (bit7Mask & src)>0)
-             || ( (bit7Mask & src)>0 && (bit7Mask&result)==0 ) 
-		     || ( (bit7Mask&result)==0 && (bit7Mask & dst)>0 ) 
+        if ( ( (bit7Mask & dst)!=0 && (bit7Mask & src)!=0)
+             || ( (bit7Mask & src)!=0 && (bit7Mask&result)==0 ) 
+		     || ( (bit7Mask&result)==0 && (bit7Mask & dst)!=0 ) 
 		   )
 		{
 			newStatus.setC(true);
@@ -93,8 +97,10 @@ public class InstrAdc extends Instr {
 		// Rd7 and Rr7 and !R7 + !Rd7 and !Rr7 and R7
         // Set if two’s complement overflow resulted 
         // from the operation; cleared otherwise.
-        if ( ((bit7Mask & dst)>0 && (bit7Mask & src)>0 && (bit7Mask&result)==0) 
-		  || ((bit7Mask & dst)==0 && (bit7Mask & src)==0 && (bit7Mask&result)>0) 
+        if ( ((bit7Mask & dst)!=0 && (bit7Mask & src)!=0 
+               && (bit7Mask&result)==0) 
+		  || ((bit7Mask & dst)==0 && (bit7Mask & src)==0 
+		       && (bit7Mask&result)!=0) 
 		   )
 		{
 			newStatus.setV(true);

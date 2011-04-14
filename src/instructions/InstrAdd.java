@@ -14,9 +14,9 @@ public class InstrAdd extends Instr {
 	private static final Logger logger = Logger.getLogger(InstrAdd.class);
 	private final int rd;
 	private final int rr;
-	private final static int bitMask = 0xFF;
-	private final static int msbMask = 0x80;
-	private final static int bit7Mask = 0x40;
+	private final static int bitMask = 0x00FF;
+	private final static int msbMask = 0x0080;
+	private final static int bit7Mask = 0x0040;
 	
 	public InstrAdd(MachineState machine, int rd, int rr) throws MalformedInstruction {
 		super(machine);
@@ -47,15 +47,10 @@ public class InstrAdd extends Instr {
 		int result = dst+src;
 		
 		// Set if there was carry from the MSB of the result; cleared otherwise
-        //if ( ( (bit7Mask & dst)>0 && (bit7Mask & src)>0)
-        //     || ( (bit7Mask & src)>0 && (bit7Mask&result)==0 ) 
-		//    || ( (bit7Mask&result)==0 && (bit7Mask & dst)>0 ) 
-		//   )
-		// FIXME: is above equivalent to checking absolute values?
-		// Something like the above breaks sub for PA5simplemath2.java.s 
-		// example.  odd
-		// The below works.
-		if(Math.abs(src) > Math.abs(dst))
+        if ( ( (bit7Mask & dst)!=0 && (bit7Mask & src)!=0)
+            || ( (bit7Mask & src)!=0 && (bit7Mask&result)==0 ) 
+		    || ( (bit7Mask&result)==0 && (bit7Mask & dst)!=0 ) 
+		   )
 		{
 			newStatus.setC(true);
 		}

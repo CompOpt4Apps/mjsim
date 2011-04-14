@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public class InstrOr extends Instr {
 	private static final Logger logger = Logger.getLogger(InstrOr.class);
-	private int msb = 0x80;
+	private int msb = 0x0080;
 	private int rd,rr;
 	public InstrOr(MachineState machine,int rd, int rr) throws MalformedInstruction {
 		super(machine);

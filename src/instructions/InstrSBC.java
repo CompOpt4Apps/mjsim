@@ -9,8 +9,8 @@ public class InstrSBC extends Instr {
 	final private int rd;
 	final private int rr;
 	private final static int bitMask = 0xFF;
-	private final static int msbMask = 0x80;
-	private final static int bit7Mask = 0x40;
+	private final static int msbMask = 0x0080;
+	private final static int bit7Mask = 0x0040;
 	private static final Logger logger = Logger.getLogger(InstrSBC.class);
 	public InstrSBC(MachineState machine, int rd, int rr) throws MalformedInstruction
 	{
@@ -81,8 +81,10 @@ public class InstrSBC extends Instr {
 		// Rd7 and !Rr7 and !R7 + !Rd7 and Rr7 and R7
         // Set if two’s complement overflow resulted 
         // from the operation; cleared otherwise.
-        if ( ((bit7Mask & dst)>0 && (bit7Mask & src)==0 && (bit7Mask&result)==0) 
-		  || ((bit7Mask & dst)==0 && (bit7Mask & src)>0 && (bit7Mask&result)>0) 
+        if ( ((bit7Mask & dst)!=0 && (bit7Mask & src)==0 
+              && (bit7Mask&result)==0) 
+		  || ((bit7Mask & dst)==0 && (bit7Mask & src)!=0 
+		      && (bit7Mask&result)!=0) 
 		   )
 		{
 			newStatus.setV(true);

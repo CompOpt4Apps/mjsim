@@ -13,7 +13,7 @@ import machine.SREG;
  */
 public class InstrAnd extends Instr {
 	private static final Logger logger = Logger.getLogger(InstrAnd.class);
-	private int msb = 0x80;
+	private int msb = 0x0080;
 	private int rd,rr;
 	public InstrAnd(MachineState machine,int rd, int rr) throws MalformedInstruction {
 		super(machine);
