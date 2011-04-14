@@ -26,9 +26,9 @@ public class FuncSetPix extends Func {
 
         // machine keeps a count
 		this.machine.noteMeggyCall();
-		logger.debug("Color is null.");
 		if(color == null)
 		{
+		    logger.debug("Color is null.");
 			throw new RuntimeError("Color is null.");
 		}
 		this.machine.setDisplaySlate(x, y, color);

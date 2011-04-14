@@ -50,9 +50,13 @@ public class InstrLD extends Instr {
 	 */
 	public void execute() throws RuntimeError {
 		int baseReg = getBaseRegister();
+		logger.debug("baseReg = "+baseReg);
 		int address = this.machine.getRegister(baseReg+1) & 0xFF;
+		logger.debug("address after this.machine.getRegister(baseReg+1) & 0xFF;= "+address);
 		address <<=8;
+		logger.debug("address after address <<=8 = "+address);
 		address = address + (this.machine.getRegister(baseReg) & 0xFF);
+		logger.debug("address = "+address);
 
 		Integer value = null;
 		
@@ -76,7 +80,9 @@ public class InstrLD extends Instr {
 		else//This is the displacement (q) case.
 		{
 			address+=q;
+			logger.debug("q = "+q+", address = "+address);
 			value = this.machine.getMemory(address);			
+			logger.debug("value = "+value);
 		}
 		
 		
