@@ -60,6 +60,8 @@ public class InstrSTD extends Instr {
 		this.event.setMemory(address, this.machine.getRegister(this.reg));	
 		this.event.setPC(this.machine.getPC()+1);
 
+        this.machine.noteStore();
+        
 		logger.debug("Indirect store from r"+this.reg+" to "+this.pointer
 		            +"+"+this.q);
 		

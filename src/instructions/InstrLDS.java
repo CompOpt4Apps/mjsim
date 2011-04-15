@@ -37,6 +37,8 @@ public class InstrLDS extends Instr {
 		this.event.setPC(machine.getPC()+1);
 		this.event.setRd(rd, machine.getMemory(address));
 		
+		this.machine.noteLoad();
+		
 		// Print out the check button message.
 		boolean value = false;
 		if (machine.getMemory(address)!=0) { value = true; }

@@ -34,5 +34,7 @@ public class InstrPush extends Instr {
 		//copy the value in the register into the memory location.
 		this.event.setStackPointer(machine.getStackPointer()-1);
 		logger.debug("Pushing the value ("+this.machine.getRegister(this.register)+") in r("+this.register+") onto the stack.");
+		
+		this.machine.noteStore();
 	}
 }

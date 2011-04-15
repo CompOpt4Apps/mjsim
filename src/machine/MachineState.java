@@ -47,6 +47,9 @@ public class MachineState {
 	private boolean batch = true;
 	private int pc = 0;// set to the beginning of the programSpace.
 	private boolean finished = false;
+	private int numLoads = 0;
+	private int numStores = 0;
+	
 	public boolean isFinished() {
 		return finished;
 	}
@@ -228,7 +231,13 @@ public class MachineState {
 	public void noteMeggyCall() {
 		logger.debug("Checking opt_arg file logic.");
 	    if (this.mUsingArgOpts) {
-	        this.mMaxCalls--; if (this.mMaxCalls<0) {logger.info("Exiting Systems due to Max Calls being reached."); System.exit(0); }
+	        this.mMaxCalls--; if (this.mMaxCalls<0) {
+	            logger.info("Exiting Systems due to Max Calls being reached.");
+	            System.out.println("numLoads = "+this.numLoads
+			                   +", numStores = "+this.numStores);
+	            System.exit(0);
+	            //this.finished = true; slightly off
+	        }
 	    }
 	}
 	
@@ -314,7 +323,17 @@ public class MachineState {
 		{
 			finished = true;
 			logger.info("Hit the finished case.");
+			System.out.println("numLoads = "+this.numLoads
+			                   +", numStores = "+this.numStores);
 		}
+	}
+	
+	public void noteLoad() {
+	    this.numLoads++;
+	}
+
+	public void noteStore() {
+	    this.numStores++;
 	}
 
 	public ArrayList<Instr> getProgramSpace()
