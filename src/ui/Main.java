@@ -23,6 +23,7 @@ public class Main {
 	public static void main(String[] args) {
 		String assemblyFile = null;
 		boolean batch = false;
+		boolean countinstrs = false;
 		Integer jumps = null;
 		// Configure the logger.
 		// This is the only way that I was able to find to get the
@@ -42,6 +43,7 @@ public class Main {
 		options.addOption("v", false, "verbose logging output");
 		options.addOption("t", false, "trace logging output (only use for debugging)");
 		options.addOption("h", "help", false, "print usage info");
+		options.addOption("i", "instrcount", false, "print out dynamic count of load and store instructions");
 
 		logger.info("Processing Command Line Arguments.");
 		try {
@@ -78,6 +80,10 @@ public class Main {
             {
                 Logger.getRootLogger().setLevel(Level.TRACE);
             }
+			if (line.hasOption('i')) {
+				countinstrs = true;
+				logger.info("Printing dynamic count of loads and stores.");
+			}
 			if (!batch && (jumps != null)) {
 				System.err
 						.println("Invalid commandline combination: j can only be set if j is also set.");
@@ -121,7 +127,7 @@ public class Main {
 		
 		AVRSim simulator = null;
 		if (jumps == null) {
-			simulator = new AVRSim(assemFile, batch, argoptsfile);
+			simulator = new AVRSim(assemFile, batch, argoptsfile, countinstrs);
 		} else {
 			simulator = new AVRSim(assemFile, jumps);
 		}

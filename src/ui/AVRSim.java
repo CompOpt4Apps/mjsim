@@ -21,15 +21,17 @@ public class AVRSim {
 	private ATmegaProgram program = null;
 	private Integer jumps = null;
 	private File argoptsfile = null;
+	private boolean countinstrs = false;
 
-	public AVRSim(File assemFile, boolean batch, File argoptsfile) {
+	public AVRSim(File assemFile, boolean batch, File argoptsfile, boolean countinstrs) {
 		this.assemFile = assemFile;
 		this.batch = batch;
 		this.argoptsfile = argoptsfile;
+		this.countinstrs = countinstrs;
 	}
 
 	public AVRSim(File assemFile, Integer jumps) {
-		this(assemFile, true, null);
+		this(assemFile, true, null, false);
 		this.jumps = jumps;
 	}
 
@@ -45,7 +47,7 @@ public class AVRSim {
 	public void initMachine() {
 		if (jumps == null) {
 			this.machine = MachineState.createMachine("AVR", 
-			    this.batch, this.argoptsfile);
+			    this.batch, this.argoptsfile, this.countinstrs);
 		} else {
 			logger.debug("Max jumps:" + jumps);
 			this.machine = MachineState.createMachine("AVR", jumps,

@@ -49,6 +49,7 @@ public class MachineState {
 	private boolean finished = false;
 	private int numLoads = 0;
 	private int numStores = 0;
+	private boolean countinstrs = false;
 	
 	public boolean isFinished() {
 		return finished;
@@ -104,11 +105,11 @@ public class MachineState {
 	}
 
 	public static MachineState createMachine(String name, boolean batch,
-	    File argoptsfile)
+	    File argoptsfile, boolean countinstrs)
 	{
 		if(machine == null)
 		{
-			machine = new MachineState(name,batch,argoptsfile);
+			machine = new MachineState(name,batch,argoptsfile, countinstrs);
 		}
 		return machine;		
 	}
@@ -117,7 +118,7 @@ public class MachineState {
 	{
 		if(machine == null)
 		{
-			machine = new MachineState(name,batch,null);
+			machine = new MachineState(name,batch,null,false);
 		}
 		return machine;		
 	}
@@ -233,8 +234,10 @@ public class MachineState {
 	    if (this.mUsingArgOpts) {
 	        this.mMaxCalls--; if (this.mMaxCalls<0) {
 	            logger.info("Exiting Systems due to Max Calls being reached.");
-	            System.out.println("numLoads = "+this.numLoads
+	            if (this.countinstrs) {
+	                System.out.println("numLoads = "+this.numLoads
 			                   +", numStores = "+this.numStores);
+			    }
 	            System.exit(0);
 	            //this.finished = true; slightly off
 	        }
@@ -271,10 +274,13 @@ public class MachineState {
         }
     }
 
-	protected MachineState(String name, boolean batch, File argoptsfile) {
+	protected MachineState(String name, boolean batch, File argoptsfile,
+	                       boolean countinstrs) 
+	{
 		this(name);		
 		this.batch = batch;
 		this.readArgOptsFile(argoptsfile);
+		this.countinstrs = countinstrs;
 	}
 
 	protected MachineState(String name, int jmps, File argoptsfile) {
@@ -323,8 +329,10 @@ public class MachineState {
 		{
 			finished = true;
 			logger.info("Hit the finished case.");
-			System.out.println("numLoads = "+this.numLoads
+			if (this.countinstrs) {
+			    System.out.println("numLoads = "+this.numLoads
 			                   +", numStores = "+this.numStores);
+			}
 		}
 	}
 	
