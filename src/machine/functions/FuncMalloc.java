@@ -20,6 +20,7 @@ public class FuncMalloc extends Func {
 		//get the value passed on the stack.
 		int size = this.machine.getRegister(24); 
 		size += (this.machine.getRegister(25) & 0xFF) << 8;
+		//logger.debug("size = "+size);
 		//get the current stack pointer
 		final int currentStack = this.machine.getStackPointer();
 		//check to see of the amount of memory that is being requested can be allocated.
@@ -32,8 +33,8 @@ public class FuncMalloc extends Func {
 		final int retVal = heapPointer;
 		heapPointer+= allocSize;
 
-		event.setRd(24, (retVal & 0xFF00) >> 8);//hi value
-		event.setRd(25, retVal & 0xFF); //lo value
+		event.setRd(25, (retVal & 0xFF00) >> 8);//hi value
+		event.setRd(24, retVal & 0xFF); //lo value
 		machine.updateState(event);//send update to the machine state.
 		
 	}
