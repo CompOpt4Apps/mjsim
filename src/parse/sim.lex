@@ -17,7 +17,7 @@ NOT_ZERO=[1-9]
 NUMBER=({NOT_ZERO}{DIGIT}*)|0
 HEX=0x[0-9A-Fa-f]+
 LETTER=[A-Za-z]
-ID="."*[_A-Za-z][_A-Za-z0-9]+
+ID="."*[_A-Za-z][_A-Za-z0-9]*
 QSTRING=\"[^\"]*\"
 
 WHITESPACE=[ \t\n\r\f]
