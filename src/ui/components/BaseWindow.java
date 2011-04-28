@@ -471,7 +471,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
             newLED.setImage(whiteLEDURL);
         }
         int x_offset = 108;
-        int y_offset = 43;
+        int y_offset = 121;
         // when I scaled the image down for the png,
         // the LED ratio got a little off
         // and now I have to add one extra pixel for LED's with
@@ -482,10 +482,10 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
         }
         if (y > 3)
         {
-            y_offset = 44;
+            y_offset = 120;
         }
         newLED.setX(x_offset + x*11);
-        newLED.setY(y_offset + y*11);
+        newLED.setY(y_offset - y*11);
         newLED.setWidth(11);
         newLED.setHeight(11);
         emulatorPanel.add(newLED);
