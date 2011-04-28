@@ -68,7 +68,7 @@ jars:
 $(SIM_SRC_DIR)/ui/Main.class: $(SIM_MAIN_DEPS)
 	$(JCC) -classpath \
 	$(JAVA_CUP_RUNTIME):$(SIM_SRC_DIR):$(SIM_SRC_DIR)/commons-cli-1.2.jar:$(SIM_SRC_DIR)/log4j-1.2.16.jar:$(SIM_SRC_DIR)/pivot-core-2.0.jar:$(SIM_SRC_DIR)/pivot-wtk-2.0.jar:$(SIM_SRC_DIR)/pivot-wtk-terra-2.0.jar \
-	$(SIM_SRC_DIR)/ui/Main.java $(SIM_SRC_DIR)/ui/components/instructionViewer/InstructionViewer.java
+	$(SIM_SRC_DIR)/ui/Main.java $(SIM_SRC_DIR)/ui/components/instructionViewer/InstructionViewer.java 
 
 #### mj_ast parser
 $(SIM_PARSE_DIR)/sim_inst.java: $(SIM_PARSE_DIR)/sim_inst.cup

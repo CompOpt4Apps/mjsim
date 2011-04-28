@@ -39,6 +39,12 @@ import org.apache.pivot.wtk.SheetCloseListener;
 import org.apache.pivot.wtk.TableView;
 import org.apache.pivot.wtk.TaskAdapter;
 import org.apache.pivot.wtk.Window;
+import org.apache.pivot.beans.BXMLSerializer;
+import org.apache.pivot.wtk.Application;
+import org.apache.pivot.wtk.Display;
+import org.apache.pivot.wtk.Palette;
+import org.apache.pivot.wtk.Panel;
+import org.apache.pivot.wtk.ImageView;
 
 import parse.ReadAssem;
 
@@ -59,11 +65,20 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 	private PushButton stepButton;
 	private PushButton stopButton;
 	private TableView pcTableView;
+    private Panel emulatorPanel;
 	private SimulateMachineState simulateMachine = null;
 	private HashMap<Integer,Boolean> breakPoints;
 	final private URL stackImage = Main.class.getClassLoader().getResource("ui/images/sp.png");
 	final private URL cpImage = Main.class.getClassLoader().getResource("ui/images/pc.png");
 	final private URL breakPointImage = Main.class.getClassLoader().getResource("ui/images/breakPoint.png");
+    final private URL redLEDURL = Main.class.getClassLoader().getResource("ui/images/redLED.png");
+    final private URL orangeLEDURL = Main.class.getClassLoader().getResource("ui/images/orangeLED.png");
+    final private URL yellowLEDURL = Main.class.getClassLoader().getResource("ui/images/yellowLED.png");
+    final private URL greenLEDURL = Main.class.getClassLoader().getResource("ui/images/greenLED.png");
+    final private URL blueLEDURL = Main.class.getClassLoader().getResource("ui/images/blueLED.png");
+    final private URL violetLEDURL = Main.class.getClassLoader().getResource("ui/images/violetLED.png");
+    final private URL whiteLEDURL = Main.class.getClassLoader().getResource("ui/images/whiteLED.png");
+    final private URL emulatorURL = Main.class.getClassLoader().getResource("ui/images/meggySimBack.png");
 	final private Comparator<Address> addressSort = new Comparator<Address>(){
 
 		@Override
@@ -83,6 +98,8 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		stepButton = (PushButton) arg0.get("stepButton");
 		stopButton = (PushButton) arg0.get("stopButton");
 		pcTableView = (TableView) arg0.get("programSpace");
+        emulatorPanel = (Panel) arg0.get("emulatorPanel");
+
 		sregTableData.add(new SREGData());
 		pcTableView.getComponentMouseButtonListeners().add(new ComponentMouseButtonListener() {
 			  
@@ -148,6 +165,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 						resetButtons();
 						//update gui state.
 						updateGui();
+                        updateEmulator();
 						checkFinished();
 					}
 
@@ -166,7 +184,6 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 						errorPrompt("Reporting Error from within internal execution: "+ arg0.getFault());
 					}
 				};
-
 				simulateMachine.execute(new TaskAdapter<String>(taskListener));
 			}
 		});
@@ -198,12 +215,14 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 		machine.addUpdate(this);
 	}
 
-	private void checkFinished()
+	public boolean checkFinished()
 	{
 		if(machine.isFinished())
 		{
 			Prompt.prompt(MessageType.INFO, "Reached the end of execution.  Please reload file to run again.",this);
+            return true;
 		}
+        return false;
 	}
 	
 	private void readInProgram() {
@@ -283,7 +302,6 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 				});
 			}
 		});
-		
 		Action.getNamedActions().put("exit", new Action(){
 			public void perform(Component source)
 			{
@@ -390,8 +408,88 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 				addr.clearImage();
 			}
 		}
+
+        updateEmulator();
 		this.repaint();
 	}
+
+    private void updateEmulator()
+    {
+        System.out.println("Updating emulator...");
+        // to get rid of all previous components
+        emulatorPanel.removeAll();
+        ImageView emulatorView = new ImageView();
+        emulatorView.setImage(emulatorURL);
+        emulatorView.setWidth(300);
+        emulatorView.setHeight(160);
+        emulatorPanel.add(emulatorView);
+        // update things in the emulator
+        updateEmulatorLEDs();
+    }
+
+    private void updateEmulatorLEDs()
+    {
+        for (int row = 0; row < 8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                lightLED(col, row, machine.getGridColor(col, row)); 
+            }
+        }
+    }
+
+    private void lightLED(int x, int y, String color)
+    {
+        ImageView newLED = new ImageView();
+        
+        if (color.equals("RED"))
+        {
+            newLED.setImage(redLEDURL);
+        }
+        else if (color.equals("ORANGE"))
+        {
+            newLED.setImage(orangeLEDURL);
+        }
+        else if (color.equals("YELLOW"))
+        {
+            newLED.setImage(yellowLEDURL);
+        }
+        else if (color.equals("GREEN"))
+        {
+            newLED.setImage(greenLEDURL);
+        }
+        else if (color.equals("BLUE"))
+        {
+            newLED.setImage(blueLEDURL);
+        }
+        else if (color.equals("VIOLET"))
+        {
+            newLED.setImage(violetLEDURL);
+        }
+        else if (color.equals("WHITE"))
+        {
+            newLED.setImage(whiteLEDURL);
+        }
+        int x_offset = 108;
+        int y_offset = 43;
+        // when I scaled the image down for the png,
+        // the LED ratio got a little off
+        // and now I have to add one extra pixel for LED's with
+        // rows or columns greater than 3
+        if (x > 3)
+        {
+            x_offset = 109;
+        }
+        if (y > 3)
+        {
+            y_offset = 44;
+        }
+        newLED.setX(x_offset + x*11);
+        newLED.setY(y_offset + y*11);
+        newLED.setWidth(11);
+        newLED.setHeight(11);
+        emulatorPanel.add(newLED);
+    }
 	
 	private void updateWindowState()
 	{
