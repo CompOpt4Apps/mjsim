@@ -70,6 +70,7 @@ TYPE=@{LETTER}+
 "neg" { return new Symbol(sym.AVR_NEG, new TokenValue("neg", yyline, yychar)); }
 "or" { return new Symbol(sym.AVR_OR, new TokenValue("or", yyline, yychar)); }
 "call" { return new Symbol(sym.AVR_CALL, new TokenValue("call", yyline, yychar)); }
+"icall" { return new Symbol(sym.AVR_ICALL, new TokenValue("icall", yyline, yychar)); }
 "ret" { return new Symbol(sym.AVR_RET, new TokenValue("ret", yyline, yychar)); }
 "mov" { return new Symbol(sym.AVR_MOV, new TokenValue("mov", yyline, yychar)); }
 "-" { return new Symbol(sym.MINUS, new TokenValue("-",yyline,yychar)); }
