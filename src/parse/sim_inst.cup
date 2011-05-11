@@ -64,6 +64,7 @@ non terminal header, eol;
 terminal AVR_PUSH, AVR_POP, AVR_MOV, AVR_IN, AVR_LD, AVR_LDI, AVR_ADD, AVR_ADC, AVR_CALL, AVR_ICALL, AVR_RET, AVR_AND, AVR_EOR, AVR_JMP, AVR_NEG, AVR_OR, AVR_CP, AVR_SUB, AVR_BREQ, AVR_BRLO, AVR_BRLT, AVR_TST, AVR_MULS, AVR_LDS, AVR_SBC, AVR_BRNE;
 terminal AVR_LDD, AVR_STD, PLUS, MINUS;
 terminal AVR_CPC, AVR_BRMI;
+terminal AVR_LSL, AVR_LSR, AVR_ROL, AVR_ROR;
 
 /* Grammar */
 start with pgrm;
@@ -275,6 +276,22 @@ instr	::=
 	|	AVR_TST REG:r eol
 		{:
 			RESULT = new InstrTST(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_LSL REG:r eol
+		{:
+			RESULT = new InstrLSL(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_LSR REG:r eol
+		{:
+			RESULT = new InstrLSR(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_ROL REG:r eol
+		{:
+			RESULT = new InstrROL(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_ROR REG:r eol
+		{:
+			RESULT = new InstrROR(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
 		:}
 	
 	|	LABEL:l | LABEL:l eol

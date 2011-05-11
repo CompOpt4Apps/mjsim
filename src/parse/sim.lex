@@ -73,6 +73,10 @@ TYPE=@{LETTER}+
 "icall" { return new Symbol(sym.AVR_ICALL, new TokenValue("icall", yyline, yychar)); }
 "ret" { return new Symbol(sym.AVR_RET, new TokenValue("ret", yyline, yychar)); }
 "mov" { return new Symbol(sym.AVR_MOV, new TokenValue("mov", yyline, yychar)); }
+"lsl" { return new Symbol(sym.AVR_LSL, new TokenValue("lsl", yyline, yychar)); }
+"lsr" { return new Symbol(sym.AVR_LSR, new TokenValue("lsr", yyline, yychar)); }
+"rol" { return new Symbol(sym.AVR_ROL, new TokenValue("rol", yyline, yychar)); }
+"ror" { return new Symbol(sym.AVR_ROR, new TokenValue("ror", yyline, yychar)); }
 "-" { return new Symbol(sym.MINUS, new TokenValue("-",yyline,yychar)); }
 "." { return new Symbol(sym.DOT, new TokenValue(".",yyline,yychar)); }
 "(" { return new Symbol(sym.LPAREN, new TokenValue("(.",yyline,yychar)); }
