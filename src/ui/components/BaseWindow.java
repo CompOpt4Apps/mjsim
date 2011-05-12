@@ -78,6 +78,8 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
     final private URL blueLEDURL = Main.class.getClassLoader().getResource("ui/images/blueLED.png");
     final private URL violetLEDURL = Main.class.getClassLoader().getResource("ui/images/violetLED.png");
     final private URL whiteLEDURL = Main.class.getClassLoader().getResource("ui/images/whiteLED.png");
+    final private URL aButtonLitURL = Main.class.getClassLoader().getResource("ui/images/AButtonLit.png");
+    final private URL bButtonLitURL = Main.class.getClassLoader().getResource("ui/images/BButtonLit.png");
     final private URL emulatorURL = Main.class.getClassLoader().getResource("ui/images/meggySimBack.png");
 	final private Comparator<Address> addressSort = new Comparator<Address>(){
 
@@ -425,6 +427,7 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
         emulatorPanel.add(emulatorView);
         // update things in the emulator
         updateEmulatorLEDs();
+        updateEmulatorButtons();
     }
 
     private void updateEmulatorLEDs()
@@ -489,6 +492,42 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
         newLED.setWidth(11);
         newLED.setHeight(11);
         emulatorPanel.add(newLED);
+    }
+
+    private void updateEmulatorButtons()
+    {
+        if (machine.checkButton("A") > 0)
+        {
+            ImageView newButton = new ImageView();
+            newButton.setImage(aButtonLitURL); 
+            newButton.setWidth(300);
+            newButton.setHeight(160);
+            emulatorPanel.add(newButton);
+        }
+        else if (machine.checkButton("B") > 0)
+        {
+            ImageView newButton = new ImageView();
+            newButton.setImage(bButtonLitURL); 
+            newButton.setWidth(300);
+            newButton.setHeight(160);
+            emulatorPanel.add(newButton);
+        }
+        else if (machine.checkButton("Up") > 0)
+        {
+
+        }
+        else if (machine.checkButton("Down") > 0)
+        {
+
+        }
+        else if (machine.checkButton("Left") > 0)
+        {
+
+        }
+        else if (machine.checkButton("Right") > 0)
+        {
+
+        }
     }
 	
 	private void updateWindowState()

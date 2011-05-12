@@ -254,7 +254,6 @@ public class MachineState {
 	public int checkButton(String bstr) {
         logger.debug("checkButton, bstr="+bstr+", this.mButtonPresses = "
             +this.mButtonPresses);
-
         if (this.mUsingArgOpts) {
 
             // Do we have a phase for the current phase?
