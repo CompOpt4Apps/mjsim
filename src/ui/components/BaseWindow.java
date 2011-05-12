@@ -80,6 +80,10 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
     final private URL whiteLEDURL = Main.class.getClassLoader().getResource("ui/images/whiteLED.png");
     final private URL aButtonLitURL = Main.class.getClassLoader().getResource("ui/images/AButtonLit.png");
     final private URL bButtonLitURL = Main.class.getClassLoader().getResource("ui/images/BButtonLit.png");
+    final private URL upButtonLitURL = Main.class.getClassLoader().getResource("ui/images/UpButtonLit.png");
+    final private URL downButtonLitURL = Main.class.getClassLoader().getResource("ui/images/DownButtonLit.png");
+    final private URL rightButtonLitURL = Main.class.getClassLoader().getResource("ui/images/RightButtonLit.png");
+    final private URL leftButtonLitURL = Main.class.getClassLoader().getResource("ui/images/LeftButtonLit.png");
     final private URL emulatorURL = Main.class.getClassLoader().getResource("ui/images/meggySimBack.png");
 	final private Comparator<Address> addressSort = new Comparator<Address>(){
 
@@ -417,7 +421,6 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
 
     private void updateEmulator()
     {
-        System.out.println("Updating emulator...");
         // to get rid of all previous components
         emulatorPanel.removeAll();
         ImageView emulatorView = new ImageView();
@@ -498,36 +501,37 @@ public class BaseWindow extends Window implements Bindable,MachineUpdate {
     {
         if (machine.checkButton("A") > 0)
         {
-            ImageView newButton = new ImageView();
-            newButton.setImage(aButtonLitURL); 
-            newButton.setWidth(300);
-            newButton.setHeight(160);
-            emulatorPanel.add(newButton);
+            addButton(aButtonLitURL);
         }
         else if (machine.checkButton("B") > 0)
         {
-            ImageView newButton = new ImageView();
-            newButton.setImage(bButtonLitURL); 
-            newButton.setWidth(300);
-            newButton.setHeight(160);
-            emulatorPanel.add(newButton);
+            addButton(bButtonLitURL); 
         }
         else if (machine.checkButton("Up") > 0)
         {
-
+            addButton(upButtonLitURL);
         }
         else if (machine.checkButton("Down") > 0)
         {
-
+            addButton(downButtonLitURL);
         }
         else if (machine.checkButton("Left") > 0)
         {
-
+            addButton(leftButtonLitURL);
         }
         else if (machine.checkButton("Right") > 0)
         {
-
+            addButton(rightButtonLitURL);
         }
+    }
+
+    private void addButton(URL button)
+    {
+        ImageView newButton = new ImageView();
+        newButton.setImage(button); 
+        newButton.setWidth(300);
+        newButton.setHeight(160);
+        emulatorPanel.add(newButton);
     }
 	
 	private void updateWindowState()
