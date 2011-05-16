@@ -61,6 +61,7 @@ TYPE=@{LETTER}+
 "add" { return new Symbol(sym.AVR_ADD, new TokenValue("add", yyline, yychar)); }
 "lo8" { return new Symbol(sym.AVR_LO, new TokenValue("lo8", yyline, yychar)); }
 "hi8" { return new Symbol(sym.AVR_HI, new TokenValue("hi8", yyline, yychar)); }
+"gs" { return new Symbol(sym.AVR_GS, new TokenValue("gs", yyline, yychar)); }
 "adc" { return new Symbol(sym.AVR_ADC, new TokenValue("adc", yyline, yychar)); }
 "and" { return new Symbol(sym.AVR_AND, new TokenValue("and", yyline, yychar)); }
 "eor" { return new Symbol(sym.AVR_EOR, new TokenValue("eor", yyline, yychar)); }

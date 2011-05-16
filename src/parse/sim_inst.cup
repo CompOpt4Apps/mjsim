@@ -48,7 +48,7 @@ parser code {:
 
 /* Symbols */
 terminal EOL;
-terminal ASSIGN, COMMA, LPAREN, RPAREN, AVR_HI, AVR_LO;
+terminal ASSIGN, COMMA, LPAREN, RPAREN, AVR_HI, AVR_LO, AVR_GS;
 terminal DOTTEXT, DOTGLOBAL, DOTTYPE;
 terminal TokenValue NUM, HEX, QSTRING;
 terminal TokenValue DOT;
@@ -171,11 +171,11 @@ instr	::=
 		{:
 			RESULT= new InstrLDI(sim_inst.machine,Integer.parseInt(r.toString().substring(1)),Integer.parseInt(e.toString()));
 		:}
-	|	AVR_LDI REG:r COMMA AVR_LO LPAREN ID:i RPAREN eol
+	|	AVR_LDI REG:r COMMA AVR_LO LPAREN AVR_GS LPAREN ID:i RPAREN RPAREN eol
 		{:
 			RESULT = new InstrLDILabel(sim_inst.machine, Integer.parseInt(r.toString().substring(1)), i.toString(), InstrLDILabel.LDIType.LO);
 		:}
-	|	AVR_LDI REG:r COMMA AVR_HI LPAREN ID:i RPAREN eol
+	|	AVR_LDI REG:r COMMA AVR_HI LPAREN AVR_GS LPAREN ID:i RPAREN RPAREN eol
 		{:
 			RESULT = new InstrLDILabel(sim_inst.machine, Integer.parseInt(r.toString().substring(1)), i.toString(), InstrLDILabel.LDIType.HI);
 		:}

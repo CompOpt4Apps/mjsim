@@ -24,7 +24,8 @@ public class InstrJmp extends Instr {
         else
         {
             pcValue = this.machine.getLabel(label);
-            
+            if(pcValue == null)
+		    pcValue = this.machine.getFunction(label);
         }
 
 		if(pcValue==null)

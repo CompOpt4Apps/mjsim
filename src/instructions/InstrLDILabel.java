@@ -44,6 +44,10 @@ public class InstrLDILabel extends Instr {
 		Integer lbl = this.machine.getFunction(label);
 		if(null == lbl && null == (lbl = this.machine.getLabel(label)))
 			throw new RuntimeError("Could not find label: " + label);
+
+		lbl += 1;	// TODO: This needs to be fixed, right now it is a sloppy hack.
+				// The issue is that labels are given different "addresses" than the instructions
+				// for that label, so if there are consecutive labels in a row, this will not work.
 		
 		if(LDIType.LO == bits)	{
 			logger.debug("LDI instructions r(" + rd + ") lo8(" + label + ")");
