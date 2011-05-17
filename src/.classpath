@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="commons-cli-1.2.jar"/>
+	<classpathentry kind="lib" path="pivot-core-2.0.jar"/>
+	<classpathentry kind="lib" path="pivot-wtk-2.0.jar" sourcepath="/home/ryan/.m2/repository/org/apache/pivot/pivot-wtk/2.0/pivot-wtk-2.0-sources.jar"/>
+	<classpathentry kind="lib" path="pivot-wtk-terra-2.0.jar"/>
+	<classpathentry kind="lib" path="/home/ryan/honorsThesis/MeggySim/java-cup-11a.jar"/>
+	<classpathentry kind="lib" path="/home/ryan/honorsThesis/MeggySim/java-cup-11a-runtime.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

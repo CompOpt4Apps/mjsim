@@ -1,0 +1,278 @@
+<avr:BaseWindow bxml:id="window" title="AVR Assembly Simulator" maximized="true"
+	xmlns:bxml="http://pivot.apache.org/bxml" xmlns="org.apache.pivot.wtk"
+	xmlns:collections="org.apache.pivot.collections" xmlns:content="org.apache.pivot.wtk.content"
+	xmlns:avr="ui.components"
+	xmlns:instrView="ui.components.instructionViewer">
+	<bxml:define>
+		<FileBrowserSheet bxml:id="fileBrowserSheet" />
+		<collections:ArrayList bxml:id="sregTableData" />
+		<collections:ArrayList bxml:id="registerTableData"/>
+		<collections:ArrayList bxml:id="stackTableData"/>
+		<collections:ArrayList bxml:id="heapTableData"/>
+		<collections:ArrayList bxml:id="programSpaceData"/>
+		<bxml:include bxml:id="instrDialog" src="instructionViewer/InstructionViewer.bxml" />
+	</bxml:define>
+	<actionMappings>
+		<Window.ActionMapping action="fileOpen"
+			keyStroke="CMD-O" />
+		<Window.ActionMapping action="exit" keyStroke="CMD-Q" />
+	</actionMappings>
+	<TablePane>
+		<columns>
+			<TablePane.Column width="1*" />
+		</columns>
+		<TablePane.Row>
+		<Border styles="{backgroundColor: '#7d966f'}">
+			<MenuBar>
+				<MenuBar.Item buttonData="File">
+					<Menu>
+						<Menu.Section>
+							<Menu.Item action="fileOpen">
+								<buttonData>
+									<content:MenuItemData text="Open"
+										keyboardShortcut="CMD-O" />
+								</buttonData>
+							</Menu.Item>
+							<Menu.Item action="exit">
+								<buttonData>
+									<content:MenuItemData text="Exit"
+										keyboardShortcut="CMD-Q" />
+								</buttonData>
+							</Menu.Item>
+						</Menu.Section>
+
+					</Menu>
+				</MenuBar.Item>
+               	<MenuBar.Item buttonData="Help">
+					<Menu>
+						<Menu.Section>
+							<Menu.Item>
+								<buttonData>
+									<content:MenuItemData text="Supported Instructions" keyboardShortcut="CMD-I"/>
+								</buttonData>
+								<buttonPressListeners>
+									importPackage(org.apache.pivot.wtk);
+									function buttonPressed(button)
+									{
+										instrDialog.open(window,null);
+									}
+								</buttonPressListeners>
+							</Menu.Item>
+						</Menu.Section>
+					</Menu>
+				</MenuBar.Item>
+			</MenuBar>
+		</Border>
+		</TablePane.Row>
+		<TablePane.Row height="3*">
+		<TablePane minimumHeight="300">
+			<columns>
+				<TablePane.Column width="1*" />
+				<TablePane.Column width="1*" />
+				<TablePane.Column width="1*" />
+			</columns>
+
+			<TablePane.Row>
+				
+				<BoxPane>
+					<PushButton bxml:id="runButton" enabled="false">
+						<content:ButtonData icon="/ui/images/runButton.png">
+						</content:ButtonData>
+					</PushButton>
+					<PushButton bxml:id="stepButton" enabled="false">
+						<content:ButtonData icon="/ui/images/stepOnceButton.png">
+						</content:ButtonData>
+					</PushButton>
+					<PushButton bxml:id="stopButton" enabled="false">
+						<content:ButtonData icon="/ui/images/stopButton.png">
+						</content:ButtonData>
+					</PushButton>
+				</BoxPane>
+				</TablePane.Row>
+				<TablePane.Row height="1*">
+				<ScrollPane minimumHeight="300" preferredHeight="300" horizontalScrollBarPolicy="fill">
+					<view>
+						<Border>
+							<TableView bxml:id="programSpace" tableData="$programSpaceData" minimumWidth="300">
+							<columns>
+										<TableView.Column
+											name="breakPoint" width="20">
+											<cellRenderer>
+												<content:TableViewImageCellRenderer />
+											</cellRenderer>
+										</TableView.Column>
+										<TableView.Column
+											name="programCounter" width="80">
+											<cellRenderer>
+												<content:TableViewImageCellRenderer />
+											</cellRenderer>
+										</TableView.Column>
+
+										<TableView.Column width="120" name="pcValue" headerData="Instruction Address" />
+										<TableView.Column minimumWidth="100" name="instruction"
+											 headerData="Instruction" />
+											</columns>
+										<tableViewSortListeners>
+										function sortChanged(tableView)
+										{ var tableData =
+										tableView.getTableData();
+										tableData.setComparator(new
+										org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+										}
+									</tableViewSortListeners></TableView></Border>
+                        
+                          
+                                    </view>
+					<columnHeader>
+							<TableViewHeader tableView="$programSpace" />
+						</columnHeader>
+				</ScrollPane>
+			
+		
+		<Border>
+				<TabPane bxml:id="tabPane" minimumHeight="300"
+					 width="300" preferredWidth="300">
+					<ScrollPane minimumHeight="300"  width="300"
+						horizontalScrollBarPolicy="fill">
+						<TabPane.tabData>
+							<content:ButtonData text="Stack" />
+						</TabPane.tabData>
+						<view>
+							<Border>
+								<TableView bxml:id="stackTable"
+									width="300" tableData="$stackTableData">
+									<columns>
+										<TableView.Column
+											name="stackPointer" width="80">
+											<cellRenderer>
+												<content:TableViewImageCellRenderer />
+											</cellRenderer>
+										</TableView.Column>
+										<TableView.Column name="address"
+											width="3*" headerData="Address" />
+										<TableView.Column name="value"
+											width="3*" headerData="Value" />
+									</columns>
+									<tableViewSortListeners>
+										function sortChanged(tableView)
+										{ var tableData =
+										tableView.getTableData();
+										tableData.setComparator(new
+										org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+										}
+									</tableViewSortListeners>
+								</TableView>
+							</Border>
+						</view>
+						<columnHeader>
+							<TableViewHeader tableView="$stackTable" />
+						</columnHeader>
+					</ScrollPane>
+
+					<ScrollPane minimumHeight="300"
+						horizontalScrollBarPolicy="fill" verticalScrollBarPolicy="auto">
+						<TabPane.tabData>
+							<content:ButtonData text="Heap" />
+						</TabPane.tabData>
+						<view>
+							<Border>
+								<TableView bxml:id="heapTable"
+									tableData="$heapTableData">
+									<columns>
+										<TableView.Column
+											name="stackPointer" width="80">
+											<cellRenderer>
+												<content:TableViewImageCellRenderer />
+											</cellRenderer>
+										</TableView.Column>
+										<TableView.Column name="address"
+											width="3*" headerData="Address" />
+										<TableView.Column name="value"
+											width="3*" headerData="Value" />
+									</columns>
+									<tableViewSortListeners>
+										function sortChanged(tableView)
+										{ var tableData =
+										tableView.getTableData();
+										tableData.setComparator(new
+										org.apache.pivot.wtk.content.TableViewRowComparator(tableView));
+										}
+									</tableViewSortListeners>
+								</TableView>
+							</Border>
+						</view>
+						<columnHeader>
+							<TableViewHeader tableView="$heapTable" />
+						</columnHeader>
+					</ScrollPane>
+				</TabPane>
+			</Border>
+			
+			<Border>
+				<TablePane>
+				<columns>
+					<TablePane.Column width="1*"/>
+				</columns>
+				<TablePane.Row height="20">
+					<Label text="SREG" />
+				</TablePane.Row>
+				
+				<TablePane.Row height="40">
+					<ScrollPane horizontalScrollBarPolicy="fill">
+						<view>
+							<Border>
+							<TableView bxml:id="sregTable" tableData="$sregTableData">
+							<columns>
+								<TableView.Column width="1*" name="i" headerData="I" />
+								<TableView.Column width="1*" name="t" headerData="T" />
+								<TableView.Column width="1*" name="h" headerData="H" />
+								<TableView.Column width="1*" name="s" headerData="S" />
+								<TableView.Column width="1*" name="v" headerData="V" />
+								<TableView.Column width="1*" name="n" headerData="N" />
+								<TableView.Column width="1*" name="z" headerData="Z" />
+								<TableView.Column width="1*" name="c" headerData="C" />
+							</columns>
+							
+							</TableView>
+						</Border>
+						</view>
+						<columnHeader>
+							<TableViewHeader tableView="$sregTable" />
+						</columnHeader>
+					</ScrollPane>
+				</TablePane.Row>
+				
+				<TablePane.Row height="1*">
+				<ScrollPane minimumHeight="300"
+					horizontalScrollBarPolicy="fill"
+					preferredHeight="300">
+					<view>
+						<Border>
+							<TableView bxml:id="registersTable"
+								tableData="$registerTableData">
+								<columns>
+									<TableView.Column name="register"
+										 headerData="Register" />
+									<TableView.Column name="value"
+										headerData="Value" />
+								</columns>
+							</TableView>
+						</Border>
+					</view>
+					<columnHeader>
+						<TableViewHeader tableView="$registersTable" />
+					</columnHeader>
+				</ScrollPane>
+				</TablePane.Row>
+				</TablePane>
+			</Border>
+			</TablePane.Row>
+		</TablePane>
+		</TablePane.Row>
+        <TablePane.Row height="1*">
+            <Panel bxml:id="emulatorPanel">
+			     <ImageView image="/ui/images/meggySimBack.png" width="300" height="160" />
+            </Panel>
+        </TablePane.Row>
+	</TablePane>
+</avr:BaseWindow>

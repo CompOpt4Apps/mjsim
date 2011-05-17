@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE instrInfo >
+<instrInfo>
+	<description>List of Supported Instructions</description>
+	<instructions>
+		<instr>
+			<name>adc</name>
+			<shorthand>adc rd, rr</shorthand>
+			<description>Adds 2 registers together (rd and rr) plus a carry and stores the result in rd.</description>
+			<notes>The carry is in the status register.</notes>
+		</instr>
+		<instr>
+			<name>add</name>
+			<shorthand>Add rd, rr</shorthand>
+			<description>Adds 2 registers together(rd and rr) and stores the result in rd.</description>
+		</instr>
+		<instr>
+			<name>and</name>
+			<description>Bitwise and between 2 registers(rd and rr), stores the result in rd.</description>
+		</instr>
+			<instr>
+			<name>breq</name>
+			<description></description>
+		</instr>
+		<instr>
+			<name>brlo</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>brlt</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>brne</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>call</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>cp</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>eor</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>in</name>
+			<description></description>
+		</instr>	
+			<instr>
+			<name>jmp</name>
+			<description></description>
+			<notes>If the label is endLable, it will not jmp as expected.</notes>
+		</instr>		
+		<instr>
+			<name>label:</name>
+			<description>Create a label to jmp to.</description>
+			<notes>An instruction and label cannot be on the same line.</notes>
+		</instr>		
+		<instr>
+			<name>ld</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>ldi</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>lds</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>mov</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>muls</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>neg</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>or</name>
+			<description></description>
+		</instr>	
+		<instr>
+			<name>pop</name>
+			<description>Pop the top most value off the stack into a register(rd).</description>
+		</instr>		
+		<instr>
+			<name>push</name>
+			<description>Push a value in a register(rr) onto the top of the stack.</description>
+		</instr>		
+		<instr>
+			<name>ret</name>
+			<description>Return from a subroutine.</description>
+		</instr>	
+			<instr>
+			<name>sbc</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>st</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>std</name>
+			<description></description>
+		</instr>		
+		<instr>
+			<name>sub</name>
+			<description></description>
+		</instr>
+		<instr>
+			<name>tst</name>
+			<description></description>
+		</instr>
+	</instructions>
+</instrInfo>

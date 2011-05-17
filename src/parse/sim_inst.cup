@@ -1,0 +1,324 @@
+package parse;
+
+import java_cup.runtime.*;
+import java.util.*;
+
+import parse.TokenValue;
+
+import machine.MachineState;
+
+import instructions.*;
+
+parser code {:
+
+    protected static MachineState machine = null;//complete hack
+    //hopefully it will work.
+
+    public sim_inst(java_cup.runtime.Scanner lexer, MachineState machine)
+    {
+        this(lexer);
+        this.machine = machine;
+    }
+
+    public void unrecovered_syntax_error(Symbol cur_token) {
+        report_fatal_error("Fatal syntax error", cur_token);
+    }
+    
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        done_parsing();
+        Symbol token = (Symbol)info;
+        TokenValue tok = (TokenValue)token.value;
+        if (tok!=null) {
+            throw new ParseException("Fatal parsing error", tok.line, tok.pos);
+        }
+    }
+    
+    public void report_error(String message, Object info) {
+        Symbol token = (Symbol)info;
+        if (token!=null) {
+            TokenValue tok = (TokenValue)token.value;
+            if (tok!=null) {
+              System.err.println("[" + tok.line + "," + tok.pos + "] " 
+                               + message + " at " + tok.toString() );
+            }
+        }
+    }
+:}
+
+/* Symbols */
+terminal EOL;
+terminal ASSIGN, COMMA, LPAREN, RPAREN, AVR_HI, AVR_LO, AVR_GS;
+terminal DOTTEXT, DOTGLOBAL, DOTTYPE;
+terminal TokenValue NUM, HEX, QSTRING;
+terminal TokenValue DOT;
+terminal TokenValue SP_L, SP_H;
+terminal TokenValue REG, LABEL, GLOBAL, TYPE, ID;
+
+non terminal TokenValue exp;
+non terminal List<Instr> pgrm, instrs;
+non terminal Instr instr;
+non terminal header, eol; 
+
+/* AVR Functions */
+terminal AVR_PUSH, AVR_POP, AVR_MOV, AVR_IN, AVR_LD, AVR_LDI, AVR_ADD, AVR_ADC, AVR_CALL, AVR_ICALL, AVR_RET, AVR_AND, AVR_EOR, AVR_JMP, AVR_NEG, AVR_OR, AVR_CP, AVR_SUB, AVR_BREQ, AVR_BRLO, AVR_BRLT, AVR_TST, AVR_MULS, AVR_LDS, AVR_SBC, AVR_BRNE;
+terminal AVR_LDD, AVR_STD, PLUS, MINUS;
+terminal AVR_CPC, AVR_BRMI;
+terminal AVR_LSL, AVR_LSR, AVR_ROL, AVR_ROR;
+
+/* Grammar */
+start with pgrm;
+
+pgrm	::=	header instrs:s
+		{:
+			RESULT=s;
+		:}
+	;
+
+header	::=	ID QSTRING eol
+		GLOBAL ASSIGN HEX eol
+		SP_H ASSIGN HEX eol
+		SP_L ASSIGN HEX eol
+		GLOBAL ASSIGN exp eol
+		GLOBAL ASSIGN exp eol
+		DOTGLOBAL ID eol
+		DOTGLOBAL ID eol
+		DOTTEXT eol
+		DOTGLOBAL ID eol
+		DOTTYPE ID COMMA TYPE eol
+		LABEL eol
+		AVR_PUSH REG eol
+		AVR_PUSH REG eol
+		AVR_IN REG COMMA SP_L eol
+		AVR_IN REG COMMA SP_H eol
+		AVR_CALL ID eol
+		{:
+		    RESULT=null;//empty state.
+        :}
+	;
+
+instrs	::=	instr:t instrs:list
+		{:
+            list.add(0,t);
+			RESULT=list;
+		:}
+
+        | /* epsilon */ 
+        {:
+            RESULT = new LinkedList<Instr>();
+        :}
+	;
+
+eol     ::= eol EOL | EOL
+		{: /*do nothing*/
+		:}
+		;
+
+instr	::=	
+        DOTTEXT eol DOTGLOBAL ID eol DOTTYPE ID COMMA TYPE eol LABEL:l eol
+        {:
+            //Edit the label a bit.
+            String label = l.toString();
+            label = label.substring(0,label.indexOf(':'));
+			RESULT=new FuncStart(sim_inst.machine,label);
+        :}
+
+    |   AVR_PUSH REG:r eol
+		{:
+			RESULT= new InstrPush(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_POP REG:r eol 
+		{:
+			RESULT= new InstrPop(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_IN REG:r COMMA SP_L eol 
+		{:
+			RESULT= new InstrIn(sim_inst.machine,Integer.parseInt(r.toString().substring(1)),InstrInType.SPL);
+		:}
+	|	AVR_IN REG:r COMMA SP_H eol 
+		{:
+			RESULT= new InstrIn(sim_inst.machine,Integer.parseInt(r.toString().substring(1)),InstrInType.SPH);
+		:}
+	|	AVR_LD eol 
+		{:
+			//RESULT= new InstrLD(sim_inst.machine);
+		:}		
+	|	AVR_LDD REG:r COMMA REG:base PLUS NUM:offset eol 
+		{:
+			RESULT= new InstrLD(sim_inst.machine,
+			                    Integer.parseInt(r.toString().substring(1)), 
+			                    base.toString().charAt(0), 
+			                    Integer.parseInt(offset.toString()) );
+		:}		
+	|	AVR_STD REG:base PLUS NUM:offset COMMA REG:r eol 
+		{:
+			RESULT= new InstrSTD(sim_inst.machine,
+			                    Integer.parseInt(r.toString().substring(1)), 
+			                    base.toString().charAt(0), 
+			                    Integer.parseInt(offset.toString()) );
+		:}		
+	|	AVR_LDI REG:r COMMA AVR_LO LPAREN exp:e RPAREN eol 
+		{:
+			RESULT= new
+            InstrLDI(sim_inst.machine,Integer.parseInt(r.toString().substring(1)),Integer.parseInt(e.toString()),InstrLDI.LDIType.LO);
+		:}
+	|	AVR_LDI REG:r COMMA AVR_HI LPAREN exp:e RPAREN eol 
+		{:
+			RESULT= new
+            InstrLDI(sim_inst.machine,Integer.parseInt(r.toString().substring(1)),Integer.parseInt(e.toString()),InstrLDI.LDIType.HI);
+		:}
+	|	AVR_LDI REG:r COMMA exp:e eol 
+		{:
+			RESULT= new InstrLDI(sim_inst.machine,Integer.parseInt(r.toString().substring(1)),Integer.parseInt(e.toString()));
+		:}
+	|	AVR_LDI REG:r COMMA AVR_LO LPAREN AVR_GS LPAREN ID:i RPAREN RPAREN eol
+		{:
+			RESULT = new InstrLDILabel(sim_inst.machine, Integer.parseInt(r.toString().substring(1)), i.toString(), InstrLDILabel.LDIType.LO);
+		:}
+	|	AVR_LDI REG:r COMMA AVR_HI LPAREN AVR_GS LPAREN ID:i RPAREN RPAREN eol
+		{:
+			RESULT = new InstrLDILabel(sim_inst.machine, Integer.parseInt(r.toString().substring(1)), i.toString(), InstrLDILabel.LDIType.HI);
+		:}
+	|	AVR_ADD REG:r1 COMMA REG:r2 eol 
+		{:
+			RESULT= new InstrAdd(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_SUB REG:r1 COMMA REG:r2 eol 
+		{:
+			RESULT= new InstrSub(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_SBC REG:r1 COMMA REG:r2 eol 
+		{:
+			RESULT= new InstrSBC(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_MULS REG:r1 COMMA REG:r2 eol 
+		{:
+			RESULT= new InstrMuls(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_ADC REG:r1 COMMA REG:r2 eol 
+		{:
+			RESULT= new InstrAdc(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_CALL ID:l eol
+		{:
+			RESULT= new InstrCall(sim_inst.machine,l.toString());
+		:}
+	|	AVR_ICALL eol
+		{:
+			RESULT = new InstrICall(sim_inst.machine);
+		:}
+	|	AVR_RET eol
+		{:
+			RESULT= new InstrRet(sim_inst.machine);
+		:}
+	|	AVR_LDS REG:rd COMMA ID:l eol
+		{:
+			RESULT= new InstrLDS(sim_inst.machine,Integer.parseInt(rd.toString().substring(1)),l.toString());
+		:}
+	|	AVR_AND REG:r1 COMMA REG:r2 eol
+		{:
+			RESULT= new InstrAnd(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_MOV REG:r1 COMMA REG:r2 eol
+		{:
+			RESULT= new InstrMov(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_EOR REG:r1 COMMA REG:r2 eol 
+		{:
+			RESULT= new InstrEor(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_JMP ID:l eol
+		{:
+			RESULT= new InstrJmp(sim_inst.machine,l.toString());
+		:}
+	|	AVR_NEG REG:r eol
+		{:
+			RESULT= new InstrNeg(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+    |
+        AVR_BRMI ID:l eol
+        {:
+            RESULT= new InstrBRMI(sim_inst.machine,l.toString()); 
+        :}
+    |
+        AVR_BREQ ID:l eol
+        {:
+            RESULT= new InstrBREQ(sim_inst.machine,l.toString()); 
+        :}
+    |
+        AVR_BRLO ID:l eol
+        {:
+            RESULT= new InstrBRLO(sim_inst.machine,l.toString()); 
+        :}
+    |
+        AVR_BRNE ID:l eol
+        {:
+            RESULT= new InstrBRNE(sim_inst.machine,l.toString()); 
+        :}
+    |
+        AVR_CP REG:r1 COMMA REG:r2 eol
+        {:
+            RESULT= new InstrCP(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+        :}
+    |
+        AVR_CPC REG:r1 COMMA REG:r2 eol
+        {:
+            RESULT= new InstrCPC(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+        :}
+	|	AVR_OR REG:r1 COMMA REG:r2 eol
+		{:
+			RESULT= new InstrOr(sim_inst.machine,Integer.parseInt(r1.toString().substring(1)),Integer.parseInt(r2.toString().substring(1)));
+		:}
+	|	AVR_BRLT ID:l eol
+		{:
+			RESULT = new InstrBRLT(sim_inst.machine,l.toString());
+		:}
+	|	AVR_TST REG:r eol
+		{:
+			RESULT = new InstrTST(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_LSL REG:r eol
+		{:
+			RESULT = new InstrLSL(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_LSR REG:r eol
+		{:
+			RESULT = new InstrLSR(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_ROL REG:r eol
+		{:
+			RESULT = new InstrROL(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	|	AVR_ROR REG:r eol
+		{:
+			RESULT = new InstrROR(sim_inst.machine,Integer.parseInt(r.toString().substring(1)));
+		:}
+	
+	|	LABEL:l | LABEL:l eol
+		{:
+            //Edit the label a bit.
+            String label = l.toString();
+            label = label.substring(0,label.indexOf(':'));
+			RESULT=new InstrLabel(sim_inst.machine,label);
+		:}
+    |
+        ID ID COMMA DOT MINUS ID eol
+        {:
+            /* Do not do anything... */
+        :}
+	;
+
+exp	::=
+		NUM:n
+		{:
+			RESULT=n;
+		:}
+	|	MINUS NUM:n
+		{:
+			RESULT=new TokenValue("-"+n.toString(), n.line, n.pos);
+		:}
+	|	HEX:n
+		{:
+			RESULT=new TokenValue(n.toString(), n.line, n.pos);
+		:}
+	;

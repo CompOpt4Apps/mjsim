@@ -1,0 +1,233 @@
+.file QUOTED_STRING
+ID:
+push REGISTER
+in REGISTER COMMA SOURCE
+call FUNCTION
+ldi REGISTER COMMA NUMBER
+ldi REGISTER COMMA lo8 LPAREN NUMBER RPAREN
+ldi REGISTER COMMA hi8 LPARAN NUMBER RPAREN
+pop REGISTER
+ret
+
+
+====================================================================================================
+
+
+%%
+%cup
+%line
+%char
+%public
+
+%eofval{
+	return new Symbol(sym.EOF, new TokenValue("EOF", yyline, yychar));
+%eofval}
+
+/* Common Tokens */
+NOT_EOL=[^\r\n]
+EOL=(\r|\n|\r\n)
+digit=[0-9]
+number={digit}+
+hex=0x[0-9A-Fa-f]+
+LETTER=[A-Za-z]
+UNDERSCORE="_"
+NOT_STAR=[^*]
+NOT_STAR_OR_SLASH=[^*/]
+
+LETT_DIG_UND=({LETTER}|{digit}|{UNDERSCORE})
+ID={LETTER}{LETT_DIG_UND}*
+QSTRING="[^"]*"
+
+/* Comments and whitespace */
+LINE_COMMENT="//"{NOT_EOL}*{EOL}
+C_COMMENT="/*"{NOT_STAR}*("*"({NOT_STAR_OR_SLASH}{NOT_STAR}*)?)*"*/"
+whitespace = [ \t\n\r\f]
+
+/* Assembly syntax */
+REGISTER=[Rr]{digit}+
+FUNCTION={ID}\:
+DIRECTIVE=\.{ID}
+LABEL=\.{ID}:
+TYPE_ID=@{ID}
+DUNNO=__{ID}__
+
+%%
+
+/* Symbols */
+"(" {return new Symbol(sym.LPAREN, new TokenValue(yytext(), yyline+1, yychar));}
+")" {return new Symbol(sym.RPAREN, new TokenValue(yytext(), yyline+1, yychar));}
+"," {return new symbol(sym.COMMA, new TokenValue(yytext(), yyline+1, yychar));}
+"=" {return new Symbol(sym.EQUALS, new TokenValue(yytext(), yyline+1, yychar));}
+
+/* Assembly instructions */
+"push" {return new Symbol(sym.PUSH, new TokenValue(yytext(), yyline+1, yychar));}
+"pop"  {return new Symbol(sym.POP, new TokenValue(yytext(), yyline+1, yychar));}
+"ldi"  {return new Symbol(sym.LDI, new TokenValue(yytext(), yyline+1, yychar));}
+"ret"  {return new Symbol(sym.RET, new TokenValue(yytext(), yyline+1, yychar));}
+
+/* Misc. */
+{number} {return new Symbol(sym.NUMBER, new TokenValue(yytest(), yyline+1, yychar));}
+{hex} {return new Symbol(sym.HEX, new TokenValue(yytext(), yyline+1, yychar));}
+{ID} {return new Symbol(sym.ID, new TokenValue(yytext(), yyline+1, yychar));}
+{LINE_COMMENT} { yychar = 0; yy_buffer_start = yy_buffer_index-1; }
+{C_COMMENT} { }
+{EOL} { yychar = 0; }
+{whitespace} {}
+. {System.out.println("error: unknown character " + yytext() + " found at line " + yyline + " position " + yychar);}
+
+
+
+====================================================================================================
+
+
+
+package parser;
+import java_cup.runtime.*;
+import ast.node.*;
+import java.util.*;
+
+parser code {:
+    public void unrecovered_syntax_error(Symbol cur_token) {
+        report_fatal_error("Fatal syntax error", cur_token);
+    }
+
+    public void report_fatal_error(String message, Object info) {
+        report_error(message, info);
+        done_parsing();
+        Symbol token = (Symbol)info;
+        mjparser.TokenValue tok = (mjparser.TokenValue)token.value;
+        throw new mjparser.ParseException("Fatal parsing error",
+                                          tok.line, tok.pos);
+    }
+
+    public void report_error(String message, Object info) {
+        Symbol token = (Symbol)info;
+        mjparser.TokenValue tok = (mjparser.TokenValue)token.value;
+        System.err.println("[" + tok.line + "," + tok.pos + "] "
+                               + message + " at " + tok.toString() );
+    }
+:}
+
+
+terminal COMMA, EQUALS;
+terminal LPARENT, RPAREN;
+terminal Integer NUM;
+terminal Integer HEX;
+terminal String QSTRING;
+non terminal Integer register;
+non terminal String dunno;
+non terminal String function;
+non terminal String label;
+
+/* Functions */
+non terminal String AVR_OPERATIVE;	// For things like .file and .size
+operative ::=
+	AVR_OPERATIVE
+		{:
+			// .text
+		:}
+	| AVR_OPERATIVE QSTRING
+		{:
+			// .file
+		:}
+	// .global stuff
+	// .size main, .-main
+	;
+
+terminal AVR_OP_LO8, AVR_OP_HI8;
+op ::=
+	AVR_OP_LO8 LPAREN NUM:n RPAREN	// lo8(1)
+		{:
+			RESULT = n & 0x00ff;
+		:}
+	| AVR_OP_LO8 LPAREN HEX:n RPAREN	// lo8(0x01)
+		{:
+			RESULT = n & 0x00ff;
+		:}
+	| AVR_OP_HI8 LPAREN NUM:n RPAREN	// hi8(1)
+		{:
+			RESULT = n & 0xff00;
+		:}
+	| AVR_OP_HI8 LPAREN HEX:n RPAREN	// hi8(0x01)
+		{:
+			RESULT = n & 0xff00;
+		:}
+	;
+
+terminal AVR_PUSH;
+avr_push ::=
+	AVR_PUSH register:r
+		{:
+		:}
+	;
+
+terminal AVR_POP;
+avr_pop ::=
+	AVR_POP register:r
+		{:
+		:}
+	;
+
+terminal AVR_IN;
+avr_in ::=
+	AVR_IN register:r COMMA dunno:s
+		{:
+		:}
+	| AVR_IN register:r dunno:s
+		{:
+		:}
+	;
+
+terminal AVR_CALL;
+avr_call ::=
+	AVR_CALL function:f
+		{:
+		:}
+	;
+
+terminal AVR_LDI;
+avr_ldi ::=
+	AVR_LDI register:r COMMA NUM:n
+		{:
+		:}
+	| AVR_LDI register:r NUM:n
+		{:
+		:}
+	| AVR_LDI register:r COMMA op:e
+		{:
+		:}
+	| AVR_LDI register:r op:e
+		{:
+		:}
+	;
+
+terminal AVR_RJMP;
+avr_rjmp ::=
+	AVR_RJMP label:l
+		{:
+		:}
+	;
+
+terminal AVR_FUNC;	// Create a new function (main: doStuff:)
+avr_func ::=
+	AVR_FUNC:f
+		{:
+		:}
+	;
+
+terminal AVR_RET;
+avr_ret ::=
+	AVR_RET
+		{:
+		:}
+	;
+	
+
+avr_dunno ::=
+	dunno:s EQUALS NUM:n
+		{:
+		:}
+	| dunno:s EQUALS HEX:n
+		{:
+		:}
+	;
