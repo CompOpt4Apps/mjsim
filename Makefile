@@ -72,7 +72,7 @@ $(SIM_SRC_DIR)/ui/Main.class: $(SIM_MAIN_DEPS)
 
 #### mj_ast parser
 $(SIM_PARSE_DIR)/sim_inst.java: $(SIM_PARSE_DIR)/sim_inst.cup
-	java -jar java-cup-11a.jar -dump -parser sim_inst $(SIM_PARSE_DIR)/sim_inst.cup
+	java -jar java-cup-11a.jar -parser sim_inst $(SIM_PARSE_DIR)/sim_inst.cup
 	mv -f sym.java $(SIM_PARSE_DIR)/
 	mv -f sim_inst.java $(SIM_PARSE_DIR)/
 
