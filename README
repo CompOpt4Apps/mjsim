@@ -47,6 +47,38 @@ usage: AVRSim
 Overview for developers
 -----------------------
 
+REGARDING THE MEGGYJR EMULATOR
+
+The emulator is located in the bottom left corner of the simulator (MJSIM)
+and depicts what the Meggy device would actually look like after completing
+each simulated instruction.  Initial functionality of this emulator includes
+the 8x8 LED grid and button presses; AuxLEDs, the reset button and sounds are
+not supported at this time.  
+
+Code for emulator layout is located in avrSim.bxml along with simulator layout.  
+Code for emulator functionality is located in BaseWindow.java inside the 
+src/ui/components directory (search for "updateEmulator()").  Images for the
+emulator are available for editing in the form of .xcf files, and are released
+as .png files, all of which are located in src/ui/images.  
+
+A simple animation scheme is used for displaying changes to the emulator.
+For example, for a set pixel call, a background image (meggySimBack.png) is 
+kept on the screen while a smaller LED image (like redLED.png) is
+positioned and overlayed on the background image with coordinates that 
+make it appear like it is actually in the LED grid.  When the pixel is
+darkened, the LED image is removed.  All animations work in this way with the
+addition and removal of images.
+
+Updates to the emulator occur whenever the simulator gui is updated
+(i.e., updateEmulator() is called by an updateGui() function).  BaseWindow
+queries the MachineState class for status on each LED and each Button
+and lights an LED or presses a button accordingly on the emulator.
+
+All images are cleared at the beginning of an update, and any LEDs or buttons
+that continue to be lit up or pressed will be handled again during this update.
+
+-- Cassie Helms, 5/17/2011 @ 4:01 PM
+
 -----------------------
 Contributing changes
 -----------------------
