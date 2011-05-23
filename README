@@ -17,7 +17,7 @@ MeggyJr simple run-time library are made.
 Quick start for users
 ---------------------
     
-    0) Download and untar MJSIM-1.0.tar.
+    0) Download and untar mjsim-1.0.tar.
         tar xf mjsim-1.0.tar
 
     1) Build the jar file, MJSIM.jar.
@@ -43,11 +43,10 @@ usage: AVRSim
  -v                verbose logging output
 
 
------------------------
-Overview for developers
------------------------
 
+-----------------------
 REGARDING THE MEGGYJR EMULATOR
+-----------------------
 
 The emulator is located in the bottom left corner of the simulator (MJSIM)
 and depicts what the Meggy device would actually look like after completing
@@ -80,6 +79,42 @@ that continue to be lit up or pressed will be handled again during this update.
 -- Cassie Helms, 5/17/2011 @ 4:01 PM
 
 -----------------------
+Overview for developers
+-----------------------
+
+The main function in src/ui/Main.java parses the command line options and
+constructs and runs a simulator object (src/ui/AVRSim.java).  The AVRSim object
+loads the assembly file into an ATmegaProgram object
+(src/instructions/ATmegaProgram.java), creates a MachineState instance
+(src/machine/MachineState.java), and has the machine execute each instruction.
+
+The machine state during the simulation is maintained in MachineState.java. 
+MachineState will call the execution wrapper for each instruction and then each
+instruction has an execute method.  In the execute method of each instruction,
+the instruction may query the machine state and/or modify an UpdateEvent object
+that the Instr base class in executeWrapper() passes to the machine state to
+update the machine.
+
+Any calls to the Meggy Jr Simple library interface are intercepted by the 
+MachineState and handled by an object specific to that call.  The function 
+objects live in src/machine/functions/.
+
+----------------------------------------------------------
+Adding a New Instruction or Run-time library function call
+----------------------------------------------------------
+
+If the instruction needs new tokens then update the src/parse/sim.lex file.
+Update the sim_inst.cup with the new grammar rule for the instruction.
+Then create an instruction or function class in either the src/instructions/
+or src/machine/functions/ subdirectories.  If you are creating a new
+run-time library function, then the MachineState.java file must be
+updated to intercept that function call.  Do a search for "_Z6DrawPxhhh"
+to see where that occurs.  We currently build the run-time library
+with avr-gcc, therefore the function names are the mangled ones created
+by avr-gcc.
+
+
+-----------------------
 Contributing changes
 -----------------------
 We are open to changes that people would like to contribute.  Since MJSIM is
@@ -87,7 +122,7 @@ being used to grade in a class setting, it is crucial that any new features
 do not break the regression tests in the RegressionTesting subdirectory.
 If you can demonstrate that those tests still work and you provide us a
 test of your own, then any useful changes will be accepted.  See the
-list of issues for possible contributions.
+list of issues at the google code webiste for mjsim for possible contributions.
 
 -------
 Credits
@@ -101,8 +136,8 @@ Michelle Strout added the arg_opts functionality and any additional
 instructions or run-time library function calls needed to support
 the MeggyJava compilers developed for CS 453.
 
-Cassandra Helms developed the MeggyJr emulator and incorporated it
-into the MJSIM GUI.
+Cassandra Helms developed the MeggyJr emulator, incorporated it
+into the MJSIM GUI, and created the mjsim logo.
 
 Michael Miller developed the lexer and parser for MJSIM and added
 some instructions like icall.
