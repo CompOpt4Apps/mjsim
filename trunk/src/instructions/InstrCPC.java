@@ -30,7 +30,7 @@ public class InstrCPC extends Instr {
 
 	@Override
 	public String toString() {
-		return "cp r" + rd+", r"+ rr;
+		return "cpc r" + rd+", r"+ rr;
 	}
 
 	@Override
