@@ -142,3 +142,6 @@ into the MJSIM GUI, and created the mjsim logo.
 Michael Miller developed the lexer and parser for MJSIM and added
 some instructions like icall.
 
+Laura Adams added the ability to play sound and output images of what
+the Meggy screen looks like each time the DisplaySlate is updated.
+
