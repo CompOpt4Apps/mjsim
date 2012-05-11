@@ -57,6 +57,18 @@ public class FuncTone extends Func {
 
 		System.out.println("Playing tone "+ toneString + " for "
                 + duration_ms + " milliseconds");	
+		double duration = duration_ms/100;
+		double[] sound = getTone(tone, duration);
+		StdAudio.play(sound);
     }
 
+    //this method calculates the values for stdaudio to play the tone
+    private static double[] getTone(double hz, double duration) { 
+        int N = (int) (StdAudio.SAMPLE_RATE * duration);
+        double[] a = new double[N+1];
+        for (int i = 0; i <= N; i++) {
+            a[i] = Math.sin(2 * Math.PI * i * hz / StdAudio.SAMPLE_RATE);
+        }
+        return a; 
+    } 
 }
