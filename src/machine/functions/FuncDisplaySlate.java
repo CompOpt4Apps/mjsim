@@ -40,7 +40,16 @@ public class FuncDisplaySlate extends Func {
 					//save an image of what the Meggy looks like
 					try
 					{
-						FileWriter fstream = new FileWriter("pictures/" + picture_index + ".ppm");
+                        File file = new File("mjsimPictures/");
+                        if(! file.exists()){
+                            boolean wasDirectoryMade = file.mkdir();
+                            if(! wasDirectoryMade) {
+                                System.out.println("Could not create mjsimPictures/");
+                            }
+
+						FileWriter fstream 
+                            = new FileWriter("mjsimPictures/" 
+                                + picture_index + ".ppm");
 						//increase the index so the next picture is saved with a unique name
 						picture_index++;
 						BufferedWriter out = new BufferedWriter(fstream);
@@ -61,8 +70,11 @@ public class FuncDisplaySlate extends Func {
 					}
 					catch (IOException e)
 					{
+                        // FIXME: should no longer be used
 						System.err.println
-						("Cannot find directory 'pictures'. Ensure directory is located in the same place as the call to MJSIM.jar.");
+						("Cannot find directory 'pictures'. "
+                        "Ensure directory is located in the same place "
+                        "as the call to MJSIM.jar.");
 					}
 					
 				}
