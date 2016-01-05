@@ -68,7 +68,7 @@ make it appear like it is actually in the LED grid.  When the pixel is
 darkened, the LED image is removed.  All animations work in this way with the
 addition and removal of images.
 
-Updates to the emulator occur whenever the simulator gui is updated
+Updates to the emulator occur whenever the simulator GUI is updated
 (i.e., updateEmulator() is called by an updateGui() function).  BaseWindow
 queries the MachineState class for status on each LED and each Button
 and lights an LED or presses a button accordingly on the emulator.
@@ -122,7 +122,7 @@ being used to grade in a class setting, it is crucial that any new features
 do not break the regression tests in the RegressionTesting subdirectory.
 If you can demonstrate that those tests still work and you provide us a
 test of your own, then any useful changes will be accepted.  See the
-list of issues at the google code website for mjsim for possible contributions.
+list of issues at the google code web site for mjsim for possible contributions.
 
 -------
 Credits
